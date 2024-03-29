@@ -6,11 +6,13 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/03/29 03:02:09 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/03/30 00:11:11 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <poll.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -28,27 +30,45 @@ int main(int argc, char **argv)
 	}
 	int fd_socket;
 	struct sockaddr_in my_addr;
-	//struct sockaddr client_addr;
 
 	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
+	std::cout << "fd socket : " << fd_socket << std::endl;
 	if (fd_socket < 0) 
 		std::cerr << "Socket exception !" << std::endl;
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(atoi(argv[1]));
 	my_addr.sin_addr.s_addr = INADDR_ANY;
+	
 	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
 		perror("Bind info");
-	std::cout << "fd socket : " << fd_socket << std::endl;
+	
 	listen(fd_socket, 5);
-	
 	std::cout << "Listening ......." << std::endl;
-
-	int client_socket = accept(fd_socket, NULL, NULL);
+	char buff[10];
+	memset(buff, 0, 10);
 	
-	std::cout << client_socket << std::endl;
-
-	if (client_socket < 0)
-		perror("Socket client");
-	std::cout << "Connection accepted !" << std::endl;
+	int client_socket = 0;
+	struct pollfd fds[1];
+	fds[0].fd = fd_socket;
+	fds[0].events = POLLIN | POLLOUT;
+	while (1)
+	{
+		if (poll(fds, 1, 0) > 0)
+		{
+			client_socket = accept(fd_socket, NULL, NULL);
+			if (client_socket < 0)
+				perror("Socket client");
+			else
+				std::cout << "Connection accepted !" << client_socket << std::endl;
+		}
+		if (client_socket)
+		{
+			int n_read = read(client_socket, buff, 9);
+			if (n_read > 0)
+				std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
+		}
+	}
+	close(client_socket);
+	close(fd_socket);
 	return (0);
 }
