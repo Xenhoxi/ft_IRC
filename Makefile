@@ -6,14 +6,14 @@
 #    By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/03/28 15:39:41 by ljerinec         ###   ########.fr        #
+#    Updated: 2024/03/29 02:27:29 by ljerinec         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = g++
+CC = c++
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES =	sources/main.c \
+SOURCES =	sources/main.cpp \
 
 OBJ_DIR = object/
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -34,7 +34,7 @@ PRINT_PREFIX	:=	\033[1m\033[38;5;240m[\033[0m\033[38;5;250m$(PRINT_NAME)\033[1m\
 all: $(FT_IRC)
 
 %.o: %.cpp
-	@$(CC) $(CFLAGS) -cpp $< -o $@ -I $(INCLUDES_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
 	@$(eval CURRENT_FILE=$(shell echo $$(($(CURRENT_FILE)+1))))
 	@$(eval PROGRESS=$(shell echo $$(($(CURRENT_FILE) * $(BAR_WIDTH) / $(TOTAL_FILES)))))
 	@$(eval REMAINING=$(shell echo $$(($(BAR_WIDTH) - $(PROGRESS)))))
@@ -44,7 +44,7 @@ all: $(FT_IRC)
 	@printf "%${REMAINING}s" | tr ' ' ' '
 	@printf "]\r\033[0m"
 
-$(CUB3D): $(OBJECTS)
+$(FT_IRC): $(OBJECTS)
 	@$(CC) $(CFLAGS) -o $(FT_IRC) $(OBJECTS)
 	@printf "$(PRINT_PREFIX) \033[1;32m[$(CURRENT_FILE)/$(TOTAL_FILES)] ["
 	@printf "%${PROGRESS}s" | tr ' ' '■'
@@ -52,16 +52,12 @@ $(CUB3D): $(OBJECTS)
 	@printf "][OK]\n\033[0m"
 
 clean:
-	@make -C includes/libft clean
 	@rm -f $(OBJECTS)
 	@rm -f *.o
 	@rm -f */*.o
-	@rm -f */*/*.o
 
 fclean: clean
-	@make -C includes/libft fclean
 	@rm -f $(FT_IRC)
-	@rm -f "minishell *"
 
 re: fclean all
 
