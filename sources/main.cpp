@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/03/31 22:37:42 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:44:23 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <netinet/in.h>
 #include <string>
 #include <iostream>
+#include <string.h>
+#include <list>
 
 int main(int argc, char **argv)
 {
@@ -48,24 +50,39 @@ int main(int argc, char **argv)
 	memset(buff, 0, 30);
 	
 	int client_socket = 0;
-	struct pollfd fds[1];
-	fds[0].fd = fd_socket;
-	fds[0].events = POLLIN | POLLOUT;
+	std::list <struct pollfd *> listfd;
+	struct pollfd fdss[1];
+	fdss[0].fd = fd_socket;
+	fdss[0].events = POLLIN | POLLOUT;
+	listfd.push_back(fdss);
 	while (1)
 	{
-		if (poll(fds, 1, 0) > 0)
+		for (std::list<struct pollfd *>::iterator it = listfd.begin(); it != listfd.end(); ++it)
 		{
-			client_socket = accept(fd_socket, NULL, NULL);
-			if (client_socket < 0)
-				perror("Socket client");
-			else
-				std::cout << "Connection accepted !" << client_socket << std::endl;
-		}
-		if (client_socket)
-		{
-			int n_read = read(client_socket, buff, 30);
-			if (n_read > 0)
-				std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
+			struct pollfd *fds = *it;
+			if (poll(fds, 1, 0) > 0)
+			{
+				if (fds->fd == fd_socket && fds->revents & POLLIN)
+				{
+					std::cout << "Ici" << std::endl;
+					struct pollfd *tmp = new struct pollfd[1];
+					tmp->fd = accept(fd_socket, NULL, NULL);
+					tmp->events = POLLIN | POLLOUT;
+					listfd.push_back(tmp);
+					if (tmp->fd < 0)
+						perror("Socket client");
+					else
+						std::cout << "Connection accepted on socket " << tmp->fd << std::endl;
+				}
+				else if (fds->revents & POLLIN)
+				{
+					int n_read = read(fds->fd, buff, 30);
+					if (n_read > 0)
+						std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
+					write(fds->fd, "OK\n", 4);
+					memset(buff, 0, 30);
+				}
+			}
 		}
 	}
 	close(client_socket);
