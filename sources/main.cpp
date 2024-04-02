@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/02 13:44:23 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:01:50 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,39 +22,39 @@
 #include <string.h>
 #include <list>
 
+void socket_init(std::list <struct pollfd *> &listfd, int port)
+{
+	int fd_socket;
+	struct sockaddr_in my_addr;
+	struct pollfd *fds = new struct pollfd[1];
+
+	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
+	std::cout << "Socket init: " << fd_socket << std::endl;
+	if (fd_socket < 0) 
+		std::cerr << "Socket exception !" << std::endl;
+	my_addr.sin_family = AF_INET;
+	my_addr.sin_port = htons(port);
+	my_addr.sin_addr.s_addr = INADDR_ANY;
+	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
+		perror("Bind info");
+	listen(fd_socket, 5);
+	fds->fd = fd_socket;
+	fds->events = POLLIN | POLLOUT;
+	listfd.push_back(fds);
+}
+
 int main(int argc, char **argv)
 {
-	//(void) argv;
+	std::list <struct pollfd *> listfd;
+	char buff[30];
+
+	memset(buff, 0, 30);
 	if (argc < 3)
 	{
 		std::cout << "Not enought parameters !" << std::endl;
 		return (1);
 	}
-	int fd_socket;
-	struct sockaddr_in my_addr;
-
-	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
-	std::cout << "fd socket : " << fd_socket << std::endl;
-	if (fd_socket < 0) 
-		std::cerr << "Socket exception !" << std::endl;
-	my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(atoi(argv[1]));
-	my_addr.sin_addr.s_addr = INADDR_ANY;
-	
-	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
-		perror("Bind info");
-	
-	listen(fd_socket, 5);
-	std::cout << "Listening ......." << std::endl;
-	char buff[30];
-	memset(buff, 0, 30);
-	
-	int client_socket = 0;
-	std::list <struct pollfd *> listfd;
-	struct pollfd fdss[1];
-	fdss[0].fd = fd_socket;
-	fdss[0].events = POLLIN | POLLOUT;
-	listfd.push_back(fdss);
+	socket_init(listfd, atoi(argv[1]));
 	while (1)
 	{
 		for (std::list<struct pollfd *>::iterator it = listfd.begin(); it != listfd.end(); ++it)
@@ -62,11 +62,11 @@ int main(int argc, char **argv)
 			struct pollfd *fds = *it;
 			if (poll(fds, 1, 0) > 0)
 			{
-				if (fds->fd == fd_socket && fds->revents & POLLIN)
+				if (fds->fd == listfd.front()->fd && fds->revents & POLLIN)
 				{
 					std::cout << "Ici" << std::endl;
 					struct pollfd *tmp = new struct pollfd[1];
-					tmp->fd = accept(fd_socket, NULL, NULL);
+					tmp->fd = accept(listfd.front()->fd, NULL, NULL);
 					tmp->events = POLLIN | POLLOUT;
 					listfd.push_back(tmp);
 					if (tmp->fd < 0)
@@ -85,7 +85,5 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	close(client_socket);
-	close(fd_socket);
 	return (0);
 }
