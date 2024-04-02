@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   user.hpp                                           :+:      :+:    :+:   */
+/*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/02 17:24:42 by smunio           ###   ########.fr       */
+/*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
+/*   Updated: 2024/04/02 18:49:07 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef USER_HPP
-# define USER_HPP
+#ifndef INCLUDES_HPP
+# define INCLUDES_HPP
 
-#include <iostream>
+#include <stdio.h>
 #include <poll.h>
-
-class User {
-    public:
-        User();
-        ~User();
-        void set_nickname(std::string name);
-		void set_fds(int server_socket);
-    private:
-        std::string     nickname;
-        struct pollfd   *fds;
-};
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string>
+#include <iostream>
+#include <string.h>
+#include <list>
+#include <exception>
+#include "exceptions.hpp"
+#include "user.hpp"
 
 #endif

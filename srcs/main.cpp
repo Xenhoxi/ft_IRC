@@ -3,31 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/02 17:32:12 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:50:15 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <poll.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <string>
-#include <iostream>
-#include <string.h>
-#include <list>
-#include <exception>
+#include "libs.hpp"
 
-void socket_init(std::list <struct pollfd *> &listfd, int port)
+void socket_init(std::list <User *> &listfd, int port)
 {
-	int fd_socket;
-	struct sockaddr_in my_addr;
-	struct pollfd *fds = new struct pollfd[1];
+	int 				fd_socket;
+	struct sockaddr_in 	my_addr;
+	User				*server_socket = new User();
+	// struct pollfd 		*fds = new struct pollfd[1];
 
 	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
 	std::cout << "Socket init: " << fd_socket << std::endl;
@@ -39,21 +29,21 @@ void socket_init(std::list <struct pollfd *> &listfd, int port)
 	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
 		perror("Bind info");
 	listen(fd_socket, 5);
-	fds->fd = fd_socket;
-	fds->events = POLLIN | POLLOUT;
-	listfd.push_back(fds);
+	server_socket->set_fds(fd_socket);
+	// fds->events = POLLIN | POLLOUT;
+	listfd.push_back(server_socket);
 }
 
-void	accept_connection(std::list <struct pollfd *> &listfd)
+void	accept_connection(std::list <User *> &userlist)
 {
-	struct pollfd *tmp = new struct pollfd[1];
-	tmp->fd = accept(listfd.front()->fd, NULL, NULL);
-	tmp->events = POLLIN | POLLOUT;
-	listfd.push_back(tmp);
-	if (tmp->fd < 0)
+	User *new_user = new User();
+	new_user->get_fds()->fd = accept(userlist.front()->get_fds()->fd, NULL, NULL);
+	new_user->get_fds()->events = POLLIN | POLLOUT;
+	userlist.push_back(new_user);
+	if (new_user->get_fds()->fd < 0)
 		perror("Socket client");
 	else
-		std::cout << "Connection accepted on socket " << tmp->fd << std::endl;
+		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
 }
 
 void	read_socket(struct pollfd *fds)
@@ -68,15 +58,15 @@ void	read_socket(struct pollfd *fds)
 	memset(buff, 0, 30);
 }
 
-void	running_server(std::list <struct pollfd *> &listfd)
+void	running_server(std::list <User *> &user_list)
 {
-	for (std::list<struct pollfd *>::iterator it = listfd.begin(); it != listfd.end(); ++it)
+	for (std::list<User *>::iterator it = user_list.begin(); it != user_list.end(); ++it)
 	{
-		struct pollfd *fds = *it;
+		struct pollfd *fds = (*it)->get_fds();
 		if (poll(fds, 1, 0) > 0)
 		{
-			if (fds->fd == listfd.front()->fd && fds->revents & POLLIN)
-				accept_connection(listfd);
+			if (fds->fd == user_list.front()->get_fds()->fd && fds->revents & POLLIN)
+				accept_connection(user_list);
 			else if (fds->revents & POLLIN)
 				read_socket(fds);
 		}
@@ -85,7 +75,7 @@ void	running_server(std::list <struct pollfd *> &listfd)
 
 int main(int argc, char **argv)
 {
-	std::list <struct pollfd *> listfd;
+	std::list <User *> user_list;
 	
 	try
 	{
@@ -94,9 +84,9 @@ int main(int argc, char **argv)
 			std::cout << "Not enought parameters !" << std::endl;
 			return (1);
 		}
-		socket_init(listfd, atoi(argv[1]));
+		socket_init(user_list, atoi(argv[1]));
 		while (1)
-			running_server(listfd);
+			running_server(user_list);
 	}
 	catch (std::exception &e)
 	{

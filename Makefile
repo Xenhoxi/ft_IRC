@@ -3,24 +3,25 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+         #
+#    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/03/29 02:27:29 by ljerinec         ###   ########.fr        #
+#    Updated: 2024/04/02 18:27:50 by smunio           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES =	sources/main.cpp \
+SOURCES =	srcs/main.cpp \
+			srcs/user.cpp \
 
 OBJ_DIR = object/
 OBJECTS = $(SOURCES:.cpp=.o)
 
 FT_IRC = ft_irc
 
-INCLUDES_DIR = includes/
+INCLUDES_DIR = inc/
 
 ####################COMPILATION STYLING####################
 

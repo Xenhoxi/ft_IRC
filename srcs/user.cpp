@@ -6,11 +6,11 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/02 17:26:53 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/02 18:50:10 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "user.hpp"
+#include "libs.hpp"
 
 User::User() 
 {
@@ -18,7 +18,7 @@ User::User()
     return ;
 }
 
-User::User() 
+User::~User() 
 {
     return ;
 }
@@ -28,6 +28,11 @@ void    User::set_fds(int server_socket)
     this->fds->fd = server_socket;
     this->fds->events = POLLIN | POLLOUT;
     return ;
+}
+
+struct pollfd *User::get_fds() const
+{
+    return (this->fds);
 }
 
 void    User::set_nickname(std::string name)
