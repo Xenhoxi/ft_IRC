@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/03/30 00:11:11 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:37:42 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 	
 	listen(fd_socket, 5);
 	std::cout << "Listening ......." << std::endl;
-	char buff[10];
-	memset(buff, 0, 10);
+	char buff[30];
+	memset(buff, 0, 30);
 	
 	int client_socket = 0;
 	struct pollfd fds[1];
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 		}
 		if (client_socket)
 		{
-			int n_read = read(client_socket, buff, 9);
+			int n_read = read(client_socket, buff, 30);
 			if (n_read > 0)
 				std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
 		}
