@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/02 17:01:50 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:32:12 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <iostream>
 #include <string.h>
 #include <list>
+#include <exception>
 
 void socket_init(std::list <struct pollfd *> &listfd, int port)
 {
@@ -43,47 +44,63 @@ void socket_init(std::list <struct pollfd *> &listfd, int port)
 	listfd.push_back(fds);
 }
 
-int main(int argc, char **argv)
+void	accept_connection(std::list <struct pollfd *> &listfd)
 {
-	std::list <struct pollfd *> listfd;
+	struct pollfd *tmp = new struct pollfd[1];
+	tmp->fd = accept(listfd.front()->fd, NULL, NULL);
+	tmp->events = POLLIN | POLLOUT;
+	listfd.push_back(tmp);
+	if (tmp->fd < 0)
+		perror("Socket client");
+	else
+		std::cout << "Connection accepted on socket " << tmp->fd << std::endl;
+}
+
+void	read_socket(struct pollfd *fds)
+{
 	char buff[30];
 
 	memset(buff, 0, 30);
-	if (argc < 3)
+	int n_read = read(fds->fd, buff, 30);
+	if (n_read > 0)
+		std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
+	write(fds->fd, "OK\n", 4);
+	memset(buff, 0, 30);
+}
+
+void	running_server(std::list <struct pollfd *> &listfd)
+{
+	for (std::list<struct pollfd *>::iterator it = listfd.begin(); it != listfd.end(); ++it)
 	{
-		std::cout << "Not enought parameters !" << std::endl;
-		return (1);
-	}
-	socket_init(listfd, atoi(argv[1]));
-	while (1)
-	{
-		for (std::list<struct pollfd *>::iterator it = listfd.begin(); it != listfd.end(); ++it)
+		struct pollfd *fds = *it;
+		if (poll(fds, 1, 0) > 0)
 		{
-			struct pollfd *fds = *it;
-			if (poll(fds, 1, 0) > 0)
-			{
-				if (fds->fd == listfd.front()->fd && fds->revents & POLLIN)
-				{
-					std::cout << "Ici" << std::endl;
-					struct pollfd *tmp = new struct pollfd[1];
-					tmp->fd = accept(listfd.front()->fd, NULL, NULL);
-					tmp->events = POLLIN | POLLOUT;
-					listfd.push_back(tmp);
-					if (tmp->fd < 0)
-						perror("Socket client");
-					else
-						std::cout << "Connection accepted on socket " << tmp->fd << std::endl;
-				}
-				else if (fds->revents & POLLIN)
-				{
-					int n_read = read(fds->fd, buff, 30);
-					if (n_read > 0)
-						std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
-					write(fds->fd, "OK\n", 4);
-					memset(buff, 0, 30);
-				}
-			}
+			if (fds->fd == listfd.front()->fd && fds->revents & POLLIN)
+				accept_connection(listfd);
+			else if (fds->revents & POLLIN)
+				read_socket(fds);
 		}
+	}
+}
+
+int main(int argc, char **argv)
+{
+	std::list <struct pollfd *> listfd;
+	
+	try
+	{
+		if (argc < 3)
+		{
+			std::cout << "Not enought parameters !" << std::endl;
+			return (1);
+		}
+		socket_init(listfd, atoi(argv[1]));
+		while (1)
+			running_server(listfd);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 	return (0);
 }
