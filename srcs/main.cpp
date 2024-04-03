@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 12:00:08 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/03 14:53:16 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ void	accept_connection(std::list <User *> &userlist)
 	if (new_user->get_fds()->fd < 0)
 		perror("Socket client");
 	else
+	{
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
+		new_user->change_status(1);
+	}
 }
 
 void	read_socket(User *user)
@@ -55,6 +58,11 @@ void	read_socket(User *user)
 	write(user->get_fds()->fd, "OK\n", 4);
 	user->_data += buff;
 	memset(buff, 0, 30);
+}
+
+void	send_rpl_msgs(User	*usr)
+{
+	write(usr->get_fds()->fd, usr->get_nickname().c_str(), strlen(usr->get_nickname().c_str()));
 }
 
 void	running_server(std::list <User *> &user_list)
@@ -79,7 +87,7 @@ int main(int argc, char **argv)
 	try
 	{
 		if (argc != 3)
-			throw Error();
+			throw Error("wrong args amount");
 		socket_init(user_list, atoi(argv[1]));
 		while (1)
 			running_server(user_list);
