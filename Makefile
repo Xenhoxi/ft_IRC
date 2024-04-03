@@ -6,7 +6,7 @@
 #    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/04/02 18:27:50 by smunio           ###   ########.fr        #
+#    Updated: 2024/04/03 17:45:39 by smunio           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,10 @@ CC = c++
 CFLAGS = -Wall -Werror -Wextra
 
 SOURCES =	srcs/main.cpp \
-			srcs/user.cpp \
+			srcs/user.cpp
 
-OBJ_DIR = object/
-OBJECTS = $(SOURCES:.cpp=.o)
+OBJ_DIR = objs/
+OBJECTS = $(addprefix $(OBJ_DIR), $(notdir $(SOURCES:.cpp=.o)))
 
 FT_IRC = ft_irc
 
@@ -34,7 +34,8 @@ PRINT_PREFIX	:=	\033[1m\033[38;5;240m[\033[0m\033[38;5;250m$(PRINT_NAME)\033[1m\
 
 all: $(FT_IRC)
 
-%.o: %.cpp
+$(OBJ_DIR)%.o: srcs/%.cpp
+	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
 	@$(eval CURRENT_FILE=$(shell echo $$(($(CURRENT_FILE)+1))))
 	@$(eval PROGRESS=$(shell echo $$(($(CURRENT_FILE) * $(BAR_WIDTH) / $(TOTAL_FILES)))))
@@ -53,9 +54,7 @@ $(FT_IRC): $(OBJECTS)
 	@printf "][OK]\n\033[0m"
 
 clean:
-	@rm -f $(OBJECTS)
-	@rm -f *.o
-	@rm -f */*.o
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
 	@rm -f $(FT_IRC)
@@ -63,3 +62,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+

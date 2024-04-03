@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 14:52:10 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 17:46:16 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,20 @@ User::~User()
     return ;
 }
 
+// void    User::parse_registration(std::string line)
+// {
+//     if (strncmp(line, "CAP LS"))
+// }
+
+void    User::change_status(int status)
+{
+    if (this->_status == 0 && status == 2)
+        throw Error("can't skip registration");
+    if (this->_status == 2 && status == 1)
+        throw Error("user is already registered");
+    this->_status = status;
+}
+
 void    User::set_fds(int server_socket)
 {
     if (server_socket < 0)
@@ -32,15 +46,6 @@ void    User::set_fds(int server_socket)
     this->_fds->fd = server_socket;
     this->_fds->events = POLLIN | POLLOUT;
     return ;
-}
-
-void    User::change_status(int status)
-{
-    if (this->_status == 0 && status == 2)
-        throw Error("can't skip registration");
-    if (this->_status == 2 && status == 1)
-        throw Error("user is already registered");
-    this->_status = status;
 }
 
 void    User::set_nickname(std::string name)
