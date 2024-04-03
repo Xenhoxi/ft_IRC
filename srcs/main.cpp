@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 11:13:57 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/03 12:00:08 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void socket_init(std::list <User *> &listfd, int port)
 		perror("Bind info");
 	listen(fd_socket, 5);
 	server_socket->set_fds(fd_socket);
-	// fds->events = POLLIN | POLLOUT;
 	listfd.push_back(server_socket);
 }
 
@@ -45,15 +44,16 @@ void	accept_connection(std::list <User *> &userlist)
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
 }
 
-void	read_socket(struct pollfd *fds)
+void	read_socket(User *user)
 {
 	char buff[30];
 
 	memset(buff, 0, 30);
-	int n_read = read(fds->fd, buff, 30);
+	int n_read = read(user->get_fds()->fd, buff, 30);
 	if (n_read > 0)
-		std::cout << "Read: " << n_read << " Buff = " << buff << std::endl;
-	write(fds->fd, "OK\n", 4);
+		std::cout << buff;
+	write(user->get_fds()->fd, "OK\n", 4);
+	user->_data += buff;
 	memset(buff, 0, 30);
 }
 
@@ -67,7 +67,7 @@ void	running_server(std::list <User *> &user_list)
 			if (fds->fd == user_list.front()->get_fds()->fd && fds->revents & POLLIN)
 				accept_connection(user_list);
 			else if (fds->revents & POLLIN)
-				read_socket(fds);
+				read_socket(*it);
 		}
 	}
 }
