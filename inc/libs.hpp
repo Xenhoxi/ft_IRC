@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 11:05:06 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/03 13:34:58 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <iostream>
 #include <string.h>
 #include <list>
+#include <vector>
 #include <exception>
 #include <signal.h>
 #include "exceptions.hpp"
