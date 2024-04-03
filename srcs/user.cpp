@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 21:28:55 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 23:12:44 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,43 @@ void    User::parse_registration(std::string line)
 {
     if (!strncmp(line.c_str(), "CAP LS", strlen(line.c_str()))) {
         write(this->_fds->fd, "CAP * LS\n", 9);
+        return ;
     }
-    else if (!strncmp(line.c_str(), "NICK", strlen(line.c_str()))) {
-        this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+    else if (!strncmp(line.c_str(), "CAP END", strlen(line.c_str()))) {
+		this->_status = REGISTRATION;
+        return ;
+	}
+    void (User::*functptr[])(std::string) = {
+        &User::store_pass,
+        &User::store_nickname,
+        &User::store_username
+    };
+    std::string str_tab[] = {"PASS", "NICK", "USER"};
+    for (int i = 0; i < 3; i++)
+    {
+        if (str_tab[i] == line.substr(0, 4))
+            (this->*functptr[i])(line);
+    }
+}
+
+void User::store_pass(std::string line)
+{
+    this->_password = line.substr(5, strlen(line.c_str()) - 5);
+	std::cout << "password: " << this->_password << std::endl;
+}
+
+void User::store_nickname(std::string line)
+{
+    this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
         std::cout << "nickname: " << this->_nickname << std::endl;
-    }
-    // USER username hostname servername :Real Name
-    else if (!strncmp(line.c_str(), "USER", strlen(line.c_str()))) {
-        char *tmp = strtok((char *)line.c_str(), " ");
+}
+
+void User::store_username(std::string line)
+{
+    char *tmp = strtok((char *)line.c_str(), " ");
         tmp = strtok(NULL, " ");
         this->_username = tmp; 
         std::cout <<"username: " << this->_username << std::endl;
-    }
-    else if (!strncmp(line.c_str(), "PASS", strlen(line.c_str()))) {
-		this->_password = line.substr(5, strlen(line.c_str()) - 5);
-		std::cout << "password: " << this->_password << std::endl;
-	}
-    else if (!strncmp(line.c_str(), "CAP END", strlen(line.c_str()))) {
-		this->_status = REGISTRATION;
-	}
-	else
-		write(this->_fds->fd, line.c_str(), strlen(line.c_str()));
 }
 
 void    User::change_status(int status)
@@ -81,7 +97,7 @@ struct pollfd *User::get_fds() const
     return (this->_fds);
 }
 
-unsigned int User::get_status() const
+int User::get_status() const
 {
 	return (this->get_status());
 }

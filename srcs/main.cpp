@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 21:25:47 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 23:13:56 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ void	parsing(User *user)
 		std::cout << *it << std::endl;
 		user->parse_registration(*it);
 	}
-	if (user->get_status() != REGISTRATION)
-		throw Error("Missing some registrations infos");
 	// send rpl messages;
 }
 
