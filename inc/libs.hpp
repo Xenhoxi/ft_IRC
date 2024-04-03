@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 13:34:58 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:05:53 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INCLUDES_HPP
 # define INCLUDES_HPP
+
+# define DISCONNECTED 0
+# define NEGOTIATION 1
+# define REGISTRATION 2
+# define CONNECTED 3
 
 #include <stdio.h>
 #include <poll.h>

@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 19:17:33 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 21:25:47 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	accept_connection(std::list <User *> &userlist)
 {
 	User *new_user = new User();
 	new_user->set_fds(accept(userlist.front()->get_fds()->fd, NULL, NULL));
-	userlist.push_back(new_user);
 	if (new_user->get_fds()->fd < 0)
-		perror("Socket client");
+		throw Error("failed to accept connection");
 	else
 	{
+		userlist.push_back(new_user);
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
-		new_user->change_status(1);
+		new_user->change_status(NEGOTIATION);
 	}
 }
 
@@ -77,13 +77,14 @@ void	parsing(User *user)
 		parsed.push_back(tmp);
 		user->_data.erase(0, closest + 1);
 	}
+	user->_data.clear();
 	for (std::vector<std::string>::iterator it = parsed.begin(); it != parsed.end(); ++it)
 	{
 		std::cout << *it << std::endl;
 		user->parse_registration(*it);
 	}
-	// if (user->get_r_infos() < 4)
-	// 	throw Error("Missing some registrations infos");
+	if (user->get_status() != REGISTRATION)
+		throw Error("Missing some registrations infos");
 	// send rpl messages;
 }
 
