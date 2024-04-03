@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/02 18:50:15 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 11:13:57 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void socket_init(std::list <User *> &listfd, int port)
 void	accept_connection(std::list <User *> &userlist)
 {
 	User *new_user = new User();
-	new_user->get_fds()->fd = accept(userlist.front()->get_fds()->fd, NULL, NULL);
-	new_user->get_fds()->events = POLLIN | POLLOUT;
+	new_user->set_fds(accept(userlist.front()->get_fds()->fd, NULL, NULL));
 	userlist.push_back(new_user);
 	if (new_user->get_fds()->fd < 0)
 		perror("Socket client");
@@ -79,11 +78,8 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		if (argc < 3)
-		{
-			std::cout << "Not enought parameters !" << std::endl;
-			return (1);
-		}
+		if (argc != 3)
+			throw Error();
 		socket_init(user_list, atoi(argv[1]));
 		while (1)
 			running_server(user_list);
