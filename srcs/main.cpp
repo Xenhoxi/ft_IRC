@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/02 19:44:34 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/03 19:17:33 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	read_socket(User *user)
 	read(user->get_fds()->fd, buff, 100);
 	// if (n_read > 0)
 	// 	std::cout << buff;
-	write(user->get_fds()->fd, "OK\n", 4);
+	// write(user->get_fds()->fd, "OK\n", 4);
 	user->_data += buff;
 	// std::cout << user->_data << std::endl;
 	memset(buff, 0, 100);
@@ -80,8 +80,11 @@ void	parsing(User *user)
 	for (std::vector<std::string>::iterator it = parsed.begin(); it != parsed.end(); ++it)
 	{
 		std::cout << *it << std::endl;
+		user->parse_registration(*it);
 	}
-	// user->_data.clear();
+	// if (user->get_r_infos() < 4)
+	// 	throw Error("Missing some registrations infos");
+	// send rpl messages;
 }
 
 void	send_rpl_msgs(User	*usr)
