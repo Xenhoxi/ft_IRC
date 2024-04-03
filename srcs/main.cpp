@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 15:58:43 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:03:06 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	accept_connection(std::list <User *> &userlist)
 	if (new_user->get_fds()->fd < 0)
 		perror("Socket client");
 	else
+	{
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
+		new_user->change_status(1);
+	}
 }
 
 void	read_socket(User *user)
@@ -81,6 +84,11 @@ void	parsing(User *user)
 	// user->_data.clear();
 }
 
+void	send_rpl_msgs(User	*usr)
+{
+	write(usr->get_fds()->fd, usr->get_nickname().c_str(), strlen(usr->get_nickname().c_str()));
+}
+
 void	running_server(std::list <User *> &user_list)
 {
 	for (std::list<User *>::iterator it = user_list.begin(); it != user_list.end(); ++it)
@@ -106,7 +114,7 @@ int main(int argc, char **argv)
 	try
 	{
 		if (argc != 3)
-			throw Error();
+			throw Error("wrong args amount");
 		socket_init(user_list, atoi(argv[1]));
 		while (1)
 			running_server(user_list);
