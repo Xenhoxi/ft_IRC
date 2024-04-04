@@ -6,31 +6,11 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/04 15:57:16 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:01:13 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
-
-void socket_init(std::list <User *> &listfd, int port)
-{
-	int 				fd_socket;
-	struct sockaddr_in 	my_addr;
-	User				*server_socket = new User();
-
-	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
-	std::cout << "Socket init: " << fd_socket << std::endl;
-	if (fd_socket < 0) 
-		std::cerr << "Socket exception !" << std::endl;
-	my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(port);
-	my_addr.sin_addr.s_addr = INADDR_ANY;
-	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
-		perror("Bind info");
-	listen(fd_socket, 5);
-	server_socket->set_fds(fd_socket);
-	listfd.push_back(server_socket);
-}
 
 void	accept_connection(std::list <User *> &userlist)
 {
@@ -82,15 +62,14 @@ void	running_server(std::list <User *> &user_list)
 
 int main(int argc, char **argv)
 {
-	std::list <User *> user_list;
-	
+	Server	*server = new Server();	
 	try
 	{
 		if (argc != 3)
 			throw Error("wrong args amount");
-		socket_init(user_list, atoi(argv[1]));
+		server->socket_init(atoi(argv[1]));
 		while (1)
-			running_server(user_list);
+			running_server(*server);
 	}
 	catch (std::exception &e)
 	{

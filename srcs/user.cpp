@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 15:55:17 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:01:44 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ struct pollfd *User::get_fds() const
 
 int User::get_status() const
 {
+	return (this->_status);
 	return (this->_status);
 }
 

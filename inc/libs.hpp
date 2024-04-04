@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 20:05:53 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 14:50:20 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@
 #include <vector>
 #include <exception>
 #include <signal.h>
-#include "exceptions.hpp"
+#include <time.h>
+#include <ctime>
+#include <map>
 #include "user.hpp"
+#include "exceptions.hpp"
+#include "server.hpp"
 
 #endif
