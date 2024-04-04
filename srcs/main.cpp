@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 23:13:56 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 15:57:16 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	accept_connection(std::list <User *> &userlist)
 		throw Error("failed to accept connection");
 	else
 	{
+		new_user->change_status(NEGOTIATION);
 		userlist.push_back(new_user);
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
-		new_user->change_status(NEGOTIATION);
 	}
 }
 
@@ -52,43 +52,9 @@ void	read_socket(User *user)
 
 	memset(buff, 0, 100);
 	read(user->get_fds()->fd, buff, 100);
-	// if (n_read > 0)
-	// 	std::cout << buff;
-	// write(user->get_fds()->fd, "OK\n", 4);
 	user->_data += buff;
-	// std::cout << user->_data << std::endl;
+	std::cout << buff;
 	memset(buff, 0, 100);
-}
-
-void	parsing(User *user)
-{
-	std::vector<std::string> parsed;
-	std::string tmp;
-	size_t closest;
-	
-	// (void) user;
-	while (user->_data.find('\r') != user->_data.npos || user->_data.find('\n') != user->_data.npos)
-	{
-		if (user->_data.find('\r') < user->_data.find('\n'))
-			closest = user->_data.find('\r');
-		else
-			closest = user->_data.find('\n');
-		tmp = user->_data.substr(0, closest);
-		parsed.push_back(tmp);
-		user->_data.erase(0, closest + 1);
-	}
-	user->_data.clear();
-	for (std::vector<std::string>::iterator it = parsed.begin(); it != parsed.end(); ++it)
-	{
-		std::cout << *it << std::endl;
-		user->parse_registration(*it);
-	}
-	// send rpl messages;
-}
-
-void	send_rpl_msgs(User	*usr)
-{
-	write(usr->get_fds()->fd, usr->get_nickname().c_str(), strlen(usr->get_nickname().c_str()));
 }
 
 void	running_server(std::list <User *> &user_list)
@@ -104,8 +70,13 @@ void	running_server(std::list <User *> &user_list)
 			else if (fds->revents & POLLIN)
 				read_socket(user);
 		}
-		if ((user->_data.find('\r') != user->_data.npos || user->_data.find('\n') != user->_data.npos) && fds->fd != user_list.front()->get_fds()->fd)
-			parsing(user);
+		if (fds->fd != user_list.front()->get_fds()->fd && user->get_status() == NEGOTIATION)
+			user->parsing();
+		// else if (user->get_status() == NEGOTIATION)
+		// 	user.negotiation();
+		// else if (user->get_status() == REGISTRATION)
+		// 	user.registration();
+		//stop code
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 23:14:17 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 14:44:19 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ class User
 public:
 	User();
 	~User();
+	void			parsing(void);
+	void			negotiation(void);
+	void			registration(void);
+	int				get_status() const;
 	void			store_pass(std::string line);
 	void			store_nickname(std::string line);
 	void			store_username(std::string line);
@@ -30,7 +34,6 @@ public:
 	void            set_fds(int server_socket);
 	struct pollfd   *get_fds() const;
 	std::string		get_nickname() const;
-	int				get_status() const;
 	std::string		_data;
 
 private:
