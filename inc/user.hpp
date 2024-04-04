@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 14:44:19 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:20:23 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,9 @@ class User
 public:
 	User();
 	~User();
-	void			parsing(void);
 	void			negotiation(void);
 	void			registration(void);
 	int				get_status() const;
-	void			store_pass(std::string line);
-	void			store_nickname(std::string line);
-	void			store_username(std::string line);
 	void			parse_registration(std::string line);
 	void			change_status(int status);
 	void            set_nickname(std::string name);
