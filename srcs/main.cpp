@@ -6,31 +6,11 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/03 23:13:56 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 15:56:13 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
-
-void socket_init(std::list <User *> &listfd, int port)
-{
-	int 				fd_socket;
-	struct sockaddr_in 	my_addr;
-	User				*server_socket = new User();
-
-	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
-	std::cout << "Socket init: " << fd_socket << std::endl;
-	if (fd_socket < 0) 
-		std::cerr << "Socket exception !" << std::endl;
-	my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(port);
-	my_addr.sin_addr.s_addr = INADDR_ANY;
-	if (bind(fd_socket, (struct sockaddr *) &my_addr, sizeof(my_addr)) <= 0)
-		perror("Bind info");
-	listen(fd_socket, 5);
-	server_socket->set_fds(fd_socket);
-	listfd.push_back(server_socket);
-}
 
 void	accept_connection(std::list <User *> &userlist)
 {
@@ -56,6 +36,7 @@ void	read_socket(User *user)
 	// 	std::cout << buff;
 	// write(user->get_fds()->fd, "OK\n", 4);
 	user->_data += buff;
+	std::cout << buff;
 	// std::cout << user->_data << std::endl;
 	memset(buff, 0, 100);
 }
@@ -67,6 +48,7 @@ void	parsing(User *user)
 	size_t closest;
 	
 	// (void) user;
+	std::cout << "parsing user..." << std::endl;
 	while (user->_data.find('\r') != user->_data.npos || user->_data.find('\n') != user->_data.npos)
 	{
 		if (user->_data.find('\r') < user->_data.find('\n'))
@@ -86,13 +68,9 @@ void	parsing(User *user)
 	// send rpl messages;
 }
 
-void	send_rpl_msgs(User	*usr)
+void	running_server(Server &server)
 {
-	write(usr->get_fds()->fd, usr->get_nickname().c_str(), strlen(usr->get_nickname().c_str()));
-}
-
-void	running_server(std::list <User *> &user_list)
-{
+	std::list<User *> user_list = server.get_usr_list();
 	for (std::list<User *>::iterator it = user_list.begin(); it != user_list.end(); ++it)
 	{
 		struct pollfd *fds = (*it)->get_fds();
@@ -111,15 +89,14 @@ void	running_server(std::list <User *> &user_list)
 
 int main(int argc, char **argv)
 {
-	std::list <User *> user_list;
-	
+	Server	*server = new Server();	
 	try
 	{
 		if (argc != 3)
 			throw Error("wrong args amount");
-		socket_init(user_list, atoi(argv[1]));
+		server->socket_init(atoi(argv[1]));
 		while (1)
-			running_server(user_list);
+			running_server(*server);
 	}
 	catch (std::exception &e)
 	{

@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/03 23:12:44 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 15:41:35 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ struct pollfd *User::get_fds() const
 
 int User::get_status() const
 {
-	return (this->get_status());
+	return (this->_status);
 }
 
 std::string User::get_nickname() const
