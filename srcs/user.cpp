@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 16:21:33 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:16:52 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,42 @@ void    User::negotiation(void)
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
-		this->parse_registration(tmp);
+		this->parse_negotiation(tmp);
 		_data.erase(0, closest + 1);
 	}
-	_data.clear();
+	_data.clear(); 
 }
 
 void    User::registration(void)
 {
-	
+	std::string welcome = "Welcome to the diloragequit Network, ";
+	welcome += this->_nickname;
+	write(this->_fds->fd, welcome.c_str(), welcome.size());
+	// this->change_status(CONNECTED);
 }
 
-void    User::parse_registration(std::string line)
+void    User::parse_negotiation(std::string line)
 {
 	if ("CAP LS" == line)
 		write(this->_fds->fd, "CAP * LS\n", 9);
 	else if ("PASS" == line.substr(0, 4))
+	{
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
+		std::cout << "pass: " << this->_password << std::endl;
+	}
 	else if ("NICK" == line.substr(0, 4))
+	{
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+		std::cout << "nick: " << this->_nickname << std::endl;
+	}
 	else if ("USER" == line.substr(0, 4))
 	{
 		char *tmp = strtok((char *)line.c_str(), " ");
 		tmp = strtok(NULL, " ");
 		this->_username = tmp;
+		std::cout << "user: " << this->_username << std::endl;
 	}
-	else if (!strncmp(line.c_str(), "CAP END", strlen(line.c_str())))
+	else if (line == "CAP END")
 		this->_status = REGISTRATION;
 }
 

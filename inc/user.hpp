@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 16:20:23 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:13:47 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,10 @@ public:
 	void			negotiation(void);
 	void			registration(void);
 	int				get_status() const;
-	void			parse_registration(std::string line);
+	void			parse_negotiation(std::string line);
 	void			change_status(int status);
-	void            set_nickname(std::string name);
 	void            set_fds(int server_socket);
 	struct pollfd   *get_fds() const;
-	std::string		get_nickname() const;
 	std::string		_data;
 
 private:
