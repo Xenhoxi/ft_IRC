@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/04 16:01:13 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:14:22 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ void	read_socket(User *user)
 	memset(buff, 0, 100);
 }
 
-void	running_server(std::list <User *> &user_list)
+void	running_server(Server &server)
 {
+	std::list<User *> &user_list = server.get_usr_list();
 	for (std::list<User *>::iterator it = user_list.begin(); it != user_list.end(); ++it)
 	{
 		struct pollfd *fds = (*it)->get_fds();
@@ -62,7 +63,7 @@ void	running_server(std::list <User *> &user_list)
 
 int main(int argc, char **argv)
 {
-	Server	*server = new Server();	
+	Server	*server = new Server();
 	try
 	{
 		if (argc != 3)

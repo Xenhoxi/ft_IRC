@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 15:54:28 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/04 16:12:41 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void    Server::set_addr(int port, int fd_socket)
 		perror("Bind info");
 }
 
-std::list<User *> Server::get_usr_list() const
+std::list<User *> &Server::get_usr_list()
 {
     return (_usr_list);
 }
