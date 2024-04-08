@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 17:16:52 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/08 11:36:18 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,14 @@ void    User::negotiation(void)
 
 void    User::registration(void)
 {
-	std::string welcome = "Welcome to the diloragequit Network, ";
-	welcome += this->_nickname;
-	write(this->_fds->fd, welcome.c_str(), welcome.size());
-	// this->change_status(CONNECTED);
+	std::string msg;
+	msg = "001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "003 " + _nickname + " :This server was created Today" + "\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	change_status(CONNECTED);
 }
 
 void    User::parse_negotiation(std::string line)
@@ -72,7 +76,7 @@ void    User::parse_negotiation(std::string line)
 		std::cout << "user: " << this->_username << std::endl;
 	}
 	else if (line == "CAP END")
-		this->_status = REGISTRATION;
+		change_status(REGISTRATION);
 }
 
 void    User::change_status(int status)
