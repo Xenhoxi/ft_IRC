@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:14:09 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/08 13:21:25 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    User::registration(Server server)
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	msg = "004" + _nickname + " " + server.get_servername() + " version 1.0\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
-	msg = "005" + _nickname + " <tokens>: are supported by this server\r\n";
+	msg = "005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	change_status(CONNECTED);
 }
