@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 23:33:02 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:21:06 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ public:
 	void			change_status(int status);
 	void            set_fds(int server_socket);
 	void			parse_command(std::string line, Server &server);
+	void			send_message(std::string msg);
+	std::string 	get_nick();
 	struct pollfd   *get_fds() const;
 	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 	std::string		get_nick() const;

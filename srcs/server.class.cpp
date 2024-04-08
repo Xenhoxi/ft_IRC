@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:08:04 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:16:23 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Server::~Server()
     return ;
 }
 
-void Server::socket_init(int port)
+void	Server::socket_init(int port)
 {
 	int 	fd_socket;
     User    *server_socket  = new User();
@@ -131,8 +131,11 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	}
 }
 
-// void	Server::broadcast(User *user, std::string msg, std::string ch_name)
-// {
-	// if (_channel_list.find(ch_name) != _channel_list.end())
-	// 	_channel_list[ch_name]->send_to_all_user();
-// }
+void	Server::broadcast(User *user, std::string msg, std::string ch_name)
+{
+	if (_channel_list.find(ch_name) != _channel_list.end())
+	{
+		std::cout << "Channel name = " << ch_name << " | " << "msg = " << msg << std::endl;
+		_channel_list[ch_name]->send_to_all_user(msg, user, ch_name);
+	}
+}

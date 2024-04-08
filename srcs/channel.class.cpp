@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/09 00:06:13 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:20:39 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ Channel::Channel(User *user, std::string name) : _name(name)
 {
     _userInChannel.push_back(user);
     _operators.push_back(user);
-    std::cout << "Create Channel and add user to it: " << _name << std::endl;
+	std::cout << "Create Channel and add user to it: " << _name << std::endl;
 }
 
 Channel::~Channel()
 {
-    return ;
+	return ;
 }
 
 void    Channel::add_user(User *user)

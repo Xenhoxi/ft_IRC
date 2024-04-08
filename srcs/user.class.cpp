@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:01:50 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:14:03 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,20 @@ User::~User()
 void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
+		server.join_channel(this, line.substr(line.find('#'), line.find(':') - 1));
+	else if ("PRIVMSG" == line.substr(0, 7))
 		server.join_channel(this, line.substr(line.find('#') + 1, line.find(':') - 1));
 	else if ("PRIVMSG" == line.substr(0, 7))
 	{
 		std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
+		std::string ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
+		std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
+		server.broadcast(this, msg, ch_name);
+	}
+	else if ("PING" == line.substr(0, 4))
+	{
+		line.erase(0, 5);
+		send_message("PONG diloragequit " + line + "\r\n");
 		std::string ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 		// std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
 		// Server.broadcast(this, msg, ch_name);
@@ -56,7 +66,6 @@ void	User::parsing(Server &server)
 		_data.erase(0, closest + 1);
 	}
 	_data.clear();
-	(void)server;
 }
 
 void    User::negotiation(Server &server)
@@ -96,24 +105,25 @@ void    User::registration(Server &server)
 
 void    User::parse_negotiation(std::string line, Server &server)
 {
-	if ("CAP LS" == line)
+	std::cout << "caca: " << line << std::endl;
+	if ("CAP LS" == line || "CAP LS 302" == line)
 		write(this->_fds->fd, "CAP * LS\n", 9);
 	else if ("PASS" == line.substr(0, 4))
 	{
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
-		std::cout << "pass: " << this->_password << std::endl;
+		// std::cout << "pass: " << this->_password << std::endl;
 	}
 	else if ("NICK" == line.substr(0, 4))
 	{
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
-		std::cout << "nick: " << this->_nickname << std::endl;
+		// std::cout << "nick: " << this->_nickname << std::endl;
 	}
 	else if ("USER" == line.substr(0, 4))
 	{
 		char *tmp = strtok((char *)line.c_str(), " ");
 		tmp = strtok(NULL, " ");
 		this->_username = tmp;
-		std::cout << "user: " << this->_username << std::endl;
+		// std::cout << "user: " << this->_username << std::endl;
 	}
 	else if (line == "CAP END")
 		this->registration(server);
@@ -150,7 +160,15 @@ int User::get_status() const
 	return (this->_status);
 }
 
-std::string	User::get_nick() const
+void	User::send_message(std::string msg)
 {
-	return (this->_nickname);
+	write(this->get_fds()->fd, msg.c_str(), msg.size());
+	std::cout << "Send: " << msg.substr(0, msg.size() - 2) << std::endl;
 }
+
+std::string 	User::get_nick()
+{
+	return (_nickname);
+}
+
+
