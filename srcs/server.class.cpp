@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:41:46 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:53:15 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,16 @@ void    Server::set_addr(int port, int fd_socket)
 std::list<User *> &Server::get_usr_list()
 {
     return (_usr_list);
+}
+
+char	*Server::get_dt() const
+{
+	return (this->_datetime);
+}
+
+std::string	Server::get_servername() const
+{
+	return (this->_server_name);
 }
 
 void	Server::join_channel(User *user, std::string ch_name)

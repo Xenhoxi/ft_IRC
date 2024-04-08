@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:42:59 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:47:40 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ class User
 public:
 	User();
 	~User();
-	void			negotiation(void);
-	void			registration(void);
+	void			negotiation(Server &server);
+	void			registration(Server &server);
 	int				get_status() const;
-	void			parse_negotiation(std::string line);
+	void			parse_negotiation(std::string line, Server &server);
 	void			parsing(Server &server);
 	void			change_status(int status);
 	void            set_fds(int server_socket);

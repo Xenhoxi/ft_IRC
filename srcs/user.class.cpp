@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:42:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:56:30 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ User::~User()
 	return ;
 }
 
-void    User::negotiation(void)
+void	User::parsing(Server &server)
+{
+	(void)server;
+}
+
+void    User::negotiation(Server &server)
 {
 	std::vector<std::string> parsed;
 	std::string tmp;
@@ -36,25 +41,29 @@ void    User::negotiation(void)
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
-		this->parse_negotiation(tmp);
+		this->parse_negotiation(tmp, server);
 		_data.erase(0, closest + 1);
 	}
 	_data.clear(); 
 }
 
-void    User::registration(void)
+void    User::registration(Server &server)
 {
 	std::string msg;
 	msg = "001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	msg = "002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
-	msg = "003 " + _nickname + " :This server was created Today" + "\r\n";
+	msg = "003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "004" + _nickname + " " + server.get_servername() + " version 1.0\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	change_status(CONNECTED);
 }
 
-void    User::parse_negotiation(std::string line)
+void    User::parse_negotiation(std::string line, Server &server)
 {
 	if ("CAP LS" == line)
 		write(this->_fds->fd, "CAP * LS\n", 9);
@@ -76,7 +85,7 @@ void    User::parse_negotiation(std::string line)
 		std::cout << "user: " << this->_username << std::endl;
 	}
 	else if (line == "CAP END")
-		this->registration();
+		this->registration(server);
 }
 
 void    User::change_status(int status)
