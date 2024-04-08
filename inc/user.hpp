@@ -6,15 +6,16 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 17:13:47 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/08 13:06:47 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef USER_HPP
 # define USER_HPP
 
-#include <iostream>
-#include <poll.h>
+#include "libs.hpp"
+
+class Server;
 
 class User
 {
@@ -22,7 +23,7 @@ public:
 	User();
 	~User();
 	void			negotiation(void);
-	void			registration(void);
+	void			registration(Server server);
 	int				get_status() const;
 	void			parse_negotiation(std::string line);
 	void			change_status(int status);

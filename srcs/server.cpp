@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 16:12:41 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:11:40 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Server::Server()
 {
     time_t  t               = time(0);
     this->_datetime         = ctime(&t);
+	this->_server_name		= "BounceDribble";
     return ;
 }
 
@@ -46,6 +47,16 @@ void    Server::set_addr(int port, int fd_socket)
 	this->_addr.sin_addr.s_addr = INADDR_ANY;
     if (bind(fd_socket, (struct sockaddr *) &this->_addr, sizeof(this->_addr)) <= 0)
 		perror("Bind info");
+}
+
+char	*Server::get_dt() const
+{
+	return (this->_datetime);
+}
+
+std::string	Server::get_servername() const
+{
+	return (this->_server_name);
 }
 
 std::list<User *> &Server::get_usr_list()

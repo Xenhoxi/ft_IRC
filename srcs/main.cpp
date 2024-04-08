@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/08 11:25:35 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:44:05 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	running_server(Server &server)
 		if (fds->fd != user_list.front()->get_fds()->fd && user->get_status() == NEGOTIATION)
 			user->negotiation();
 		else if (user->get_status() == REGISTRATION)
-			user->registration();
+			user->registration(server);
 		//stop code
 	}
 }

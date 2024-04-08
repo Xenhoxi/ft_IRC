@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 11:36:18 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:14:09 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,18 @@ void    User::negotiation(void)
 	_data.clear(); 
 }
 
-void    User::registration(void)
+void    User::registration(Server server)
 {
 	std::string msg;
 	msg = "001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	msg = "002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
-	msg = "003 " + _nickname + " :This server was created Today" + "\r\n";
+	msg = "003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "004" + _nickname + " " + server.get_servername() + " version 1.0\r\n";
+	write(this->_fds->fd, msg.c_str(), msg.size());
+	msg = "005" + _nickname + " <tokens>: are supported by this server\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	change_status(CONNECTED);
 }
