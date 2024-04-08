@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:14:03 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:14:46 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
 		server.join_channel(this, line.substr(line.find('#'), line.find(':') - 1));
-	else if ("PRIVMSG" == line.substr(0, 7))
-		server.join_channel(this, line.substr(line.find('#') + 1, line.find(':') - 1));
 	else if ("PRIVMSG" == line.substr(0, 7))
 	{
 		std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
