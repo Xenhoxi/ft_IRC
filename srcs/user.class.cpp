@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:14:46 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:33:44 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void	User::parse_command(std::string line, Server &server)
 	{
 		line.erase(0, 5);
 		send_message("PONG diloragequit " + line + "\r\n");
-		std::string ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
-		// std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
-		// Server.broadcast(this, msg, ch_name);
 	}
 	else if ("KICK" == line.substr(0, 4) || "INVITE" == line.substr(0, 6)
 		|| "TOPIC" == line.substr(0, 5) || "MODE" == line.substr(0, 4))

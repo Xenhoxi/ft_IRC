@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/09 00:20:39 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 00:43:52 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ bool    Channel::is_operator(User &user) const
     std::list<User *>::const_iterator it;
     for (it = this->_operators.begin(); it != this->_operators.end(); it++)
     {
-        std::cout << (*it)->get_nick() << std::endl;
+        std::cout << "Checking if "<< (*it)->get_nick() << " is operator" << std::endl;
         User    *op_user = *it;
         if (op_user == (&user))
             return (true);
     }
+    std::cout << "Don't have op privileges" << std::endl;
     return (false);
 }
 
@@ -67,3 +68,17 @@ void Channel::mode(std::string line)
     std::cout << "mode called" << std::endl;
 }
 
+void    Channel::send_to_all_user(std::string msg, User *send_user, std::string ch_name)
+{
+	std::list<User *>::iterator it;
+
+	for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+	{
+		User *user_receiver = *it;
+		if (send_user != user_receiver)
+		{
+			user_receiver->send_message(":" + send_user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n");
+			std::cout << "send to all user" << std::endl;
+		}
+	}
+}
