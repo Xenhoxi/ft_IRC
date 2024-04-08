@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:36:02 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:40:27 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class Server
 		void					add_user(void);
 	private:
 		std::list<User *>       			_usr_list;
-        std::string         _server_name;
+        std::string         				_server_name;
 		std::map<std::string, Channel *>    _channel_list;
 		char                				*_datetime;
 		struct	sockaddr_in					_addr;
