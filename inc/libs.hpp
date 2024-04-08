@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/04 14:50:20 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/08 13:01:09 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 # define DISCONNECTED 0
 # define NEGOTIATION 1
-# define REGISTRATION 2
-# define CONNECTED 3
+# define CONNECTED 2
 
 #include <stdio.h>
 #include <poll.h>
@@ -38,5 +37,6 @@
 #include "user.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"
+#include "channel.hpp"
 
 #endif

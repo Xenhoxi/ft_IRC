@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 11:36:18 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:33:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void    User::parse_negotiation(std::string line)
 		std::cout << "user: " << this->_username << std::endl;
 	}
 	else if (line == "CAP END")
-		change_status(REGISTRATION);
+		this->registration();
 }
 
 void    User::change_status(int status)
@@ -97,7 +97,6 @@ void    User::set_fds(int server_socket)
 	}
 	this->_fds->fd = server_socket;
 	this->_fds->events = POLLIN | POLLOUT;
-	return ;
 }
 
 struct pollfd *User::get_fds() const
@@ -108,5 +107,9 @@ struct pollfd *User::get_fds() const
 int User::get_status() const
 {
 	return (this->_status);
-	return (this->_status);
+}
+
+void	User::parsing(Server &server)
+{
+	
 }

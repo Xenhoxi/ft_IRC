@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   channel.hpp                                        :+:      :+:    :+:   */
+/*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/08 13:26:17 by ljerinec         ###   ########.fr       */
+/*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
+/*   Updated: 2024/04/08 13:33:56 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHANNEL_HPP
-# define CHANNEL_HPP
-
 #include "libs.hpp"
 
-class Channel
+Channel::Channel(User *user, std::string name) : _name(name)
 {
-public:
-	Channel(User *user, std::string name);
-    ~Channel(void);
-    void    add_user(User *user);
+    _UserInChannel.push_back(user);
+}
 
-private:
-    std::string         _name;
-    std::list<User *>   _UserInChannel;
-};
+Channel::~Channel()
+{
+    return ;
+}
 
-
-#endif
+void    Channel::add_user(User *user)
+{
+    _UserInChannel.push_back(user);
+}

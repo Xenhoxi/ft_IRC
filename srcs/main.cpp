@@ -6,25 +6,11 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/08 11:25:35 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:33:08 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
-
-void	accept_connection(std::list <User *> &userlist)
-{
-	User *new_user = new User();
-	new_user->set_fds(accept(userlist.front()->get_fds()->fd, NULL, NULL));
-	if (new_user->get_fds()->fd < 0)
-		throw Error("failed to accept connection");
-	else
-	{
-		new_user->change_status(NEGOTIATION);
-		userlist.push_back(new_user);
-		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
-	}
-}
 
 void	read_socket(User *user)
 {
@@ -47,15 +33,14 @@ void	running_server(Server &server)
 		if (poll(fds, 1, 0) > 0)
 		{
 			if (fds->fd == user_list.front()->get_fds()->fd && fds->revents & POLLIN)
-				accept_connection(user_list);
+				server.add_user();
 			else if (fds->revents & POLLIN)
 				read_socket(user);
 		}
 		if (fds->fd != user_list.front()->get_fds()->fd && user->get_status() == NEGOTIATION)
 			user->negotiation();
-		else if (user->get_status() == REGISTRATION)
-			user->registration();
-		//stop code
+		else if (user->get_status() == CONNECTED)
+			user->parsing(server);
 	}
 }
 
