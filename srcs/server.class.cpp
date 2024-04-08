@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:27:53 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:37:43 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,4 @@ void    Server::set_addr(int port, int fd_socket)
 std::list<User *> &Server::get_usr_list()
 {
     return (_usr_list);
-}
-
-void	Server::join_channel(User *user, std::string ch_name)
-{
-	if (_channel_list.find(ch_name) != _channel_list.end())
-		_channel_list[ch_name]->add_user(user);
-	else
-	{
-		Channel *newChannel = new Channel(user, ch_name);
-		_channel_list.insert(std::pair<std::string, Channel *>(ch_name, newChannel));
-	}
-}
-
-void	Server::add_user(void)
-{
-	User *new_user = new User();
-	new_user->set_fds(accept(_usr_list.front()->get_fds()->fd, NULL, NULL));
-	if (new_user->get_fds()->fd < 0)
-		throw Error("failed to accept connection");
-	else
-	{
-		new_user->change_status(NEGOTIATION);
-		_usr_list.push_back(new_user);
-		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
-	}
 }
