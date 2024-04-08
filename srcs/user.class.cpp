@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 14:13:20 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:48:22 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,36 @@ User::~User()
 	return ;
 }
 
+void	User::parse_command(std::string line, Server &server)
+{
+	if ("JOIN" == line.substr(0, 4))
+		server.join_channel(this, line.substr(line.find('#') + 1, line.find(':') - 1));
+	if ("PRIVMSG" == line.substr(0, 7))
+	{
+		std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
+		std::string ch_name = line.substr(line.find('#') + 1, line.find(':') - line.find('#') - 2);
+		// std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
+		// Server.broadcast(this, msg, ch_name);
+	}
+}
+
 void	User::parsing(Server &server)
 {
+	std::vector<std::string> parsed;
+	std::string tmp;
+	size_t closest;
+	
+	if (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
+	{
+		if (_data.find('\r') < _data.find('\n'))
+			closest = _data.find('\r');
+		else
+			closest = _data.find('\n');
+		tmp = _data.substr(0, closest);
+		parse_command(tmp, server);
+		_data.erase(0, closest + 1);
+	}
+	_data.clear();
 	(void)server;
 }
 

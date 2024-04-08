@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 13:53:15 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/08 14:47:26 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,3 +87,9 @@ void	Server::add_user(void)
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
 	}
 }
+
+// void	Server::broadcast(User *user, std::string msg, std::string ch_name)
+// {
+	// if (_channel_list.find(ch_name) != _channel_list.end())
+	// 	_channel_list[ch_name]->send_to_all_user();
+// }
