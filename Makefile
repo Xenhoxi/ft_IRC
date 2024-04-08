@@ -6,7 +6,7 @@
 #    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/04/04 15:20:47 by smunio           ###   ########.fr        #
+#    Updated: 2024/04/08 13:49:41 by smunio           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,9 @@ CC = c++
 CFLAGS = -Wall -Werror -Wextra -g3 
 
 SOURCES =	srcs/main.cpp \
-			srcs/user.cpp \
-			srcs/server.cpp 
+			srcs/user.class.cpp \
+			srcs/server.class.cpp \
+			srcs/channel.class.cpp
 
 OBJ_DIR = objs/
 OBJECTS = $(addprefix $(OBJ_DIR), $(notdir $(SOURCES:.cpp=.o)))

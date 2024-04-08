@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/08 13:26:17 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:51:11 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CHANNEL_HPP
 
 #include "libs.hpp"
+
+class User;
 
 class Channel
 {
