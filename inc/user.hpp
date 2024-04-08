@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 14:23:08 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:06:17 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ public:
 	void			change_status(int status);
 	void            set_fds(int server_socket);
 	void			parse_command(std::string line, Server &server);
+	void			send_message(std::string msg);
+	std::string 	get_nick();
 	struct pollfd   *get_fds() const;
 	std::string		_data;
 
