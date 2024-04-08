@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 14:47:26 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/09 00:08:04 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Server::Server()
 {
     time_t  t               = time(0);
     this->_datetime         = ctime(&t);
+	this->_server_name		= "vitesse a la team de puants";
     return ;
 }
 
@@ -63,6 +64,11 @@ std::string	Server::get_servername() const
 	return (this->_server_name);
 }
 
+std::map<std::string, Channel *>	Server::get_channel_list() const
+{
+	return (this->_channel_list);
+}
+
 void	Server::join_channel(User *user, std::string ch_name)
 {
 	if (_channel_list.find(ch_name) != _channel_list.end())
@@ -85,6 +91,43 @@ void	Server::add_user(void)
 		new_user->change_status(NEGOTIATION);
 		_usr_list.push_back(new_user);
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
+	}
+}
+
+std::string Server::find_ch_name(std::string line)
+{
+	char *tok = strtok((char *)line.c_str(), " ");
+	while (tok != NULL)
+	{
+		if (tok[0] == '#')
+			return (static_cast<std::string>(tok));
+		tok = strtok(NULL, " ");
+	}
+	return ("null");
+}
+
+void	Server::call_op_cmd(std::string line, User &caller)
+{
+	std::string ch_name = find_ch_name(line);
+	char *cmd			= strtok((char *)line.c_str(), " ");
+	const char *cmd_tab[] = {"KICK", "INVITE", "TOPIC", "MODE"};
+	void (Channel::*functptr[])(std::string) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
+
+	if (ch_name == "null") // a securiser davantage
+		return ;
+
+	Channel *my_channel = this->_channel_list[ch_name];
+	for (int i = 0; i < 4; i++)
+	{	
+		if (!strcmp(cmd, cmd_tab[i]))
+		{
+			std::cout << "Crash: line:124 server.class.cpp call 911 pls" << std::endl;
+			if (my_channel->is_operator(caller) == true)
+			{
+				std::cout << "found operator" << std::endl;
+				(my_channel->*functptr[i])(line);
+			}
+		}
 	}
 }
 

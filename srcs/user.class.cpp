@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/08 14:48:22 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/09 00:01:50 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
 		server.join_channel(this, line.substr(line.find('#') + 1, line.find(':') - 1));
-	if ("PRIVMSG" == line.substr(0, 7))
+	else if ("PRIVMSG" == line.substr(0, 7))
 	{
 		std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
-		std::string ch_name = line.substr(line.find('#') + 1, line.find(':') - line.find('#') - 2);
+		std::string ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 		// std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
 		// Server.broadcast(this, msg, ch_name);
 	}
+	else if ("KICK" == line.substr(0, 4) || "INVITE" == line.substr(0, 6)
+		|| "TOPIC" == line.substr(0, 5) || "MODE" == line.substr(0, 4))
+		server.call_op_cmd(line, *this);
 }
 
 void	User::parsing(Server &server)
@@ -145,4 +148,9 @@ struct pollfd *User::get_fds() const
 int User::get_status() const
 {
 	return (this->_status);
+}
+
+std::string	User::get_nick() const
+{
+	return (this->_nickname);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/08 14:46:51 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/09 00:00:43 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,16 @@ public:
     ~Channel(void);
     void    add_user(User *user);
     void    send_to_all_user();
+	void	kick(std::string line);
+	void	invite(std::string line);
+	void	topic(std::string line);
+	void	mode(std::string line);
+	bool	is_operator(User &user) const;
 
 private:
-    std::string         _name;
-    std::list<User *>   _UserInChannel;
+    std::string         			_name;
+    std::list<User *>  				_userInChannel;
+	std::list<User *>				_operators;
 };
-
 
 #endif
