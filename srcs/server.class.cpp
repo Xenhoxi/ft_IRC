@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:16:23 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 14:43:02 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,6 @@ char	*Server::get_dt() const
 std::string	Server::get_servername() const
 {
 	return (this->_server_name);
-}
-
-std::map<std::string, Channel *>	Server::get_channel_list() const
-{
-	return (this->_channel_list);
 }
 
 void	Server::join_channel(User *user, std::string ch_name)
@@ -131,11 +126,22 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	}
 }
 
-void	Server::broadcast(User *user, std::string msg, std::string ch_name)
+void	Server::broadcast(User *user, std::string line)
 {
+	std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
+	std::string ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
+	std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		std::cout << "Channel name = " << ch_name << " | " << "msg = " << msg << std::endl;
 		_channel_list[ch_name]->send_to_all_user(msg, user, ch_name);
 	}
+}
+
+void	Server::channel_part(std::string line, User *user)
+{
+	std::string ch_name = line.substr(line.find('#'), line.size() - line.find('#'));
+	std::cout << ch_name << "|" << std::endl;
+	if (_channel_list.find(ch_name) != _channel_list.end())
+		_channel_list[ch_name]->disconnect(user, ch_name);
 }

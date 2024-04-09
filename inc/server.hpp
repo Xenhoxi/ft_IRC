@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 00:19:14 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/09 13:43:42 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ public:
 	std::string         get_servername() const;
 	void				join_channel(User *user, std::string ch_name);
 	void				add_user(void);
-	void				broadcast(User *user, std::string msg, std::string ch_name);
-	std::map<std::string, Channel *>	get_channel_list() const;
-	std::string 			find_ch_name(std::string line);
-	void					call_op_cmd(std::string line, User &caller);
+	void				broadcast(User *user, std::string line);
+	std::string 		find_ch_name(std::string line);
+	void				call_op_cmd(std::string line, User &caller);
+	void				channel_part(std::string line, User *user);
 private:
 	std::list<User *>       			_usr_list;
 	std::string         				_server_name;
