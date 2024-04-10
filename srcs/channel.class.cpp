@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/10 13:41:54 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:44:48 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Channel::~Channel()
 void    Channel::add_user(User *user)
 {
     _userInChannel.push_back(user);
-    user->send_message(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+    send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
     for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
         user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
      user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
