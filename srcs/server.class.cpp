@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/10 13:33:12 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/10 13:40:07 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,18 +112,10 @@ void	Server::call_op_cmd(std::string line, User &caller)
 		return ;
 
 	Channel *my_channel = this->_channel_list[ch_name];
-	for (int i = 0; i < 4; i++)
-	{	
+	for (int i = 0; i < 4; i++)	
 		if (!strcmp(cmd, cmd_tab[i]))
-		{
-			std::cout << "line: " << line << std::endl;
 			if (my_channel->is_operator(caller) == true)
-			{
-				std::cout << "found operator" << std::endl;
 				(my_channel->*functptr[i])(line, caller);
-			}
-		}
-	}
 }
 
 void	Server::broadcast(User *user, std::string line)

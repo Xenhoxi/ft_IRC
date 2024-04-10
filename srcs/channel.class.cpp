@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/10 13:32:34 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/10 13:39:23 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ bool    Channel::is_operator(User &user) const
 
 void Channel::kick(std::string &line, User &caller)
 {
-    (void)caller;
     std::string reason = line.substr(line.find(':') + 1, line.size());
 
     char *tar = (char *)line.c_str();
@@ -60,17 +59,15 @@ void Channel::kick(std::string &line, User &caller)
     tar = strtok(NULL, " ");
 
     User    &target = this->get_user(tar);
-    std::cout << "target nickname: " << target.get_nick() << std::endl;\
 
     std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + "\r\n";
-    write(target.get_fds()->fd, msg.c_str(), msg.size());
+    this->send_to_all_user(msg);
     
     std::list<User *>::iterator it;
     for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
     {
         if (*it == &target)
         {
-            std::cout << "gonna erase: " << (*it)->get_nick() << std::endl;
             _userInChannel.erase(it);
             break ;
         }
