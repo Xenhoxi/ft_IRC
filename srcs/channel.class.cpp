@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/09 15:18:30 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:23:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,25 @@
 
 Channel::Channel(User *user, std::string name) : _name(name)
 {
-    _userInChannel.push_back(user);
+    add_user(user);
     _operators.push_back(user);
-    user->send_message(":" + user->get_nick() + " PRIVMSG " + name + " :has joined the channel\r\n");
-	std::cout << "Create Channel and add user to it: " << _name << std::endl;
+    std::cout << "Create channel " << _name << " and add " << user->get_nick() << std::endl;
 }
 
 Channel::~Channel()
 {
+    std::cout << "Channel " << _name << "deleted !" << std::endl;
 	return ;
 }
 
 void    Channel::add_user(User *user)
 {
     _userInChannel.push_back(user);
-    user->send_message(":" + user->get_nick() + " PRIVMSG " + this->_name + " :has joined the channel\r\n");
-    std::cout << "User add to channel: " << _name << std::endl;
+    user->send_message(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+    for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+        user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
+     user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
+    std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
 bool    Channel::is_operator(User &user) const
@@ -78,7 +81,7 @@ void    Channel::disconnect(User *leaving_user, std::string ch_name)
 		User *user = *it;
 		if (leaving_user == user)
 		{
-			leaving_user->send_message("PART\r\n");
+			send_to_all_user(":" + leaving_user->get_nick() + " PART " + ch_name + " " + leaving_user->get_nick() + "\r\n");
             _userInChannel.erase(it);
 			std::cout << "User leave the channel: " << ch_name << std::endl;
             break ;
@@ -86,7 +89,7 @@ void    Channel::disconnect(User *leaving_user, std::string ch_name)
 	}
 }
 
-void    Channel::send_to_all_user(std::string msg, User *send_user, std::string ch_name)
+void    Channel::send_to_others(std::string msg, User *send_user)
 {
 	std::list<User *>::iterator it;
 
@@ -94,9 +97,30 @@ void    Channel::send_to_all_user(std::string msg, User *send_user, std::string 
 	{
 		User *user_receiver = *it;
 		if (send_user != user_receiver)
-		{
-			user_receiver->send_message(":" + send_user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n");
-			std::cout << "send to all user" << std::endl;
-		}
+			user_receiver->send_message(msg);
 	}
+}
+
+void    Channel::send_to_all_user(std::string msg)
+{
+	std::list<User *>::iterator it;
+
+	for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+	{
+		User *user_receiver = *it;
+        user_receiver->send_message(msg);
+	}
+}
+
+bool    Channel::is_connected(User *user)
+{
+    std::list<User *>::iterator it;
+
+    for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+	{
+		User *channel_user = *it;
+		if (user == channel_user)
+			return (true);
+	}
+    return (false);
 }

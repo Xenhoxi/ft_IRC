@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 13:50:28 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:11:16 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int User::get_status() const
 void	User::send_message(std::string msg)
 {
 	write(this->get_fds()->fd, msg.c_str(), msg.size());
-	std::cout << "Send: " << msg.substr(0, msg.size() - 2) << std::endl;
+	std::cout << ">> " << msg.substr(0, msg.size() - 2) << std::endl;
 }
 
 std::string 	User::get_nick()
