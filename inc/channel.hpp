@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/10 13:32:05 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:16:55 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ public:
 	Channel(User *user, std::string name);
     ~Channel(void);
     void    add_user(User *user);
-	void	kick(std::string &line, User &caller);
-	void	invite(std::string &line, User &caller);
-	void	topic(std::string &line, User &caller);
-	void	mode(std::string &line, User &caller);
+
+	void	kick(std::string &line, User &caller, Server &server);
+	void	invite(std::string &line, User &caller, Server &server);
+	void	topic(std::string &line, User &caller, Server &server);
+	void	mode(std::string &line, User &caller, Server &server);
+
     void    send_to_all_user(std::string msg);
     void    send_to_others(std::string msg, User *user);
 	void	disconnect(User *user, std::string ch_name);

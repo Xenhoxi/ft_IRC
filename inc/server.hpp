@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/09 13:43:42 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:18:47 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ public:
 	std::string 		find_ch_name(std::string line);
 	void				call_op_cmd(std::string line, User &caller);
 	void				channel_part(std::string line, User *user);
+	User				&get_user(std::string nick);
 private:
 	std::list<User *>       			_usr_list;
 	std::string         				_server_name;
