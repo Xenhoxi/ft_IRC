@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/10 13:07:36 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/10 13:33:05 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int User::get_status() const
 void	User::send_message(std::string msg)
 {
 	write(this->get_fds()->fd, msg.c_str(), msg.size());
-	std::cout << "Send: " << msg.substr(0, msg.size() - 2) << std::endl;
+	std::cout << ">> " << msg.substr(0, msg.size() - 2) << std::endl;
 }
 
 std::string 	User::get_nick()
