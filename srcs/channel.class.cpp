@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/10 13:39:09 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:41:54 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Channel::~Channel()
 void    Channel::add_user(User *user)
 {
     _userInChannel.push_back(user);
-    send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+    user->send_message(":" + user->get_nick() + " JOIN " + _name + "\r\n");
     for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
         user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
      user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
@@ -49,28 +49,63 @@ bool    Channel::is_operator(User &user) const
     return (false);
 }
 
-void Channel::kick(std::string line)
+void Channel::kick(std::string &line, User &caller)
 {
-    (void)line;
-    std::cout << "kicking ..." << std::endl;
+    std::string reason = line.substr(line.find(':') + 1, line.size());
+
+    char *tar = (char *)line.c_str();
+    tar = strtok(NULL, " ");
+    tar = strtok(NULL, " ");
+
+    User    &target = this->get_user(tar);
+
+    std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + "\r\n";
+    this->send_to_all_user(msg);
+    
+    std::list<User *>::iterator it;
+    for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+    {
+        if (*it == &target)
+        {
+            _userInChannel.erase(it);
+            break ;
+        }
+    }
 }
 
-void Channel::invite(std::string line)
+void Channel::invite(std::string &line, User &caller)
 {
     (void)line;
+        (void)caller;
+
     std::cout << "inviting ..." << std::endl;
 }
 
-void Channel::topic(std::string line)
+void Channel::topic(std::string &line, User &caller)
 {
     (void)line;
+        (void)caller;
+
     std::cout << "topic called" << std::endl;
 }
 
-void Channel::mode(std::string line)
+void Channel::mode(std::string &line, User &caller)
 {
     (void)line;
+        (void)caller;
+
     std::cout << "mode called" << std::endl;
+}
+
+User &Channel::get_user(std::string nick)
+{
+    std::list<User *>::iterator it;
+    for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+	{
+        if ((*it)->get_nick() == nick)
+            return (*(*it));
+    }
+    throw Error("can't find target in user list");
 }
 
 void    Channel::disconnect(User *leaving_user, std::string ch_name)

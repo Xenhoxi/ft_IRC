@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/10 13:04:20 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:40:07 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,24 +106,16 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	std::string ch_name = find_ch_name(line);
 	char *cmd			= strtok((char *)line.c_str(), " ");
 	const char *cmd_tab[] = {"KICK", "INVITE", "TOPIC", "MODE"};
-	void (Channel::*functptr[])(std::string) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
+	void (Channel::*functptr[])(std::string&, User&) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
 
 	if (ch_name == "null") // a securiser davantage
 		return ;
 
 	Channel *my_channel = this->_channel_list[ch_name];
-	for (int i = 0; i < 4; i++)
-	{	
+	for (int i = 0; i < 4; i++)	
 		if (!strcmp(cmd, cmd_tab[i]))
-		{
-			std::cout << "Crash: line:124 server.class.cpp call 911 pls" << std::endl;
 			if (my_channel->is_operator(caller) == true)
-			{
-				std::cout << "found operator" << std::endl;
-				(my_channel->*functptr[i])(line);
-			}
-		}
-	}
+				(my_channel->*functptr[i])(line, caller);
 }
 
 void	Server::broadcast(User *user, std::string line)
