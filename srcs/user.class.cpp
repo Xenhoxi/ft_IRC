@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/10 14:24:29 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/11 13:18:24 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-User::User() : _status(DISCONNECTED)
+User::User() : _status(NEGOTIATION)
 {
 	this->_fds = new struct pollfd[1];
 	return ;
@@ -36,6 +36,9 @@ void	User::parse_command(std::string line, Server &server)
 		server.call_op_cmd(line, *this);
 	else if ("PART" == line.substr(0, 4))
 		server.channel_part(line, this);
+	else if ("QUIT" == line.substr(0, 4))
+		server.disconnect(this);
+		
 }
 
 void	User::parsing(Server &server)
@@ -92,7 +95,7 @@ void    User::registration(Server &server)
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	msg = "003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
-	msg = "004" + _nickname + " " + server.get_servername() + " version 1.0\r\n";
+	msg = "004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
 	msg = "005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
 	write(this->_fds->fd, msg.c_str(), msg.size());
@@ -106,7 +109,15 @@ void    User::parse_negotiation(std::string line, Server &server)
 	else if ("PASS" == line.substr(0, 4))
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
 	else if ("NICK" == line.substr(0, 4))
+	{
+		if (!server.is_pass(_password))
+		{
+			send_message("ERROR :Password incorrect\r\n");
+			server.disconnect(this);
+			throw Error("Password incorrect");
+		}
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+	}
 	else if ("USER" == line.substr(0, 4))
 	{
 		char *tmp = strtok((char *)line.c_str(), " ");
@@ -124,7 +135,6 @@ void    User::change_status(int status)
 	if (this->_status == 2 && status == 1)
 		throw Error("user is already registered");
 	this->_status = status;
-	std::cout << "Status change of " << this->get_fds()->fd << " to " << _status << std::endl;
 }
 
 void    User::set_fds(int server_socket)

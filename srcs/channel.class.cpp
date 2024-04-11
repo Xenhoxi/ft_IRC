@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/11 10:58:58 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:06:00 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 {
     (void)server;
     (void)line;
-        (void)caller;
+    (void)caller;
 
     std::cout << "topic called" << std::endl;
 }
@@ -95,7 +95,7 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 void Channel::mode(std::string &line, User &caller, Server &server)
 {
     (void)line;
-        (void)caller;
+    (void)caller;
     (void)server;
 
     std::cout << "mode called" << std::endl;
