@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/11 12:58:57 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:32:23 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,14 @@ void	Server::channel_part(std::string line, User *user)
 	std::string ch_name = line.substr(line.find('#'), line.size() - line.find('#'));
 	std::cout << ch_name << "|" << std::endl;
 	if (_channel_list.find(ch_name) != _channel_list.end())
+	{
 		_channel_list[ch_name]->disconnect(user, ch_name);
+		// if ((*(_channel_list.find(ch_name))).second->get_size() == 0)
+		// {
+		// 	// _channel_list.erase(_channel_list.find(ch_name));
+		// 	std::cout << "Channel supprimer !" << std::endl;
+		// }
+	}
 }
 
 bool	Server::is_pass(std::string password)

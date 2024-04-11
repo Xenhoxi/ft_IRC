@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/11 13:18:24 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:18:44 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,15 @@ void    User::registration(Server &server)
 {
 	std::string msg;
 	msg = "001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
-	write(this->_fds->fd, msg.c_str(), msg.size());
+	send_message(msg);
 	msg = "002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
-	write(this->_fds->fd, msg.c_str(), msg.size());
+	send_message(msg);
 	msg = "003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
-	write(this->_fds->fd, msg.c_str(), msg.size());
+	send_message(msg);
 	msg = "004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n";
-	write(this->_fds->fd, msg.c_str(), msg.size());
+	send_message(msg);
 	msg = "005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
-	write(this->_fds->fd, msg.c_str(), msg.size());
+	send_message(msg);
 	change_status(CONNECTED);
 }
 

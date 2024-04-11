@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/11 13:20:46 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:23:26 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	read_socket(User *user)
 void	running_server(Server &server)
 {
 	std::list<User *> &user_list = server.get_usr_list();
+
 	for (std::list<User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 	{
 		try

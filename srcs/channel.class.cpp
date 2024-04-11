@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/11 11:06:00 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:27:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ Channel::Channel(User *user, std::string name) : _name(name)
 {
     add_user(user);
     _operators.push_back(user);
-    std::cout << "Create channel " << _name << " and add " << user->get_nick() << std::endl;
+    std::cout << "Channel created !" << std::endl;
 }
 
 Channel::~Channel()
 {
     std::cout << "Channel " << _name << "deleted !" << std::endl;
+    
 	return ;
 }
 
@@ -29,9 +30,10 @@ void    Channel::add_user(User *user)
 {
     _userInChannel.push_back(user);
     send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
-    for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
-        user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
-     user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
+    // user->send_message("NAMES\r\n");
+    // for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+    //     user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
+    //  user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
     std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
@@ -162,4 +164,9 @@ bool    Channel::is_connected(User *user)
 			return (true);
 	}
     return (false);
+}
+
+int Channel::get_size(void)
+{
+    return (_userInChannel.size());
 }
