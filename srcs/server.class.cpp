@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/10 13:40:07 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:28:00 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ std::string Server::find_ch_name(std::string line)
 			return (static_cast<std::string>(tok));
 		tok = strtok(NULL, " ");
 	}
-	return ("null");
+	throw Error("can't find channel");
 }
 
 void	Server::call_op_cmd(std::string line, User &caller)
@@ -106,7 +106,7 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	std::string ch_name = find_ch_name(line);
 	char *cmd			= strtok((char *)line.c_str(), " ");
 	const char *cmd_tab[] = {"KICK", "INVITE", "TOPIC", "MODE"};
-	void (Channel::*functptr[])(std::string&, User&) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
+	void (Channel::*functptr[])(std::string&, User&, Server&) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
 
 	if (ch_name == "null") // a securiser davantage
 		return ;
@@ -115,7 +115,7 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	for (int i = 0; i < 4; i++)	
 		if (!strcmp(cmd, cmd_tab[i]))
 			if (my_channel->is_operator(caller) == true)
-				(my_channel->*functptr[i])(line, caller);
+				(my_channel->*functptr[i])(line, caller, *this);
 }
 
 void	Server::broadcast(User *user, std::string line)
@@ -131,6 +131,17 @@ void	Server::broadcast(User *user, std::string line)
 			_channel_list[ch_name]->send_to_others(msg, user);
 		}
 	}
+}
+
+User &Server::get_user(std::string nick)
+{
+    std::list<User *>::iterator it;
+    for (it = _usr_list.begin(); it != _usr_list.end(); it++)
+	{
+        if ((*it)->get_nick() == nick)
+            return (*(*it));
+    }
+    throw Error("can't find target in user list");
 }
 
 void	Server::channel_part(std::string line, User *user)

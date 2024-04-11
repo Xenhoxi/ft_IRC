@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/10 13:55:04 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:58:58 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ bool    Channel::is_operator(User &user) const
     return (false);
 }
 
-void Channel::kick(std::string &line, User &caller)
+void Channel::kick(std::string &line, User &caller, Server &server)
 {
+    (void)server;
     std::string reason = line.substr(line.find(':') + 1, line.size());
 
     char *tar = (char *)line.c_str();
@@ -73,26 +74,29 @@ void Channel::kick(std::string &line, User &caller)
     }
 }
 
-void Channel::invite(std::string &line, User &caller)
+void Channel::invite(std::string &line, User &caller, Server &server)
 {
-    (void)line;
-        (void)caller;
+    char *tar = (char *)line.c_str();
+    tar = strtok(NULL, " "); 
+    User    &target = server.get_user(tar);
 
-    std::cout << "inviting ..." << std::endl;
+    target.send_message(":" + caller.get_nick() + " INVITE " + tar + " " + this->_name + "\r\n");
 }
 
-void Channel::topic(std::string &line, User &caller)
+void Channel::topic(std::string &line, User &caller, Server &server)
 {
+    (void)server;
     (void)line;
         (void)caller;
 
     std::cout << "topic called" << std::endl;
 }
 
-void Channel::mode(std::string &line, User &caller)
+void Channel::mode(std::string &line, User &caller, Server &server)
 {
     (void)line;
         (void)caller;
+    (void)server;
 
     std::cout << "mode called" << std::endl;
 }
