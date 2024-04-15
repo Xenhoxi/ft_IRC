@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/11 14:27:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:29:12 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,25 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 
 void Channel::mode(std::string &line, User &caller, Server &server)
 {
-    (void)line;
-    (void)caller;
-    (void)server;
-
-    std::cout << "mode called" << std::endl;
+	(void)server;
+	std::string opt = line.substr(line.find('-'), 2);
+	std::string	tar = line.substr(line.find('-') + 3, line.size());
+    std::cout << "mode called " << tar  << opt << std::endl;
+	caller.send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k')
+		throw Error("wrong MODE opt");
+	if (opt == "-o")
+	{
+		std::list<User *>::iterator it;
+		for (it = this->_operators.begin(); it != this->_operators.end(); it++)
+		{
+			if ((*it)->get_nick() == caller.get_nick())
+			{
+				this->_operators.erase(it);
+				break ;
+			}
+		}
+	}
 }
 
 User &Channel::get_user(std::string nick)
