@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/11 14:32:23 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:11:53 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,14 @@ void	Server::broadcast(User *user, std::string line)
 	if (line.find('#') != line.npos)
 		ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 	else
-		ch_name = line.substr(line.find(' '), line.find(':') - line.find(' ') - 1);;
-	std::cout << "msg = " << msg << " | "<< "channel name = " << ch_name << std::endl;
-	if (_channel_list.find(ch_name) != _channel_list.end())
+		ch_name = line.substr(line.find(' ') + 1, line.find(':') - line.find(' ') - 2);
+	if ("#" == ch_name.substr(0, 1))
 	{
 		if (_channel_list[ch_name]->is_connected(user))
 		{
 			msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 			_channel_list[ch_name]->send_to_others(msg, user);
+			msg.clear();
 		}
 	}
 	else
@@ -136,10 +136,12 @@ void	Server::broadcast(User *user, std::string line)
 		std::list<User *>::iterator it;
 		for (it = _usr_list.begin(); it != _usr_list.end(); it++)
 		{
+			std::cout << (*it)->get_nick() << ":" << ch_name << "|" << std::endl;
 			if ((*it)->get_nick() == ch_name)
 			{
 				msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 				(*it)->send_message(msg);
+				msg.clear();
 			}
 		}
 	}
@@ -163,11 +165,11 @@ void	Server::channel_part(std::string line, User *user)
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		_channel_list[ch_name]->disconnect(user, ch_name);
-		// if ((*(_channel_list.find(ch_name))).second->get_size() == 0)
-		// {
-		// 	// _channel_list.erase(_channel_list.find(ch_name));
-		// 	std::cout << "Channel supprimer !" << std::endl;
-		// }
+		if ((*(_channel_list.find(ch_name))).second->get_size() == 0)
+		{
+			_channel_list.erase(_channel_list.find(ch_name));
+			std::cout << "Channel supprimer !" << std::endl;
+		}
 	}
 }
 

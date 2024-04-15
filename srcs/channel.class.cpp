@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/11 14:27:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/15 10:39:55 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ Channel::Channel(User *user, std::string name) : _name(name)
 Channel::~Channel()
 {
     std::cout << "Channel " << _name << "deleted !" << std::endl;
-    
 	return ;
 }
 
