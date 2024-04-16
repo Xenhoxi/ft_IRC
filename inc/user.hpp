@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/16 10:41:04 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:08:32 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ public:
 	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
 private:
+	void			check_nick_validity(Server &server);
+	bool			is_nick_used(Server &server);
+
 	std::string		_data;
 	std::string     _nickname;
 	std::string		_username;

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/11 12:53:31 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:17:47 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 #include <time.h>
 #include <ctime>
 #include <map>
+#include <sstream>
 #include "user.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"

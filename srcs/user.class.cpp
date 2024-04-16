@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/11 14:18:44 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:21:56 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +89,44 @@ void    User::negotiation(Server &server)
 void    User::registration(Server &server)
 {
 	std::string msg;
-	msg = "001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
+	msg = ":ft_irc 001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
 	send_message(msg);
-	msg = "002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
+	msg = ":ft_irc 002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
 	send_message(msg);
-	msg = "003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
+	msg = ":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
 	send_message(msg);
-	msg = "004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n";
+	msg = ":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n";
 	send_message(msg);
-	msg = "005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
+	msg = ":ft_irc 005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
 	send_message(msg);
 	change_status(CONNECTED);
+}
+
+bool	User::is_nick_used(Server &server)
+{
+	for (std::list<User *>::iterator it = server.get_usr_list().begin(); it != server.get_usr_list().end(); it++)
+	{
+		if (this != (*it) && this->get_nick() == (*it)->get_nick())
+			return (true);
+	}
+	return (false);
+}
+
+void	User::check_nick_validity(Server &server)
+{
+	std::list<User *> user_list;
+	std::stringstream	nb;
+	std::string			nick = _nickname;
+	int	i = 0;
+
+	while (_nickname.substr(0, 1) == "#")
+		_nickname.erase(0);
+	while (is_nick_used(server))
+	{
+		nb.str(std::string());
+		nb << ++i;
+		_nickname = nick + nb.str();
+	}
 }
 
 void    User::parse_negotiation(std::string line, Server &server)
@@ -117,6 +144,8 @@ void    User::parse_negotiation(std::string line, Server &server)
 			throw Error("Password incorrect");
 		}
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+		check_nick_validity(server);
+		std::cout << _nickname << std::endl;
 	}
 	else if ("USER" == line.substr(0, 4))
 	{
@@ -167,6 +196,11 @@ void	User::send_message(std::string msg)
 std::string 	User::get_nick()
 {
 	return (_nickname);
+}
+
+void	User::add_data(std::string new_data)
+{
+	_data += new_data;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/16 10:33:54 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/16 12:44:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 Channel::Channel(User *user, std::string name) : _name(name)
 {
-    add_user(user);
     _operators.push_back(user);
+    add_user(user);
     std::cout << "Channel created !" << std::endl;
 }
 
@@ -27,12 +27,18 @@ Channel::~Channel()
 
 void    Channel::add_user(User *user)
 {
+    std::string msg = ":ft_irc 353 " + user->get_nick() + " = " + _name + " :";
+
     _userInChannel.push_back(user);
     send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
-    // user->send_message("NAMES\r\n");
-    // for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); it++)
-    //     user->send_message(user->get_nick() + " = " + _name + ":" + (*it)->get_nick()  + "\r\n");
-    //  user->send_message(user->get_nick() + " " + _name + " :End of /NAMES list\r\n");
+    for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)
+    {
+        if (is_operator(*(*it)))
+            msg += "@";
+        msg += (*it)->get_nick() + " ";
+    }
+    send_to_all_user(msg + "\r\n");
+   send_to_all_user(":ft_irc 366 " + user->get_nick() + " " + _name + " :End of /NAMES list.");
     std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
@@ -41,7 +47,6 @@ bool    Channel::is_operator(User &user) const
     std::list<User *>::const_iterator it;
     for (it = this->_operators.begin(); it != this->_operators.end(); it++)
     {
-        std::cout << "Checking if "<< (*it)->get_nick() << " is operator" << std::endl;
         User    *op_user = *it;
         if (op_user == (&user))
             return (true);
@@ -96,24 +101,26 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 void Channel::mode(std::string &line, User &caller, Server &server)
 {
 	(void)server;
-	std::string opt = line.substr(line.find('-'), 2);
-	std::string	tar = line.substr(line.find('-') + 3, line.size());
-    std::cout << "mode called " << tar  << opt << std::endl;
-	caller.send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
-	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k')
-		throw Error("wrong MODE opt");
-	if (opt == "-o")
-	{
-		std::list<User *>::iterator it;
-		for (it = this->_operators.begin(); it != this->_operators.end(); it++)
-		{
-			if ((*it)->get_nick() == caller.get_nick())
-			{
-				this->_operators.erase(it);
-				break ;
-			}
-		}
-	}
+    (void)caller;
+    (void)line;
+	// std::string opt = line.substr(line.find('-'), 2);
+	// std::string	tar = line.substr(line.find('-') + 3, line.size());
+    // std::cout << "mode called " << tar  << opt << std::endl;
+	// caller.send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+	// if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k')
+	// 	throw Error("wrong MODE opt");
+	// if (opt == "-o")
+	// {
+	// 	std::list<User *>::iterator it;
+	// 	for (it = this->_operators.begin(); it != this->_operators.end(); it++)
+	// 	{
+	// 		if ((*it)->get_nick() == caller.get_nick())
+	// 		{
+	// 			this->_operators.erase(it);
+	// 			break ;
+	// 		}
+	// 	}
+	// }
 }
 
 User &Channel::get_user(std::string nick)
