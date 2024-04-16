@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/16 12:44:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:47:33 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void    Channel::add_user(User *user)
             msg += "@";
         msg += (*it)->get_nick() + " ";
     }
-    send_to_all_user(msg + "\r\n");
-   send_to_all_user(":ft_irc 366 " + user->get_nick() + " " + _name + " :End of /NAMES list.");
+    user->send_message(msg + "\r\n" + ":ft_irc 366 " + user->get_nick() + " " + _name + " :End of /NAMES list.\r\n");
     std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
