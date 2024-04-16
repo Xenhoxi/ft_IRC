@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/16 17:44:42 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/16 18:23:31 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 
 void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 {
+    (void)caller;
 	std::string	tar = line.substr(line.find("MODE") + 9 + this->_name.size(), line.size());
     std::list<User *>::iterator it;
 
@@ -132,6 +133,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
             if ((*it)->get_nick() == tar)
             {
                     this->_operators.erase(it);
+                    (*it)->send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
                     break ;
             }
         }
@@ -141,10 +143,10 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
             if ((*it)->get_nick() == tar)
             {
                     this->_operators.push_back(*it);
+                    (*it)->send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
                     break ;
             }
         }
-    caller.send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
 }
 
 void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
@@ -159,6 +161,7 @@ void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
     if (opt[0] == '-')
     {
         this->_max_users = 0;
+        caller.send_message(": MODE " + this->_name + " " + opt + " " + "\r\n");
     }
     // caller.send_message()
 }
