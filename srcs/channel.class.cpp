@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/04/15 10:39:55 by ljerinec         ###   ########.fr       */
-=======
-/*   Updated: 2024/04/15 14:29:12 by smunio           ###   ########.fr       */
->>>>>>> refs/remotes/origin/master
+/*   Updated: 2024/04/16 10:33:54 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
