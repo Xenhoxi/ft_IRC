@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/17 11:53:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:56:41 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,12 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 void Channel::topic(std::string &line, User &caller, Server &server)
 {
     (void)server;
-    (void)line;
     (void)caller;
-
-    std::cout << "topic called" << std::endl;
+    std::string topic;
+    if (line.find("#") != line.npos && line.find(":") != line.npos)
+        topic = line.substr(line.find(":") + 1, line.size()- line.find(":") + 2);
+    _topic = topic;
+    std::cout << "topic called :" << topic << std::endl;
 }
 
 void Channel::mode(std::string &line, User &caller, Server &server)
@@ -231,4 +233,9 @@ size_t Channel::get_size(void)
 size_t Channel::get_max_user(void)
 {
     return (_max_users);
+}
+
+bool    Channel::get_topic_restriction(void)
+{
+    return (_topic_restriction);
 }

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/17 11:52:02 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:43:03 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ public:
 	bool	is_connected(User *user);
 	size_t	get_size(void);
 	size_t	get_max_user(void);
+	bool	get_topic_restriction(void);
 
 private:
     std::string         			_name;
@@ -47,7 +48,7 @@ private:
     std::list<User *>  				_userInChannel;
 	std::list<User *>				_operators;
 	size_t							_max_users;
-	bool							_topic; 
+	bool							_topic_restriction;
 };
 
 #endif
