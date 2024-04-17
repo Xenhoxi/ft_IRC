@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/16 17:35:01 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:45:30 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,12 @@ std::string	Server::get_servername() const
 void	Server::join_channel(User *user, std::string ch_name)
 {
 	if (_channel_list.find(ch_name) != _channel_list.end())
-		_channel_list[ch_name]->add_user(user);
+	{
+		if (_channel_list[ch_name]->get_size() < _channel_list[ch_name]->get_max_user())
+			_channel_list[ch_name]->add_user(user);
+		//else
+			//user->send_message("FULL le channel frerot casse toi !");
+	}
 	else
 	{
 		Channel *newChannel = new Channel(user, ch_name);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/16 17:15:40 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:52:02 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,16 @@ public:
 	User	&get_user(std::string nick);
 	bool	is_operator(std::string nick) const;
 	bool	is_connected(User *user);
-	int		get_size(void);
+	size_t	get_size(void);
+	size_t	get_max_user(void);
 
 private:
     std::string         			_name;
 	std::string						_topic;
     std::list<User *>  				_userInChannel;
 	std::list<User *>				_operators;
-	unsigned int					_max_users;
+	size_t							_max_users;
+	bool							_topic; 
 };
 
 #endif

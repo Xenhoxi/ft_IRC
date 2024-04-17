@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/16 18:23:31 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:38:10 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,17 @@ Channel::~Channel()
 
 void    Channel::add_user(User *user)
 {
-
-    // if (_userInChannel.size() < _max_users && _max_users != 0)
-    // {
-        std::string msg = ":ft_irc 353 " + user->get_nick() + " = " + _name + " :";
-        _userInChannel.push_back(user);
-        send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
-        for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)
-        {
-            if (is_operator((*it)->get_nick()))
-                msg += "@";
-            msg += (*it)->get_nick() + " ";
-        }
-        user->send_message(msg + "\r\n" + ":ft_irc 366 " + user->get_nick() + " " + _name + " :End of /NAMES list.\r\n");
-        std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
-    // }
-    // else
-    //     throw Error("channel is full");
+    std::string msg = ":ft_irc 353 " + user->get_nick() + " = " + _name + " :";
+    _userInChannel.push_back(user);
+    send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+    for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)
+    {
+        if (is_operator((*it)->get_nick()))
+            msg += "@";
+        msg += (*it)->get_nick() + " ";
+    }
+    user->send_message(msg + "\r\n" + ":ft_irc 366 " + user->get_nick() + " " + _name + " :End of /NAMES list.\r\n");
+    std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
 bool    Channel::is_operator(std::string nick) const
@@ -229,7 +223,12 @@ bool    Channel::is_connected(User *user)
     return (false);
 }
 
-int Channel::get_size(void)
+size_t Channel::get_size(void)
 {
     return (_userInChannel.size());
+}
+
+size_t Channel::get_max_user(void)
+{
+    return (_max_users);
 }
