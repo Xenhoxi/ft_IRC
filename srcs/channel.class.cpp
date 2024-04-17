@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/17 11:38:10 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/17 11:53:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ bool    Channel::is_operator(std::string nick) const
 void Channel::kick(std::string &line, User &caller, Server &server)
 {
     (void)server;
+    // CLIENT NE RECOIE PAS MSG DISANT QUIL NEST PAS OP
     std::string reason = line.substr(line.find(':') + 1, line.size());
 
     char *tar = (char *)line.c_str();
@@ -127,7 +128,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
             if ((*it)->get_nick() == tar)
             {
                     this->_operators.erase(it);
-                    (*it)->send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+                    this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
                     break ;
             }
         }
@@ -137,7 +138,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
             if ((*it)->get_nick() == tar)
             {
                     this->_operators.push_back(*it);
-                    (*it)->send_message(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+                    this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
                     break ;
             }
         }
@@ -150,14 +151,13 @@ void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
     {
         std::string count = line.substr(line.find(opt) + 3, line.size());
         this->_max_users += atoi(count.c_str());
-        caller.send_message(": MODE " + this->_name + " " + opt + " " + count + "\r\n");
+        this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + count + "\r\n");
     }
     if (opt[0] == '-')
     {
         this->_max_users = 0;
-        caller.send_message(": MODE " + this->_name + " " + opt + " " + "\r\n");
+        this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
     }
-    // caller.send_message()
 }
 
 User &Channel::get_user(std::string nick)
