@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/17 13:56:41 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:47:03 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,19 @@ void Channel::topic(std::string &line, User &caller, Server &server)
     (void)server;
     (void)caller;
     std::string topic;
+    
     if (line.find("#") != line.npos && line.find(":") != line.npos)
         topic = line.substr(line.find(":") + 1, line.size()- line.find(":") + 2);
     _topic = topic;
-    std::cout << "topic called :" << topic << std::endl;
+    if (!_topic_restriction)
+        send_to_all_user(":" + caller.get_nick() + " TOPIC " + _name + " :" + _topic + "\r\n");
+    else
+    {
+        if (_topic_restriction && is_operator(caller.get_nick()))
+           send_to_all_user(":" + caller.get_nick() + " TOPIC "+ _topic + "\r\n");
+        else
+            caller.send_message("Not OP");
+    }
 }
 
 void Channel::mode(std::string &line, User &caller, Server &server)
