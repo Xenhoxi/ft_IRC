@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/18 10:47:03 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 00:32:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void    Channel::add_user(User *user)
     std::string msg = ":ft_irc 353 " + user->get_nick() + " = " + _name + " :";
     _userInChannel.push_back(user);
     send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+    if (_topic.size() > 0)
+        user->send_message("TOPIC " + _name + " :" + _topic + "\r\n");
     for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)
     {
         if (is_operator((*it)->get_nick()))
@@ -103,7 +105,7 @@ void Channel::topic(std::string &line, User &caller, Server &server)
         if (_topic_restriction && is_operator(caller.get_nick()))
            send_to_all_user(":" + caller.get_nick() + " TOPIC "+ _topic + "\r\n");
         else
-            caller.send_message("Not OP");
+            caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator");
     }
 }
 
