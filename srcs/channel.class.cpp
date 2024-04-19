@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/19 00:32:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:34:37 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ void Channel::invite(std::string &line, User &caller, Server &server)
     User    &target = server.get_user(tar);
 
     target.send_message(":" + caller.get_nick() + " INVITE " + tar + " " + this->_name + "\r\n");
+    _user_invited.push_front(target.get_nick());
 }
 
 void Channel::topic(std::string &line, User &caller, Server &server)
 {
     (void)server;
-    (void)caller;
     std::string topic;
     
     if (line.find("#") != line.npos && line.find(":") != line.npos)

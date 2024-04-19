@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/16 14:21:56 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 01:13:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	User::parse_command(std::string line, Server &server)
 		server.channel_part(line, this);
 	else if ("QUIT" == line.substr(0, 4))
 		server.disconnect(this);
-		
 }
 
 void	User::parsing(Server &server)
@@ -89,6 +88,7 @@ void    User::negotiation(Server &server)
 void    User::registration(Server &server)
 {
 	std::string msg;
+
 	msg = ":ft_irc 001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
 	send_message(msg);
 	msg = ":ft_irc 002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
