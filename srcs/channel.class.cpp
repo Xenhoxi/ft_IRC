@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/19 11:34:37 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:51:38 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,18 @@ bool    Channel::is_connected(User *user)
 		if (user == channel_user)
 			return (true);
 	}
+    return (false);
+}
+
+bool    Channel::is_invited(std::string nick)
+{
+    std::list<std::string>::iterator it;
+
+    for (it = _user_invited.begin(); it != _user_invited.end(); it++)
+    {
+        if ((*it) == nick)
+            return (true);
+    }
     return (false);
 }
 
