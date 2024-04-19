@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/19 11:51:38 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:50:02 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-Channel::Channel(User *user, std::string name) : _name(name), _max_users(0)
+Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _topic_mode(TOPIC_OP)
 {
     _operators.push_back(user);
     add_user(user);
@@ -57,6 +57,8 @@ bool    Channel::is_operator(std::string nick) const
 void Channel::kick(std::string &line, User &caller, Server &server)
 {
     (void)server;
+	if (is_operator(caller.get_nick()) == false)
+		throw Error("cannot use KICK if not op");
     // CLIENT NE RECOIE PAS MSG DISANT QUIL NEST PAS OP
     std::string reason = line.substr(line.find(':') + 1, line.size());
 
@@ -82,6 +84,8 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 
 void Channel::invite(std::string &line, User &caller, Server &server)
 {
+	if (is_operator(caller.get_nick()) == false)
+		throw Error("cannot use INVITE if not op");
     char *tar = (char *)line.c_str();
     tar = strtok(NULL, " "); 
     User    &target = server.get_user(tar);
@@ -98,11 +102,11 @@ void Channel::topic(std::string &line, User &caller, Server &server)
     if (line.find("#") != line.npos && line.find(":") != line.npos)
         topic = line.substr(line.find(":") + 1, line.size()- line.find(":") + 2);
     _topic = topic;
-    if (!_topic_restriction)
+    if (_topic_mode == TOPIC_ALL)
         send_to_all_user(":" + caller.get_nick() + " TOPIC " + _name + " :" + _topic + "\r\n");
     else
     {
-        if (_topic_restriction && is_operator(caller.get_nick()))
+        if (_topic_mode == TOPIC_OP && is_operator(caller.get_nick()))
            send_to_all_user(":" + caller.get_nick() + " TOPIC "+ _topic + "\r\n");
         else
             caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator");
@@ -112,6 +116,8 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 void Channel::mode(std::string &line, User &caller, Server &server)
 {
     (void)server;
+	if (is_operator(caller.get_nick()) == false)
+		throw Error("cannot use MODE if not op");
     if (line.find('-') == std::string::npos && line.find('+') == std::string::npos)
     {
         throw Error("no MODE opt");
@@ -124,14 +130,15 @@ void Channel::mode(std::string &line, User &caller, Server &server)
         && opt[0] != '+' && opt[0] != '-')
 		throw Error("wrong MODE opt");
 	if (opt[1] == 'o')
-        this->mode_o(line, opt, caller);
+        this->mode_o(line, opt);
     else if (opt[1] == 'l')
-        this->mode_l(line, opt, caller);
+        this->mode_l(line, opt);
+    else if (opt[1] == 't')
+        this->mode_t(opt);
 }
 
-void Channel::mode_o(std::string &line, std::string &opt, User &caller)
+void Channel::mode_o(std::string &line, std::string &opt)
 {
-    (void)caller;
 	std::string	tar = line.substr(line.find("MODE") + 9 + this->_name.size(), line.size());
     std::list<User *>::iterator it;
 
@@ -157,9 +164,8 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
         }
 }
 
-void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
+void    Channel::mode_l(std::string &line, std::string &opt)
 {
-    (void)caller;
     if (opt[0] == '+')
     {
         std::string count = line.substr(line.find(opt) + 3, line.size());
@@ -171,6 +177,21 @@ void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
         this->_max_users = 0;
         this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
     }
+}
+
+void    Channel::mode_t(std::string &opt)
+{
+    if (opt[0] == '+')
+    {
+		this->_topic_mode = TOPIC_ALL;
+		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+    }
+    if (opt[0] == '-')
+    {
+		this->_topic_mode = TOPIC_OP;
+		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+    }
+
 }
 
 User &Channel::get_user(std::string nick)
@@ -258,7 +279,7 @@ size_t Channel::get_max_user(void)
     return (_max_users);
 }
 
-bool    Channel::get_topic_restriction(void)
+unsigned int  Channel::get_topic_mode(void)
 {
-    return (_topic_restriction);
+    return (_topic_mode);
 }

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/04/19 12:07:54 by ljerinec         ###   ########.fr       */
+=======
+/*   Updated: 2024/04/20 15:32:27 by smunio           ###   ########.fr       */
+>>>>>>> 2c049587a2d8a0ce5905b4f84404506ce1323ac6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +117,7 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	Channel *my_channel = this->_channel_list[ch_name];
 	for (int i = 0; i < 4; i++)	
 		if (!strcmp(cmd, cmd_tab[i]))
-			if (my_channel->is_operator(caller.get_nick()) == true)
-				(my_channel->*functptr[i])(line, caller, *this);
+			(my_channel->*functptr[i])(line, caller, *this);
 }
 
 void	Server::broadcast(User *user, std::string line)
