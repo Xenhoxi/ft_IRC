@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/19 01:13:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:06:20 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,11 @@ void    User::negotiation(Server &server)
 
 void    User::registration(Server &server)
 {
-	std::string msg;
-
-	msg = ":ft_irc 001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n";
-	send_message(msg);
-	msg = ":ft_irc 002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n";
-	send_message(msg);
-	msg = ":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n";
-	send_message(msg);
-	msg = ":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n";
-	send_message(msg);
-	msg = ":ft_irc 005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n";
-	send_message(msg);
+	send_message(":ft_irc 001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n");
+	send_message(":ft_irc 002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n");
+	send_message(":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n");
+	send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
+	send_message(":ft_irc 005" + _nickname + " <tokens>: nothing is supported by this server, fck you\r\n");
 	change_status(CONNECTED);
 }
 

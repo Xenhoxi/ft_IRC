@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/19 11:56:33 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:07:54 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	Server::join_channel(User *user, std::string ch_name)
 {
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
-		if (_channel_list[ch_name]->get_max_user() == 0 || _channel_list[ch_name]->get_size() < _channel_list[ch_name]->get_max_user())
-			_channel_list[ch_name]->add_user(user);
-		else if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user())
+		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user())
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (Channel full +l)\r\n");
-		// else if (!_channel_list[ch_name]->is_invited(user->get_nick()))
-		// 	user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (Should be invited +i)\r\n");
+		else if (_channel_list[ch_name]->get_topic_restriction() && !_channel_list[ch_name]->is_invited(user->get_nick()))
+			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (Should be invited +i)\r\n");
+		else
+			_channel_list[ch_name]->add_user(user);
 	}
 	else
 	{
