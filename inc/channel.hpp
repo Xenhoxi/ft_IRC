@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/19 11:48:55 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:29:42 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,20 @@ public:
 	void	topic(std::string &line, User &caller, Server &server);
 	void	mode(std::string &line, User &caller, Server &server);
 
-	void	mode_o(std::string &line, std::string &opt, User &caller);
-	void	mode_l(std::string &line, std::string &opt, User &caller);
+	void	mode_o(std::string &line, std::string &opt);
+	void	mode_l(std::string &line, std::string &opt);
+	void	mode_t(std::string &opt);
 
-    void    send_to_all_user(std::string msg);
-    void    send_to_others(std::string msg, User *user);
-	void	disconnect(User *user, std::string ch_name);
-	User	&get_user(std::string nick);
-	bool	is_operator(std::string nick) const;
-	bool	is_connected(User *user);
-	bool	is_invited(std::string nick);
-	size_t	get_size(void);
-	size_t	get_max_user(void);
-	bool	get_topic_restriction(void);
+    void    		send_to_all_user(std::string msg);
+    void   			send_to_others(std::string msg, User *user);
+	void			disconnect(User *user, std::string ch_name);
+	User			&get_user(std::string nick);
+	bool			is_operator(std::string nick) const;
+	bool			is_connected(User *user);
+	bool			is_invited(std::string nick);
+	size_t			get_size(void);
+	size_t			get_max_user(void);
+	unsigned int	get_topic_mode(void);
 
 private:
     std::string         			_name;
@@ -51,8 +52,8 @@ private:
 	std::list<std::string>			_user_invited;
 	size_t							_max_users;
 
+	unsigned int					_topic_mode;
 	bool							_invite_restriction;
-	bool							_topic_restriction;
 };
 
 #endif
