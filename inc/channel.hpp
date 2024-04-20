@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 16:05:46 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:15:59 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ public:
 	void	mode_o(std::string &line, std::string &opt);
 	void	mode_l(std::string &line, std::string &opt);
 	void	mode_t(std::string &opt);
+	void	mode_i(std::string &opt);
 
     void    		send_to_all_user(std::string msg);
     void   			send_to_others(std::string msg, User *user);
@@ -48,6 +49,7 @@ public:
 private:
     std::string         			_name;
 	std::string						_topic;
+	std::string						_password;
     std::list<User *>  				_userInChannel;
 	std::list<User *>				_operators;
 	std::list<std::string>			_user_invited;

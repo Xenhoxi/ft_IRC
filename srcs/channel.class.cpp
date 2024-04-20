@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 16:05:48 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:17:26 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _topic_mode(TOPIC_OP)
+Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _topic_mode(TOPIC_ALL)
 {
     _operators.push_back(user);
     add_user(user);
@@ -135,6 +135,8 @@ void Channel::mode(std::string &line, User &caller, Server &server)
         this->mode_l(line, opt);
     else if (opt[1] == 't')
         this->mode_t(opt);
+    else if (opt[1] == 'i')
+        this->mode_i(opt);
 }
 
 void Channel::mode_o(std::string &line, std::string &opt)
@@ -192,6 +194,20 @@ void    Channel::mode_t(std::string &opt)
 		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
     }
 
+}
+
+void    Channel::mode_i(std::string &opt)
+{
+    if (opt[0] == '+')
+    {
+		this->_topic_mode = ON_INVITE;
+		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+    }
+    if (opt[0] == '-')
+    {
+		this->_topic_mode = NO_INVITE;
+		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+    }
 }
 
 User &Channel::get_user(std::string nick)
