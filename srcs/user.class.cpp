@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/19 12:06:20 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:49:11 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ User::~User()
 void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
-		server.join_channel(this, line.substr(line.find('#'), line.find(':') - 1));
+		server.join_channel(this, line.substr(line.find('#'), line.find(':') - 1), line);
 	else if ("PRIVMSG" == line.substr(0, 7))
 		server.broadcast(this, line);
 	else if ("PING" == line.substr(0, 4))

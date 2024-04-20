@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 16:15:59 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:43:00 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ public:
 	void	mode_l(std::string &line, std::string &opt);
 	void	mode_t(std::string &opt);
 	void	mode_i(std::string &opt);
+	void	mode_k(std::string &line);
 
     void    		send_to_all_user(std::string msg);
     void   			send_to_others(std::string msg, User *user);
@@ -45,6 +46,7 @@ public:
 	size_t			get_max_user(void);
 	unsigned int	get_topic_mode(void);
 	unsigned int	get_invite_mode(void);
+	std::string		get_password(void) const;
 
 private:
     std::string         			_name;

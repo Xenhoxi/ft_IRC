@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/16 10:37:57 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:49:20 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ public:
 
 	void				add_user(void);
 	void				disconnect(User *user);
-	void				join_channel(User *user, std::string ch_name);
+	void				join_channel(User *user, std::string ch_name, std::string &line);
 	void				broadcast(User *user, std::string line);
 	void				channel_part(std::string line, User *user);
 	bool				is_pass(std::string password);

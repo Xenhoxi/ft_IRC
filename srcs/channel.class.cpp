@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 16:17:26 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:54:33 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ void Channel::mode(std::string &line, User &caller, Server &server)
         this->mode_t(opt);
     else if (opt[1] == 'i')
         this->mode_i(opt);
+    else if (opt[1] == 'k')
+        this->mode_k(line);
 }
 
 void Channel::mode_o(std::string &line, std::string &opt)
@@ -208,6 +210,28 @@ void    Channel::mode_i(std::string &opt)
 		this->_topic_mode = NO_INVITE;
 		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
     }
+}
+
+void    Channel::mode_k(std::string &line)
+{
+    // si 
+    std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
+    std::string pass = line.substr(line.find(opt) + 3, line.size());
+    if (opt[0] == '+')
+    {
+        this->_password == pass;
+        send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
+    }
+    if (opt[0] == '-')
+    {
+        this->_password.clear();
+        send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
+    }
+}
+
+std::string Channel::get_password() const
+{
+    return (_password);
 }
 
 User &Channel::get_user(std::string nick)
