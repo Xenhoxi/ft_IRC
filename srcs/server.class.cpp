@@ -70,7 +70,7 @@ void	Server::join_channel(User *user, std::string ch_name)
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user())
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (Channel full +l)\r\n");
-		else if (_channel_list[ch_name]->get_topic_restriction() && !_channel_list[ch_name]->is_invited(user->get_nick()))
+		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (Should be invited +i)\r\n");
 		else
 			_channel_list[ch_name]->add_user(user);

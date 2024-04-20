@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/20 15:17:07 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:02:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@
 # define NEGOTIATION 	1
 # define CONNECTED 		2
 # define LEAVING 		3
+
 # define TOPIC_ALL		5
 # define TOPIC_OP		4
+
+# define NO_INVITE      0
+# define ON_INVITE      1
 
 #include <stdio.h>
 #include <poll.h>

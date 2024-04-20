@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 15:29:42 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:05:46 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ public:
 	size_t			get_size(void);
 	size_t			get_max_user(void);
 	unsigned int	get_topic_mode(void);
+	unsigned int	get_invite_mode(void);
 
 private:
     std::string         			_name;
@@ -53,7 +54,7 @@ private:
 	size_t							_max_users;
 
 	unsigned int					_topic_mode;
-	bool							_invite_restriction;
+	unsigned int					_invite_mode;
 };
 
 #endif

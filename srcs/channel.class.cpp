@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 15:50:02 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/20 16:05:48 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,4 +282,9 @@ size_t Channel::get_max_user(void)
 unsigned int  Channel::get_topic_mode(void)
 {
     return (_topic_mode);
+}
+
+unsigned int  Channel::get_invite_mode(void)
+{
+    return (_invite_mode);
 }
