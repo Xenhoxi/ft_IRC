@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/22 14:12:38 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:58:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,9 +232,12 @@ void	Server::disconnect(User *user, std::string line)
 			close((*it)->get_fds()->fd);
 			for (it2 = _channel_list.begin(); it2 != _channel_list.end(); it2++)
 			{
-				if ((it2)->second->is_connected(user))
+				if (it2->second->is_connected(user))
 				{
-					(it2)->second->disconnect(user, "QUIT", ":Quit" + line);
+					it2->second->delete_ops(user);
+					it2->second->disconnect(user, "QUIT", ":Quit" + line);
+					if (it2->second->get_size() == 0)
+						it2 = _channel_list.erase(it2);
 				}
 			}
 			(*it)->change_status(DISCONNECTED);

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/22 13:57:52 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:53:47 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,6 +320,20 @@ bool    Channel::is_invited(std::string nick)
 			return (true);
 	}
 	return (false);
+}
+
+void	Channel::delete_ops(User *user)
+{
+	std::list<User *>::iterator it;
+
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if ((*it)->get_nick() == user->get_nick())
+		{
+			_operators.erase(it);
+			break ;
+		}
+	}
 }
 
 size_t Channel::get_size(void)

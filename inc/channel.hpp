@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/22 13:43:26 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:50:54 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	bool			is_operator(std::string nick) const;
 	bool			is_connected(User *user);
 	bool			is_invited(std::string nick);
+	void			delete_ops(User *user);
 	size_t			get_size(void);
 	size_t			get_max_user(void);
 	unsigned int	get_topic_mode(void);
