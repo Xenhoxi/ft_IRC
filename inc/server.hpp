@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/20 16:49:20 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/22 13:23:25 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ public:
 	std::list<User *>	&get_usr_list();
 
 	void				add_user(void);
-	void				disconnect(User *user);
+	void				disconnect(User *user, std::string line);
 	void				join_channel(User *user, std::string ch_name, std::string &line);
 	void				broadcast(User *user, std::string line);
 	void				channel_part(std::string line, User *user);

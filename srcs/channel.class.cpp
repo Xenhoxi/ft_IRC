@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/22 10:37:28 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:57:52 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,17 +254,21 @@ User &Channel::get_user(std::string nick)
 	throw Error("can't find target in user list");
 }
 
-void    Channel::disconnect(User *leaving_user, std::string ch_name)
+void    Channel::disconnect(User *leaving_user, std::string type, std::string reason)
 {
 	std::list<User *>::iterator it;
+
 	for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
 	{
 		User *user = *it;
 		if (leaving_user == user)
 		{
-			send_to_all_user(":" + leaving_user->get_nick() + " PART " + ch_name + " " + leaving_user->get_nick() + "\r\n");
+			if (type == "PART")
+				send_to_all_user(":" + leaving_user->get_nick() + " " + type + " " + _name + reason + "\r\n");
+			else if (type == "QUIT")
+				send_to_all_user(":" + leaving_user->get_nick() + " " + type + " " + reason + "\r\n");
 			_userInChannel.erase(it);
-			std::cout << "User leave the channel: " << ch_name << std::endl;
+			std::cout << "User leave the channel: " << _name << std::endl;
 			break ;
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/20 16:43:00 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/22 13:43:26 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ public:
 
     void    		send_to_all_user(std::string msg);
     void   			send_to_others(std::string msg, User *user);
-	void			disconnect(User *user, std::string ch_name);
+	void			disconnect(User *user, std::string type, std::string reason);
 	User			&get_user(std::string nick);
 	bool			is_operator(std::string nick) const;
 	bool			is_connected(User *user);

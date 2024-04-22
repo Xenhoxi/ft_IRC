@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/16 14:08:32 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:03:37 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ private:
 	std::string		_data;
 	std::string     _nickname;
 	std::string		_username;
+	std::string		_realname;
 	std::string		_password;
 	int				_status;
 	struct pollfd	*_fds;

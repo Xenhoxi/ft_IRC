@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/22 10:26:47 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:12:38 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,11 +184,20 @@ User &Server::get_user(std::string nick)
 
 void	Server::channel_part(std::string line, User *user)
 {
-	std::string ch_name = line.substr(line.find('#'), line.size() - line.find('#'));
-	std::cout << ch_name << "|" << std::endl;
+	std::string ch_name;
+	std::string	reason = "";
+
+	if (line.find("#") != line.npos && line.find(":") != line.npos)
+		ch_name = line.substr(line.find('#'), line.find(":") - 1 - line.find('#'));
+	else if (line.find("#") != line.npos)
+		ch_name = line.substr(line.find('#'), line.size() - line.find('#'));
+	else
+		ch_name = "#";
+	if (line.find(":") != line.npos)
+		reason += " " + line.substr(line.find(':'), line.size() - line.find(':'));
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
-		_channel_list[ch_name]->disconnect(user, ch_name);
+		_channel_list[ch_name]->disconnect(user, "PART", reason);
 		if ((*(_channel_list.find(ch_name))).second->get_size() == 0)
 		{
 			_channel_list.erase(_channel_list.find(ch_name));
@@ -209,15 +218,25 @@ int		Server::get_nb_client()
 	return (_nb_client);
 }
 
-void	Server::disconnect(User *user)
+void	Server::disconnect(User *user, std::string line)
 {
 	std::list<User *>::iterator it;
+	std::map<std::string, Channel *>::iterator it2;
 
+	if (line.find(":"))
+		line = line.substr(line.find(":"), line.size() - line.find(":"));
     for (it = _usr_list.begin(); it != _usr_list.end(); it++)
 	{
         if ((*it) == user)
 		{
 			close((*it)->get_fds()->fd);
+			for (it2 = _channel_list.begin(); it2 != _channel_list.end(); it2++)
+			{
+				if ((it2)->second->is_connected(user))
+				{
+					(it2)->second->disconnect(user, "QUIT", ":Quit" + line);
+				}
+			}
 			(*it)->change_status(DISCONNECTED);
 			break ;
 		}
