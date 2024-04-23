@@ -6,13 +6,13 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/23 11:53:40 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:56:30 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _topic_mode(TOPIC_ALL)
+Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _need_pass(false), _topic_mode(TOPIC_ALL)
 {
 	_operators.push_back(user);
 	add_user(user);
@@ -222,15 +222,21 @@ void    Channel::mode_k(std::string &line)
 {
 	// si 
 	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
-	std::string pass = line.substr(line.find(opt) + 3, line.size());
 	if (opt[0] == '+')
 	{
+		std::string pass = line.substr(line.find(opt) + 3, line.size());
 		this->_password = pass;
+		std::cout << this->_password << std::endl;
+		this->_need_pass = true;
 		send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
+		std::string pass = line.substr(line.find(opt) + 3, line.size());
+		if (pass != this->_password)
+			throw Error("can't remove password: Wrong password");
 		this->_password.clear();
+		this->_need_pass = false;
 		send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
 }
@@ -346,6 +352,11 @@ size_t Channel::get_max_user(void)
 unsigned int  Channel::get_topic_mode(void)
 {
 	return (_topic_mode);
+}
+
+bool	Channel::get_pass_bool(void) const
+{
+	return (_need_pass);
 }
 
 unsigned int  Channel::get_invite_mode(void)
