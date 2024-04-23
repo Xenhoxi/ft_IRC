@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/22 14:53:47 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:53:40 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _to
 {
 	_operators.push_back(user);
 	add_user(user);
-	std::cout << "Channel created !" << std::endl;
 }
 
 Channel::~Channel()
 {
-	std::cout << "Channel " << _name << "deleted !" << std::endl;
 	return ;
 }
 
@@ -44,7 +42,6 @@ void    Channel::add_user(User *user)
 	for (it = _user_invited.begin(); it != _user_invited.end(); it++)
 		if (*it == user->get_nick())
 			it = _user_invited.erase(it);
-	std::cout << user->get_nick() << " add to channel: " << _name << std::endl;
 }
 
 bool    Channel::is_operator(std::string nick) const

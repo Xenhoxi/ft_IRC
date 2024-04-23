@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/22 13:45:11 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:49:23 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,12 @@ void    User::negotiation(Server &server)
 
 void    User::registration(Server &server)
 {
-	send_message(":ft_irc 001 " + _nickname + " :Welcome to the diloragequit Network, " + _nickname + "\r\n");
-	send_message(":ft_irc 002 " + _nickname + " :Your host is ft_IRC, running version 1.0" + "\r\n");
+	send_message(":ft_irc 001 " + _nickname + " :Welcome to the 'ft_irc' Network, " + _nickname + "\r\n");
+	send_message(":ft_irc 002 " + _nickname + " :Your host is " + server.get_servername() + ", running version 1.0" + "\r\n");
 	send_message(":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n");
 	send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
-	send_message(":ft_irc 005" + _nickname + "AWAYLEN=128 : nothing is supported by this server, fck you\r\n");
+	send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC CHANLIMIT=#:25 NICKLEN=30 TOPICLEN=307 KICKLEN=307 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
+	send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
 	change_status(CONNECTED);
 }
 
@@ -113,7 +114,7 @@ void	User::check_nick_validity(Server &server)
 	int	i = 0;
 
 	while (_nickname.substr(0, 1) == "#")
-		_nickname.erase(0);
+		_nickname.erase(_nickname.begin());
 	while (is_nick_used(server))
 	{
 		nb.str(std::string());
