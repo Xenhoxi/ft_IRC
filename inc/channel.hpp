@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/22 14:50:54 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:44:15 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	bool			is_operator(std::string nick) const;
 	bool			is_connected(User *user);
 	bool			is_invited(std::string nick);
+	bool			get_pass_bool(void) const;
 	void			delete_ops(User *user);
 	size_t			get_size(void);
 	size_t			get_max_user(void);
@@ -57,6 +58,7 @@ private:
 	std::list<User *>				_operators;
 	std::list<std::string>			_user_invited;
 	size_t							_max_users;
+	bool							_need_pass;
 
 	unsigned int					_topic_mode;
 	unsigned int					_invite_mode;
