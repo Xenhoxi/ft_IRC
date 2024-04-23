@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/22 11:03:37 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:11:36 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ public:
 private:
 	void			check_nick_validity(Server &server);
 	bool			is_nick_used(Server &server);
+	int				nick_isalnum(void);
 
 	std::string		_data;
 	std::string     _nickname;

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/23 11:57:01 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:59:51 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	Server::join_channel(User *user, std::string ch_name, std::string &line)
 		<< JOIN #chezmoi chezmoi 
 		>> :smunio__!~smunio@b42f-2f71-26c7-79bc-fd70.abo.wanadoo.fr JOIN :#chezmoi
 	*/
-	(void)line;
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user() && _channel_list[ch_name]->get_max_user() != 0)
@@ -146,16 +145,16 @@ void	Server::broadcast(User *user, std::string line)
 		ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 	else
 		ch_name = line.substr(line.find(' ') + 1, line.find(':') - line.find(' ') - 2);
-	if ("#" == ch_name.substr(0, 1))
+	if (ch_name.find("#") != ch_name.npos && _channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->is_connected(user))
 		{
 			msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 			_channel_list[ch_name]->send_to_others(msg, user);
-			msg.clear();
+			return ;
 		}
 	}
-	else
+	else if (ch_name.find("#") == ch_name.npos)
 	{
 		std::list<User *>::iterator it;
 		for (it = _usr_list.begin(); it != _usr_list.end(); it++)
@@ -165,10 +164,11 @@ void	Server::broadcast(User *user, std::string line)
 			{
 				msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 				(*it)->send_message(msg);
-				msg.clear();
+				return ;
 			}
 		}
 	}
+	user->send_message(":ft_irc 401 " + user->get_nick() + "\r\n");
 }
 
 User &Server::get_user(std::string nick)

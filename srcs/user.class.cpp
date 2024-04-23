@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/23 11:49:23 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:41:07 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,21 +106,36 @@ bool	User::is_nick_used(Server &server)
 	return (false);
 }
 
+int	User::nick_isalnum(void)
+{
+	for (int i = 0; _nickname[i]; i++)
+	{
+		if (!std::isalnum(_nickname[i]))
+			return (0);
+	}
+	return (1);
+}
+
 void	User::check_nick_validity(Server &server)
 {
-	std::list<User *> user_list;
+	std::list<User *> 	user_list;
 	std::stringstream	nb;
-	std::string			nick = _nickname;
-	int	i = 0;
+	std::string			nick;
+	std::string			old_nick = _nickname;	
+	int					i = 0;
 
-	while (_nickname.substr(0, 1) == "#")
-		_nickname.erase(_nickname.begin());
+	while (_nickname.find("#") != _nickname.npos)
+		_nickname.erase(_nickname.find("#"), 1);
+	if (_nickname.size() == 0 || nick_isalnum() == 0)
+		_nickname = "Guest";
+	nick = _nickname;
 	while (is_nick_used(server))
 	{
 		nb.str(std::string());
 		nb << ++i;
 		_nickname = nick + nb.str();
 	}
+	send_message(":" + old_nick + " NICK " +_nickname + "\r\n");	
 }
 
 void    User::parse_negotiation(std::string line, Server &server)
@@ -139,7 +154,6 @@ void    User::parse_negotiation(std::string line, Server &server)
 		}
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
 		check_nick_validity(server);
-		std::cout << _nickname << std::endl;
 	}
 	else if ("USER" == line.substr(0, 4))
 	{
@@ -152,7 +166,9 @@ void    User::parse_negotiation(std::string line, Server &server)
 		std::cout << _realname << std::endl;
 	}
 	else if (line == "CAP END")
+	{
 		this->registration(server);
+	}
 }
 
 void    User::change_status(int status)
