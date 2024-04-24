@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/23 13:59:51 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:09:35 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,35 @@ std::string	Server::get_servername() const
 	return (this->_server_name);
 }
 
-void	Server::join_channel(User *user, std::string ch_name, std::string &line)
+void	Server::join_channel(User *user, std::string &line)
 {
 	/* 	<< JOIN #chezmoi
 		>> :choopa.nj.us.dal.net 475 smunio__ #chezmoi :Cannot join channel (+k)
 		<< JOIN #chezmoi chezmoi 
 		>> :smunio__!~smunio@b42f-2f71-26c7-79bc-fd70.abo.wanadoo.fr JOIN :#chezmoi
 	*/
+	char *ch_name 	= strtok((char *)line.c_str(), " ");
+	ch_name			= strtok(NULL, " ");
+	std::cout << "line: " << line << " ch_name: " << ch_name << std::endl;
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user() && _channel_list[ch_name]->get_max_user() != 0)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		else if (_channel_list[ch_name]->get_pass_bool() != false)
+		if (_channel_list[ch_name]->get_pass_bool() != false)
 		{
 			std::cout << "need pass: " << _channel_list[ch_name]->get_password() << std::endl;
-			if (line.size() < line.find(ch_name) + ch_name.size() + 1)
+			if (line.size() < line.find(ch_name) + strlen(ch_name) + 1)
 				user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 			else
 			{
-				std::string pass = line.substr(line.find(ch_name) + ch_name.size() + 1, line.size());
+				std::string pass = line.substr(line.find(ch_name) + strlen(ch_name) + 1, line.size());
 				std::cout << "pass: " << pass << std::endl;
-				if (pass != _channel_list[ch_name]->get_password())
-					user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
-				else if (pass == _channel_list[ch_name]->get_password())
+				if (pass == _channel_list[ch_name]->get_password())
 					_channel_list[ch_name]->add_user(user);
+				else
+					user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 			}
 		}
 		else
