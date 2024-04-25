@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
+#    By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/04/08 13:49:41 by smunio           ###   ########.fr        #
+#    Updated: 2024/04/25 11:07:17 by ljerinec         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,16 @@ CC = c++
 CFLAGS = -Wall -Werror -Wextra -g3 
 
 SOURCES =	srcs/main.cpp \
-			srcs/user.class.cpp \
-			srcs/server.class.cpp \
+			srcs/user/user.class.cpp \
+			srcs/user/userGeters.class.cpp \
+			srcs/user/userCommands.class.cpp \
+			srcs/server/server.class.cpp \
+			srcs/server/serverGeters.class.cpp \
+			srcs/server/serverCommands.class.cpp \
 			srcs/channel.class.cpp
 
 OBJ_DIR = objs/
-OBJECTS = $(addprefix $(OBJ_DIR), $(notdir $(SOURCES:.cpp=.o)))
+OBJECTS = $(SOURCES:.cpp=.o)
 
 FT_IRC = ft_irc
 
@@ -36,7 +40,7 @@ PRINT_PREFIX	:=	\033[1m\033[38;5;240m[\033[0m\033[38;5;250m$(PRINT_NAME)\033[1m\
 
 all: $(FT_IRC)
 
-$(OBJ_DIR)%.o: srcs/%.cpp
+%.o: %.cpp
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
 	@$(eval CURRENT_FILE=$(shell echo $$(($(CURRENT_FILE)+1))))
@@ -48,12 +52,14 @@ $(OBJ_DIR)%.o: srcs/%.cpp
 	@printf "%${REMAINING}s" | tr ' ' ' '
 	@printf "]\r\033[0m"
 
+
 $(FT_IRC): $(OBJECTS)
 	@$(CC) $(CFLAGS) -o $(FT_IRC) $(OBJECTS)
 	@printf "$(PRINT_PREFIX) \033[1;32m[$(CURRENT_FILE)/$(TOTAL_FILES)] ["
 	@printf "%${PROGRESS}s" | tr ' ' '■'
 	@printf "%${REMAINING}s" | tr ' ' ' '
 	@printf "][OK]\n\033[0m"
+	@mv $(OBJECTS) $(OBJ_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)
