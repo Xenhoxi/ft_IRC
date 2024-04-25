@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/23 14:11:36 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:37:16 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,22 @@ public:
 	std::string 	get_nick();
 	struct pollfd   *get_fds() const;
 	void			add_data(std::string new_data);
+	void            set_fds(int server_socket);
 	
 	void			parsing(Server &server);
 	void			parse_negotiation(std::string line, Server &server);
+	void			parse_command(std::string line, Server &server);
+	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
+
 	void			negotiation(Server &server);
 	void			registration(Server &server);
 	void			send_message(std::string msg);
 	void			change_status(int status);
-	void            set_fds(int server_socket);
-	void			parse_command(std::string line, Server &server);
-	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
 private:
-	void			check_nick_validity(Server &server);
-	bool			is_nick_used(Server &server);
 	int				nick_isalnum(void);
+	bool			is_nick_used(Server &server);
+	void			check_nick_validity(Server &server);
 
 	std::string		_data;
 	std::string     _nickname;

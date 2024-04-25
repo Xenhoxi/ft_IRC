@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/24 13:06:31 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 10:22:01 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,27 @@ class Channel;
 class Server
 {
 public: 
+	/*server.class.cpp*/
 	Server();
 	~Server();
+	void				socket_init(int port, std::string pass);
+	std::string 		find_ch_name(std::string line);	
+
+	/*serverCommands.class.cpp*/
+	void				join_channel(User *user, std::string &line);
+	void				add_user(void);
+	void				broadcast(User *user, std::string line);
+	void				disconnect(User *user, std::string line);
+	void				channel_part(std::string line, User *user);
+	void				call_op_cmd(std::string line, User &caller);
+
+	/*serverGeters.class.cpp*/
+	bool				is_pass(std::string password);
 	int					get_nb_client();
 	char                *get_dt() const;
 	User				&get_user(std::string nick);
-	std::string         get_servername() const;
-	std::string 		find_ch_name(std::string line);	
 	std::list<User *>	&get_usr_list();
-
-	void				add_user(void);
-	void				disconnect(User *user, std::string line);
-	void				join_channel(User *user, std::string &line);
-	void				broadcast(User *user, std::string line);
-	void				channel_part(std::string line, User *user);
-	bool				is_pass(std::string password);
-
-	void				socket_init(int port, std::string pass);
-	void				call_op_cmd(std::string line, User &caller);
+	std::string         get_servername() const;
 private:
 	std::list<User *>       			_usr_list;
 	std::string         				_server_name;
