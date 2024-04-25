@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 13:21:44 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 13:33:05 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,31 @@
 void Channel::kick(std::string &line, User &caller, Server &server)
 {
 	(void)server;
-	if (is_operator(caller.get_nick()) == false)
-		throw Error("cannot use KICK if not op");
-	// CLIENT NE RECOIE PAS MSG DISANT QUIL NEST PAS OP
-	std::string reason = line.substr(line.find(':') + 1, line.size());
-
-	char *tar = (char *)line.c_str();
-	tar = strtok(NULL, " ");
-	tar = strtok(NULL, " ");
-
-	User    &target = this->get_user(tar);
-
-	std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + "\r\n";
-	this->send_to_all_user(msg);
-	
-	std::list<User *>::iterator it;
-	for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
+	if (is_operator(caller.get_nick()) != false)
 	{
-		if (*it == &target)
+		std::string reason = line.substr(line.find(':') + 1, line.size());
+
+		char *tar = (char *)line.c_str();
+		tar = strtok(NULL, " ");
+		tar = strtok(NULL, " ");
+
+		User    &target = this->get_user(tar);
+
+		std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + "\r\n";
+		this->send_to_all_user(msg);
+		
+		std::list<User *>::iterator it;
+		for (it = _userInChannel.begin(); it != _userInChannel.end(); it++)
 		{
-			_userInChannel.erase(it);
-			break ;
+			if (*it == &target)
+			{
+				_userInChannel.erase(it);
+				break ;
+			}
 		}
 	}
+	else
+		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 }
 
 void Channel::invite(std::string &line, User &caller, Server &server)
