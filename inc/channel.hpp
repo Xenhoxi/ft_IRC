@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 10:23:25 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 11:34:17 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ public:
 	bool			is_connected(User *user);
 	bool			is_invited(std::string nick);
 
-	//channelCommands
+	/*channelCommands.class.cpp*/
 	void	kick(std::string &line, User &caller, Server &server);
 	void	invite(std::string &line, User &caller, Server &server);
 	void	topic(std::string &line, User &caller, Server &server);
@@ -36,7 +36,7 @@ public:
 	void			disconnect(User *user, std::string type, std::string reason);
 	void			delete_ops(User *user);
 
-	//channelMode
+	/*channelMode.class.cpp*/
 	void	mode(std::string &line, User &caller, Server &server);
 	void	mode_o(std::string &line, std::string &opt);
 	void	mode_l(std::string &line, std::string &opt);
@@ -44,7 +44,7 @@ public:
 	void	mode_i(std::string &opt);
 	void	mode_k(std::string &line);
 
-	//channelGeters
+	/*channelGeters.class.cpp*/
 	User			&get_user(std::string nick);
 	bool			get_pass_bool(void) const;
 	size_t			get_size(void);

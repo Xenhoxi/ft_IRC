@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 10:19:13 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:01:49 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	Server::disconnect(User *user, std::string line)
 	std::list<User *>::iterator it;
 	std::map<std::string, Channel *>::iterator it2;
 
-	if (line.find(":"))
+	if (line.find(":") != line.npos)
 		line = line.substr(line.find(":"), line.size() - line.find(":"));
     for (it = _usr_list.begin(); it != _usr_list.end(); it++)
 	{
