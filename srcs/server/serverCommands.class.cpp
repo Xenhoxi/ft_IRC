@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 12:01:49 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 13:01:22 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	Server::join_channel(User *user, std::string &line)
 {
+	// if user is invited, dont need pass
+	
 	char *ch_name 	= strtok((char *)line.c_str(), " ");
 	ch_name			= strtok(NULL, " ");
 	std::cout << "line: " << line << " ch_name: " << ch_name << std::endl;

@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 10:21:22 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 13:15:37 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 
 void Channel::invite(std::string &line, User &caller, Server &server)
 {
+	/*>> :serenity.fl.us.dal.net 443 smunio smunio #me :is already on channel
+	>> :serenity.fl.us.dal.net 401 smunio leo*n :No such nick/channel*/
 	char *tar = (char *)line.c_str();
 	tar = strtok(NULL, " "); 
 	User    &target = server.get_user(tar);
