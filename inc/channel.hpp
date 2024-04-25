@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/23 10:44:15 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 10:23:25 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,31 @@ class Channel
 public:
 	Channel(User *user, std::string name);
     ~Channel(void);
-    void    add_user(User *user);
+	bool			is_operator(std::string nick) const;
+	bool			is_connected(User *user);
+	bool			is_invited(std::string nick);
 
+	//channelCommands
 	void	kick(std::string &line, User &caller, Server &server);
 	void	invite(std::string &line, User &caller, Server &server);
 	void	topic(std::string &line, User &caller, Server &server);
-	void	mode(std::string &line, User &caller, Server &server);
+    void    		add_user(User *user);
+    void    		send_to_all_user(std::string msg);
+    void   			send_to_others(std::string msg, User *user);
+	void			disconnect(User *user, std::string type, std::string reason);
+	void			delete_ops(User *user);
 
+	//channelMode
+	void	mode(std::string &line, User &caller, Server &server);
 	void	mode_o(std::string &line, std::string &opt);
 	void	mode_l(std::string &line, std::string &opt);
 	void	mode_t(std::string &opt);
 	void	mode_i(std::string &opt);
 	void	mode_k(std::string &line);
 
-    void    		send_to_all_user(std::string msg);
-    void   			send_to_others(std::string msg, User *user);
-	void			disconnect(User *user, std::string type, std::string reason);
+	//channelGeters
 	User			&get_user(std::string nick);
-	bool			is_operator(std::string nick) const;
-	bool			is_connected(User *user);
-	bool			is_invited(std::string nick);
 	bool			get_pass_bool(void) const;
-	void			delete_ops(User *user);
 	size_t			get_size(void);
 	size_t			get_max_user(void);
 	unsigned int	get_topic_mode(void);
