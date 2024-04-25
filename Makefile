@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
+#    By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/04/25 11:31:07 by smunio           ###   ########.fr        #
+#    Updated: 2024/04/25 13:08:22 by ljerinec         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,10 +62,9 @@ $(FT_IRC): $(OBJECTS)
 	@printf "%${PROGRESS}s" | tr ' ' '■'
 	@printf "%${REMAINING}s" | tr ' ' ' '
 	@printf "][OK]\n\033[0m"
-	@mv $(OBJECTS) $(OBJ_DIR)
 
 clean:
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJECTS)
 
 fclean: clean
 	@rm -f $(FT_IRC)
