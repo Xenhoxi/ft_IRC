@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 13:15:37 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 13:21:44 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 		_user_invited.push_front(target.get_nick());
 	}
 	else
-		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator");
+		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 }
 
 void Channel::topic(std::string &line, User &caller, Server &server)
@@ -73,7 +73,7 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 		if (_topic_mode == TOPIC_OP && is_operator(caller.get_nick()))
 		   send_to_all_user(":" + caller.get_nick() + " TOPIC "+ _topic + "\r\n");
 		else
-			caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator");
+			caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 	}
 }
 
