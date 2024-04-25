@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/24 13:06:15 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/25 10:39:16 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,56 +66,6 @@ void	User::parsing(Server &server)
 	_data.clear();
 }
 
-void    User::negotiation(Server &server)
-{
-	std::vector<std::string> parsed;
-	std::string tmp;
-	size_t closest;
-	
-	while (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
-	{
-		if (_data.find('\r') < _data.find('\n'))
-			closest = _data.find('\r');
-		else
-			closest = _data.find('\n');
-		tmp = _data.substr(0, closest);
-		this->parse_negotiation(tmp, server);
-		_data.erase(0, closest + 1);
-	}
-	_data.clear();
-}
-
-void    User::registration(Server &server)
-{
-	send_message(":ft_irc 001 " + _nickname + " :Welcome to the 'ft_irc' Network, " + _nickname + "\r\n");
-	send_message(":ft_irc 002 " + _nickname + " :Your host is " + server.get_servername() + ", running version 1.0" + "\r\n");
-	send_message(":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n");
-	send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
-	send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC CHANLIMIT=#:25 NICKLEN=30 TOPICLEN=307 KICKLEN=307 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
-	send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
-	change_status(CONNECTED);
-}
-
-bool	User::is_nick_used(Server &server)
-{
-	for (std::list<User *>::iterator it = server.get_usr_list().begin(); it != server.get_usr_list().end(); it++)
-	{
-		if (this != (*it) && this->get_nick() == (*it)->get_nick())
-			return (true);
-	}
-	return (false);
-}
-
-int	User::nick_isalnum(void)
-{
-	for (int i = 0; _nickname[i]; i++)
-	{
-		if (!std::isalnum(_nickname[i]))
-			return (0);
-	}
-	return (1);
-}
-
 void	User::check_nick_validity(Server &server)
 {
 	std::list<User *> 	user_list;
@@ -170,51 +120,3 @@ void    User::parse_negotiation(std::string line, Server &server)
 		this->registration(server);
 	}
 }
-
-void    User::change_status(int status)
-{
-	if (this->_status == 0 && status == 2)
-		throw Error("can't skip registration");
-	if (this->_status == 2 && status == 1)
-		throw Error("user is already registered");
-	this->_status = status;
-}
-
-void    User::set_fds(int server_socket)
-{
-	if (server_socket < 0)
-	{
-		throw Error("failed to accept");
-	}
-	this->_fds->fd = server_socket;
-	this->_fds->events = POLLIN | POLLOUT;
-	return ;
-}
-
-struct pollfd *User::get_fds() const
-{
-	return (this->_fds);
-}
-
-int User::get_status() const
-{
-	return (this->_status);
-}
-
-void	User::send_message(std::string msg)
-{
-	write(this->get_fds()->fd, msg.c_str(), msg.size());
-	std::cout << ">> " << msg.substr(0, msg.size() - 2) << std::endl;
-}
-
-std::string 	User::get_nick()
-{
-	return (_nickname);
-}
-
-void	User::add_data(std::string new_data)
-{
-	_data += new_data;
-}
-
-
