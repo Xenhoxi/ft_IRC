@@ -6,7 +6,7 @@
 #    By: smunio <smunio@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 15:35:39 by ljerinec          #+#    #+#              #
-#    Updated: 2024/04/25 11:30:26 by smunio           ###   ########.fr        #
+#    Updated: 2024/04/25 11:31:07 by smunio           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,6 @@ $(FT_IRC): $(OBJECTS)
 	@printf "%${PROGRESS}s" | tr ' ' '■'
 	@printf "%${REMAINING}s" | tr ' ' ' '
 	@printf "][OK]\n\033[0m"
-	@mv $(OBJECTS) $(OBJ_DIR)
 	@mv $(OBJECTS) $(OBJ_DIR)
 
 clean:
