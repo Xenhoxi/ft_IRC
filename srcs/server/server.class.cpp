@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 10:19:47 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 13:04:44 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ void	Server::socket_init(int port, std::string pass)
 	this->_addr.sin_family = AF_INET;
 	this->_addr.sin_port = htons(port);
 	this->_addr.sin_addr.s_addr = INADDR_ANY;
-    if (bind(fd_socket, (struct sockaddr *) &this->_addr, sizeof(this->_addr)) <= 0)
-		perror("Bind info");
+    if (bind(fd_socket, (struct sockaddr *) &this->_addr, sizeof(this->_addr)) < 0)
+		throw Error("Bind info: Address already in use");
+	else
+		std::cout << "Server ON !" << std::endl;
 	listen(fd_socket, 5);
     this->_usr_list.push_back(server_socket);
 	this->_usr_list.front()->set_fds(fd_socket);

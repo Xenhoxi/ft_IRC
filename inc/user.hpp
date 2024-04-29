@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 10:37:16 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 13:54:15 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ public:
 	void			parse_command(std::string line, Server &server);
 	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
+	void			ping(void);
 	void			negotiation(Server &server);
 	void			registration(Server &server);
 	void			send_message(std::string msg);
@@ -48,6 +49,7 @@ private:
 	std::string		_username;
 	std::string		_realname;
 	std::string		_password;
+	time_t			_last_pong;
 	int				_status;
 	struct pollfd	*_fds;
 };
