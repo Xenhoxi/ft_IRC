@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 13:01:22 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:08:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	Server::join_channel(User *user, std::string &line)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		if (_channel_list[ch_name]->get_pass_bool() != false)
+		else if (_channel_list[ch_name]->get_pass_bool() != false)
 		{
 			std::cout << "need pass: " << _channel_list[ch_name]->get_password() << std::endl;
 			if (line.size() < line.find(ch_name) + strlen(ch_name) + 1)

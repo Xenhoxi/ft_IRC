@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 11:34:17 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:05:40 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ public:
 	bool			is_invited(std::string nick);
 
 	/*channelCommands.class.cpp*/
-	void	kick(std::string &line, User &caller, Server &server);
-	void	invite(std::string &line, User &caller, Server &server);
-	void	topic(std::string &line, User &caller, Server &server);
+	void			kick(std::string &line, User &caller, Server &server);
+	void			invite(std::string &line, User &caller, Server &server);
+	void			topic(std::string &line, User &caller, Server &server);
     void    		add_user(User *user);
     void    		send_to_all_user(std::string msg);
     void   			send_to_others(std::string msg, User *user);
