@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelCommands.class.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 13:33:05 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:11:59 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,33 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 
 void Channel::invite(std::string &line, User &caller, Server &server)
 {
-	/*>> :serenity.fl.us.dal.net 443 smunio smunio #me :is already on channel
-	>> :serenity.fl.us.dal.net 401 smunio leo*n :No such nick/channel*/
 	char *tar = (char *)line.c_str();
-	tar = strtok(NULL, " "); 
-	User    &target = server.get_user(tar);
-	std::cout << "Invite called ! Caller = " << caller.get_nick() << " & caller = " << caller.get_nick()  << std::endl;
-
-	if (is_operator(caller.get_nick()))
+	tar = strtok(NULL, " ");
+	User	*target = NULL;
+	if (!tar)
+		return ;
+	if (!is_operator(caller.get_nick()))
 	{
-		target.send_message(":" + caller.get_nick() + " INVITE " + tar + " " + this->_name + "\r\n");
-		_user_invited.push_front(target.get_nick());
+		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator 1\r\n");
+		return ;
 	}
-	else
-		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
+	try
+	{
+		target = &server.get_user(tar);
+	}
+	catch (std::exception &e)
+	{
+		caller.send_message(":ft_irc 401" + caller.get_nick() + " " + target->get_nick() + " :No such nick/channel\r\n");
+		return ;
+	}
+	if (this->is_connected(target))
+	{
+		caller.send_message(":ft_irc 443" + caller.get_nick() + " " + _name + " " + target->get_nick() + " :is already on channel\r\n");
+		return ;
+	}
+	target->send_message(":" + caller.get_nick() + " INVITE " + tar + " " + this->_name + "\r\n");
+	if (!is_invited(target->get_nick()))
+		_user_invited.push_front(target->get_nick());
 }
 
 void Channel::topic(std::string &line, User &caller, Server &server)
