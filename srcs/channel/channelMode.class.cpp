@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 09:26:53 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:06:31 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,18 @@
 void Channel::mode(std::string &line, User &caller, Server &server)
 {
 	(void)server;
-	if (is_operator(caller.get_nick()) == false)
-		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
+	//:sakura.jp.as.dal.net 329 smunio #me 1714381232
+
 	if (line.find('-') == std::string::npos && line.find('+') == std::string::npos)
 	{
 		std::cout << "line: " << line << " //should display channel characteristics" << std::endl;
-		throw Error("no MODE opt");
+		caller.send_message(": 324 " + caller.get_nick() + " " + this->_name + " +" + "\r\n");
+		caller.send_message(": 329 " + caller.get_nick() + " " + this->_name + " 1714381232" + "\r\n");
 		return ;
 		//should display channel characteristics
 	}
+	else if (is_operator(caller.get_nick()) == false)
+		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
 
 	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'

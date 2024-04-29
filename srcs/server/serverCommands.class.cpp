@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 13:01:22 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:16:13 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,23 @@
 
 void	Server::join_channel(User *user, std::string &line)
 {
-	// if user is invited, dont need pass
-	
 	char *ch_name 	= strtok((char *)line.c_str(), " ");
 	ch_name			= strtok(NULL, " ");
-	std::cout << "line: " << line << " ch_name: " << ch_name << std::endl;
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user() && _channel_list[ch_name]->get_max_user() != 0)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		if (_channel_list[ch_name]->get_pass_bool() != false)
+		else if (_channel_list[ch_name]->get_pass_bool() != false)
 		{
-			std::cout << "need pass: " << _channel_list[ch_name]->get_password() << std::endl;
-			if (line.size() < line.find(ch_name) + strlen(ch_name) + 1)
+			if (_channel_list[ch_name]->is_invited(user->get_nick()))
+				_channel_list[ch_name]->add_user(user);
+			else if (line.size() < line.find(ch_name) + strlen(ch_name) + 1)
 				user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 			else
 			{
 				std::string pass = line.substr(line.find(ch_name) + strlen(ch_name) + 1, line.size());
-				std::cout << "pass: " << pass << std::endl;
 				if (pass == _channel_list[ch_name]->get_password())
 					_channel_list[ch_name]->add_user(user);
 				else
