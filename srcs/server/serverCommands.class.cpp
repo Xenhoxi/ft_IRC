@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 11:18:52 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 11:29:01 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	Server::join_channel(User *user, std::string &line)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		else if (_channel_list[ch_name]->get_pass_bool() != false)
 		else if (_channel_list[ch_name]->get_pass_bool() != false)
 		{
 			if (_channel_list[ch_name]->is_invited(user->get_nick()))
@@ -115,7 +114,10 @@ void	Server::disconnect(User *user, std::string line)
 					it2->second->delete_ops(user);
 					it2->second->disconnect(user, "QUIT", ":Quit" + line);
 					if (it2->second->get_size() == 0)
-						it2 = _channel_list.erase(it2);
+					{
+						_channel_list.erase(it2);
+						break ;
+					}
 				}
 			}
 			(*it)->change_status(DISCONNECTED);

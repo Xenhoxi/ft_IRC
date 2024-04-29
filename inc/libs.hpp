@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/20 16:02:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:27:40 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define ON_INVITE      1
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <poll.h>
 #include <unistd.h>
 #include <sys/types.h>
