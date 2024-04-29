@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 10:22:42 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 09:26:53 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 {
 	(void)server;
 	if (is_operator(caller.get_nick()) == false)
-		throw Error("cannot use MODE if not op");
+		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 	if (line.find('-') == std::string::npos && line.find('+') == std::string::npos)
 	{
+		std::cout << "line: " << line << " //should display channel characteristics" << std::endl;
 		throw Error("no MODE opt");
 		return ;
 		//should display channel characteristics
