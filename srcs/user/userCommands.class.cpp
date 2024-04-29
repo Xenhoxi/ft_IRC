@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 13:02:59 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 17:34:40 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,15 @@ void	User::send_message(std::string msg)
 	std::cout << ">> " << msg.substr(0, msg.size() - 2) << std::endl;
 }
 
-void	User::ping(void)
+void	User::ping(Server &server)
 {
 	time_t  t = time(0);
 	
-	std::cout << t << std::endl;
-	// if (_last_pong - t > 600000)
-	// 	send_message("PING ft_irc");	
+	if (t - _last_pong > 20 && t - _last_pong <= 25)
+	{
+		send_message("PING ft_irc\r\n");
+		_last_pong += 5;
+	}
+	if (t - _last_pong > 30)
+		server.disconnect(this, "NULL");
 }
