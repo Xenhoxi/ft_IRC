@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 11:25:30 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 18:55:00 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 {
 	(void)server;
 
-	if (line.find('-') == std::string::npos && line.find('+') == std::string::npos)
+	if (line.find('#') + this->_name.size() == line.size())
 	{
 		caller.send_message(": 324 " + caller.get_nick() + " " + this->_name + " +" + "\r\n");
 		caller.send_message(": 329 " + caller.get_nick() + " " + this->_name + " 1714381232" + "\r\n");
@@ -28,7 +28,10 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 
 	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
 		&& opt[0] != '+' && opt[0] != '-')
+	{
+		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
 		throw Error("wrong MODE opt");
+	}	
 	if (opt[1] == 'o')
 		this->mode_o(line, opt);
 	else if (opt[1] == 'l')
