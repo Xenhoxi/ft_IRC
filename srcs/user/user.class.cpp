@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 13:04:05 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 17:52:36 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ void	User::parse_command(std::string line, Server &server)
 	else if ("QUIT" == line.substr(0, 4))
 		server.disconnect(this, line);
 	else if ("NICK" == line.substr(0, 4))
-	{
-		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
-		check_nick_validity(server);
-	}
+		change_nick(line.substr(5, strlen(line.c_str()) - 5), server);
 }
 
 void	User::parsing(Server &server)
@@ -90,7 +87,6 @@ void	User::check_nick_validity(Server &server)
 		nb << ++i;
 		_nickname = nick + nb.str();
 	}
-	send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");	
 }
 
 void    User::parse_negotiation(std::string line, Server &server)

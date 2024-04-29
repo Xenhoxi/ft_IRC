@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 13:54:15 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 17:49:02 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ public:
 	void			registration(Server &server);
 	void			send_message(std::string msg);
 	void			change_status(int status);
+	void			change_nick(std::string new_nick, Server &server);
 
 private:
 	int				nick_isalnum(void);
