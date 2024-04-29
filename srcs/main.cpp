@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 13:55:49 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/29 17:29:33 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	running_server(Server &server)
 			else if (user->get_status() == CONNECTED)
 			{
 				user->parsing(server);
-				//user->ping();
+				user->ping(server);
 			}
 			else if (user->get_status() == DISCONNECTED)
 				it = user_list.erase(it);

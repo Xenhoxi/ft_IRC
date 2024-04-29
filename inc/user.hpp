@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 17:49:02 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:03:43 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ public:
 	void			parse_command(std::string line, Server &server);
 	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
-	void			ping(void);
+	void			ping(Server &server);
 	void			negotiation(Server &server);
 	void			registration(Server &server);
 	void			send_message(std::string msg);
