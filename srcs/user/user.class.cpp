@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:53:16 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 13:57:20 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ User::User() : _status(NEGOTIATION), _cap_passed(false)
 {
 	this->_fds = new struct pollfd[1];
 	_last_pong = time(0);
+	_pinged = false;
 	return ;
 }
 
@@ -33,7 +34,10 @@ void	User::parse_command(std::string line, Server &server)
 	else if ("PING" == line.substr(0, 4))
 		send_message("PONG diloragequit " + line.erase(0, 5) + "\r\n");
 	else if ("PONG" == line.substr(0, 4))
+	{
 		_last_pong = time(0);
+		_pinged = false;
+	}
 	else if ("KICK" == line.substr(0, 4) || "INVITE" == line.substr(0, 6)
 		|| "TOPIC" == line.substr(0, 5) || "MODE" == line.substr(0, 4))
 		server.call_op_cmd(line, *this);
