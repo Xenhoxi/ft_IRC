@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 18:03:26 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 12:54:44 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ void	User::ping(Server &server)
 {
 	time_t  t = time(0);
 	
-	if (t - _last_pong > 20 && t - _last_pong <= 25)
+	if (t - _last_pong > 20 && t - _last_pong < 25)
 	{
 		send_message("PING ft_irc\r\n");
-		_last_pong += 5;
+		_last_pong += 6;
 	}
 	if (t - _last_pong > 30)
 		server.disconnect(this, "NULL");
