@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelCommands.class.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:24:34 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:17:02 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 	{
 		target = &server.get_user(tar);
 	}
-	catch (std::exception &e)
+	catch (Error &e)
 	{
 		caller.send_message(":ft_irc 401" + caller.get_nick() + " " + target->get_nick() + " :No such nick/channel\r\n");
 		return ;

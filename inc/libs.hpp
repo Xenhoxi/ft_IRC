@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 14:40:54 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:01:35 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 #include <ctime>
 #include <map>
 #include <sstream>
+#include <signal.h>
 #include "user.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 14:54:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:19:51 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,22 @@ void	running_server(Server &server)
 			else if (user->get_status() == DISCONNECTED)
 				it = user_list.erase(it);
 		}
-		catch (std::exception &e)
+		catch (Error &e)
 		{
+			std::cout << "souris inverser pendant 3j" << std::endl;
 			std::cout << e.what() << std::endl;
 		}
 	}
+}
+
+void	stop_server(int sig)
+{
+	if (sig == SIGINT)
+	{
+		std::cout << "catched a SIGINT" << std::endl;
+		throw Stop("catched a SIGINT");
+	}
+	return ;
 }
 
 int main(int argc, char **argv)
@@ -68,15 +79,17 @@ int main(int argc, char **argv)
 	Server	*server = new Server();
 	try
 	{
+		signal(SIGINT, stop_server);
 		if (argc != 3)
 			throw Error("wrong args amount");
 		server->socket_init(atoi(argv[1]), argv[2]);
 		while (1)
 			running_server(*server);
 	}
-	catch (std::exception &e)
+	catch (Stop &e)
 	{
-		std::cout << "Error: " << e.what() << std::endl;
+		std::cout << "Stoping: " << e.what() << std::endl;
 	}
+	delete server;
 	return (0);
 }
