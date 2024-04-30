@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 11:29:01 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:41:54 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	Server::join_channel(User *user, std::string &line)
 	}
 	else
 	{
-		Channel *newChannel = new Channel(user, ch_name);
+		Channel *newChannel = new Channel(user, ch_name); // leak
 		_channel_list.insert(std::pair<std::string, Channel *>(ch_name, newChannel));
 	}
 }

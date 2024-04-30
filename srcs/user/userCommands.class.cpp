@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 13:15:16 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 13:56:16 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,22 @@ void    User::negotiation(Server &server)
 
 void    User::registration(Server &server)
 {
-	send_message(":ft_irc 001 " + _nickname + " :Welcome to the 'ft_irc' Network, " + _nickname + "\r\n");
-	send_message(":ft_irc 002 " + _nickname + " :Your host is " + server.get_servername() + ", running version 1.0" + "\r\n");
-	send_message(":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n");
-	send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
-	send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC CHANLIMIT=#:25 NICKLEN=30 TOPICLEN=307 KICKLEN=307 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
-	send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
-	change_status(CONNECTED);
+	if (_nickname.size() != 0 && _username.size() != 0 && _cap_passed == true)
+	{
+		send_message(":ft_irc 001 " + _nickname + " :Welcome to the 'ft_irc' Network, " + _nickname + "\r\n");
+		send_message(":ft_irc 002 " + _nickname + " :Your host is " + server.get_servername() + ", running version 1.0" + "\r\n");
+		send_message(":ft_irc 003 " + _nickname + " :This server was created " + server.get_dt() + "\r\n");
+		send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
+		send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC CHANLIMIT=#:25 NICKLEN=30 TOPICLEN=307 KICKLEN=307 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
+		send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
+		change_status(CONNECTED);
+	}
+	else
+	{
+		send_message("Cannot register if negotiation is not done: will be disconnected\r\n");
+		server.disconnect(this, "NULL");
+		throw Error("Cannot register if negotiation is not done.");
+	}
 }
 
 void    User::change_status(int status)

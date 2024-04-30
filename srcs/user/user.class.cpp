@@ -6,13 +6,13 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:14:30 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 13:53:16 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-User::User() : _status(NEGOTIATION), _negotiations_passed(0)
+User::User() : _status(NEGOTIATION), _cap_passed(false)
 {
 	this->_fds = new struct pollfd[1];
 	_last_pong = time(0);
@@ -97,13 +97,10 @@ void    User::parse_negotiation(std::string line, Server &server)
 	if ("CAP LS" == line || "CAP LS 302" == line)
 	{
 		write(this->_fds->fd, "CAP * LS\n", 9);
-		_negotiations_passed++;
+		_cap_passed = true;
 	}
 	else if ("PASS" == line.substr(0, 4))
-	{
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
-		_negotiations_passed++;
-	}
 	else if ("NICK" == line.substr(0, 4))
 	{
 		if (!server.is_pass(_password))
@@ -114,7 +111,6 @@ void    User::parse_negotiation(std::string line, Server &server)
 		}
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
 		check_nick_validity(server);
-		_negotiations_passed++;
 	}
 	else if ("USER" == line.substr(0, 4))
 	{
@@ -125,17 +121,9 @@ void    User::parse_negotiation(std::string line, Server &server)
 			this->_realname = line.substr(line.find(":") + 1, line.size() - line.find(":") + 1);	
 		std::cout << _username << std::endl;
 		std::cout << _realname << std::endl;
-		_negotiations_passed++;
 	}
 	else if (line == "CAP END")
 	{
-		if (_negotiations_passed != 4)
-		{
-			send_message("Cannot register if negotiation is not done: you will be disconnected\r\n");
-			server.disconnect(this, "NULL");
-			throw Error("tried registration when negotiation not done.");
-		}
-		else
 			this->registration(server);
 	}
 }
