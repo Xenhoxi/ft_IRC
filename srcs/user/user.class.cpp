@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 20:28:55 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 23:29:17 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ User::User() : _status(NEGOTIATION), _cap_passed(false)
 
 User::~User() 
 {
+	if (_fds->fd > 0)
+		close(_fds->fd);
+	delete [] _fds;
 	return ;
 }
 

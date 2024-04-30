@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:54 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 10:31:30 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 22:54:18 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@ int User::get_status() const
 
 void    User::set_fds(int server_socket)
 {
-	if (server_socket < 0)
-	{
-		throw Error("failed to accept");
-	}
 	this->_fds->fd = server_socket;
 	this->_fds->events = POLLIN | POLLOUT;
 	return ;

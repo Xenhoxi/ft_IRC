@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 13:41:54 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 23:24:59 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@ void	Server::join_channel(User *user, std::string &line)
 
 void	Server::add_user(void)
 {
-	User *new_user = new User();
-	new_user->set_fds(accept(_usr_list.front()->get_fds()->fd, NULL, NULL));
-	if (new_user->get_fds()->fd < 0)
-		throw Error("failed to accept connection");
+	User	*new_user = new User();
+	int		newfd;
+	newfd = accept(_usr_list.front()->get_fds()->fd, NULL, NULL);
+	if (newfd < 0)
+	{
+		new_user->set_fds(-1);
+		delete new_user;
+		throw Error("Failed to accept connection");
+	}
 	else
 	{
+		new_user->set_fds(newfd);
 		_usr_list.push_back(new_user);
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
 	}
@@ -113,8 +119,10 @@ void	Server::disconnect(User *user, std::string line)
 				{
 					it2->second->delete_ops(user);
 					it2->second->disconnect(user, "QUIT", ":Quit" + line);
+					std::cout << it2->second->get_size() << std::endl;
 					if (it2->second->get_size() == 0)
 					{
+						delete it2->second;
 						_channel_list.erase(it2);
 						break ;
 					}
@@ -144,6 +152,7 @@ void	Server::channel_part(std::string line, User *user)
 		_channel_list[ch_name]->disconnect(user, "PART", reason);
 		if ((*(_channel_list.find(ch_name))).second->get_size() == 0)
 		{
+			delete _channel_list.find(ch_name)->second;
 			_channel_list.erase(_channel_list.find(ch_name));
 			std::cout << "Channel supprimer !" << std::endl;
 		}

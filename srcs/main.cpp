@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 18:46:31 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 22:45:21 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	running_server(Server &server)
 				user->parsing(server);
 				user->ping(server);
 			}
-			// else if (user->get_status() != DISCONNECTED && user->get_status() != MAIN_SOCKET)
 			else if (user->get_status() == DISCONNECTED)
 				it = user_list.erase(it);
 		}
@@ -67,10 +66,7 @@ void	running_server(Server &server)
 void	stop_server(int sig)
 {
 	if (sig == SIGINT)
-	{
-		std::cout << "catched a SIGINT" << std::endl;
-		throw Stop("catched a SIGINT");
-	}
+		throw Stop("Server Stoped !");
 	return ;
 }
 
@@ -90,7 +86,7 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Stoping: " << e.what() << std::endl;
 	}
-	catch (Error &e)
+	catch (std::exception &e)
 	{
 		std::cout << "Error: " << e.what() << std::endl;
 	}

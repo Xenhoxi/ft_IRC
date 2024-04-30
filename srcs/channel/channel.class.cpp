@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.class.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/25 10:23:28 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 21:22:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _ne
 
 Channel::~Channel()
 {
-	return ;
+	_userInChannel.clear();
+	_operators.clear();
+	_user_invited.clear();
 }
 
 bool    Channel::is_operator(std::string nick) const
