@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 15:19:51 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 18:46:31 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ int main(int argc, char **argv)
 	catch (Stop &e)
 	{
 		std::cout << "Stoping: " << e.what() << std::endl;
+	}
+	catch (Error &e)
+	{
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 	delete server;
 	return (0);

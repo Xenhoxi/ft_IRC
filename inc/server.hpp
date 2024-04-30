@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:39:53 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/25 10:22:01 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:12:24 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	User				&get_user(std::string nick);
 	std::list<User *>	&get_usr_list();
 	std::string         get_servername() const;
+
 private:
 	std::list<User *>       			_usr_list;
 	std::string         				_server_name;

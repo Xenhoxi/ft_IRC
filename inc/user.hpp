@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 14:16:12 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:15:36 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ public:
 	void			parsing(Server &server);
 	void			parse_negotiation(std::string line, Server &server);
 	void			parse_command(std::string line, Server &server);
-	void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
+	void			be_my_guest(Server &server);
+	// void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
 	void			ping(Server &server);
 	void			negotiation(Server &server);
 	void			registration(Server &server);
 	void			send_message(std::string msg);
 	void			change_status(int status);
-	void			change_nick(std::string new_nick, Server &server);
 
 private:
 	int				nick_isalnum(void);

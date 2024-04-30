@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userCommands.class.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 14:52:18 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:40:21 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,6 @@ void    User::change_status(int status)
 	if (this->_status == 2 && status == 1)
 		throw Error("user is already registered");
 	this->_status = status;
-}
-
-void	User::change_nick(std::string new_nick, Server &server)
-{
-	std::string old_nick = this->_nickname;
-	this->_nickname = new_nick;
-	while (_nickname.find("#") != _nickname.npos)
-		_nickname.erase(_nickname.find("#"), 1);
-	if (_nickname.size() == 0 || nick_isalnum() == 0)
-		_nickname = "Guest";
-	if (is_nick_used(server) == true || new_nick == old_nick)
-	{
-		send_message(": NOTICE " + this->_nickname + " :This nick is owned by someone else. Please choose another.\r\n");
-		send_message(": NOTICE " + this->_nickname + " :Your nick will be changed if you like it or not.\r\n");
-		_nickname = old_nick;
-	}
-	else
-		send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");	
 }
 
 void	User::send_message(std::string msg)

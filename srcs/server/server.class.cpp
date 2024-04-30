@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 14:41:03 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:51:27 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ Server::Server()
 
 Server::~Server()
 {
-	std::cout << "in server destructor" << std::endl;
 	std::map<std::string, Channel *>::iterator	it;
 	for (it = _channel_list.begin(); it != _channel_list.end(); it++)
 	{

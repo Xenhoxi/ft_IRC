@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 14:38:14 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:28:55 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,12 @@ void	User::parse_command(std::string line, Server &server)
 	else if ("QUIT" == line.substr(0, 4))
 		server.disconnect(this, line);
 	else if ("NICK" == line.substr(0, 4))
-		change_nick(line.substr(5, strlen(line.c_str()) - 5), server);
+	{
+		std::string old_nick = this->_nickname;
+		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+		check_nick_validity(server);
+		send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");
+	}
 }
 
 void	User::parsing(Server &server)
@@ -76,7 +81,7 @@ void	User::parsing(Server &server)
 }
 
 void	User::check_nick_validity(Server &server)
-{
+{	
 	std::list<User *> 	user_list;
 	std::stringstream	nb;
 	std::string			nick;
@@ -93,6 +98,28 @@ void	User::check_nick_validity(Server &server)
 		nb.str(std::string());
 		nb << ++i;
 		_nickname = nick + nb.str();
+	}
+		// send_message(": 431 " + this->_nickname + " :No nickname given: Will be known as a guest\r\n");
+		// send_message(": 432 " + old_nick + " " + this->_nickname + " :Errorneous nickname: Will be known as a guest\r\n");
+		// send_message(": NOTICE " + this->_nickname + " :This nick is owned by someone else.\r\n");
+		// send_message(": NOTICE " + this->_nickname + " :Your nick will be changed if you like it or not.\r\n");
+}
+
+void	User::be_my_guest(Server &server)
+{
+	_nickname 				= "Guest";
+	int					i 	= 0;
+	std::stringstream	nb;
+	std::string			nick;
+	if (is_nick_used(server))
+	{
+		nick = _nickname;
+		while (is_nick_used(server))
+		{
+			nb.str(std::string());
+			nb << ++i;
+			_nickname = nick + nb.str();
+		}
 	}
 }
 
