@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:56:58 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 14:16:12 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ private:
 	std::string		_password;
 	time_t			_last_pong;
 	int				_status;
+	bool			_pinged;
 	bool			_cap_passed;
 	struct pollfd	*_fds;
 };

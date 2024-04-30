@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 13:28:20 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:54:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,16 @@ void	running_server(Server &server)
 					read_socket(user);
 			}
 			if (fds->fd != user_list.front()->get_fds()->fd && user->get_status() == NEGOTIATION)
+			{
 				user->negotiation(server);
+				user->ping(server);	
+			}
 			else if (user->get_status() == CONNECTED)
 			{
 				user->parsing(server);
 				user->ping(server);
 			}
+			// else if (user->get_status() != DISCONNECTED && user->get_status() != MAIN_SOCKET)
 			else if (user->get_status() == DISCONNECTED)
 				it = user_list.erase(it);
 		}

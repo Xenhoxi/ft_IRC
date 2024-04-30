@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:41:25 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 14:41:03 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	Server::socket_init(int port, std::string pass)
     User    *server_socket  = new User(); // leak
 
 	this->_password = pass;
+	server_socket->change_status(MAIN_SOCKET);
 	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
 	std::cout << "Socket init: " << fd_socket << std::endl;
 	if (fd_socket < 0) 

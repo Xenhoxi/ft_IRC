@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 13:57:20 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 14:38:14 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,10 @@ void    User::parse_negotiation(std::string line, Server &server)
 		std::cout << _realname << std::endl;
 	}
 	else if (line == "CAP END")
+		this->registration(server);
+	else if ("PONG" == line.substr(0, 4))
 	{
-			this->registration(server);
+		_last_pong = time(0);
+		_pinged = false;
 	}
 }

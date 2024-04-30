@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userCommands.class.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 13:57:09 by smunio           ###   ########.fr       */
+/*   Updated: 2024/04/30 14:52:18 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	User::ping(Server &server)
 	}
 	if (t - _last_pong > 25 && _pinged == true)
 	{
-		server.disconnect(this, "NULL");
+		server.disconnect(this, " TIMED OUT");
 		std::cout << "Client TIMEOUT" << std::endl;
 	}
 }

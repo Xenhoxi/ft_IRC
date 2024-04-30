@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 11:27:40 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:40:54 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 # define NEGOTIATION 	1
 # define CONNECTED 		2
 # define LEAVING 		3
+# define MAIN_SOCKET    4
 
-# define TOPIC_ALL		5
-# define TOPIC_OP		4
+# define TOPIC_ALL		0
+# define TOPIC_OP		1
 
 # define NO_INVITE      0
 # define ON_INVITE      1
