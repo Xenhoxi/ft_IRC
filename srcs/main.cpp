@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/29 17:29:33 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:58:34 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void	read_socket(User *user)
 {
-	char buff[100];
+	char	buff[100];
+	int		u;
+
 	memset(buff, 0, 100);
-	read(user->get_fds()->fd, buff, 100);
+	u = read(user->get_fds()->fd, buff, 100);
 	user->add_data(buff);
-	std::cout << "<< " << buff;
+	if (u > 0)
+		std::cout << "<< " << buff;
 	memset(buff, 0, 100);
 }
 
