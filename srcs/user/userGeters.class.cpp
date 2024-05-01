@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:54 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 22:54:18 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:00:21 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,4 @@ void    User::set_fds(int server_socket)
 {
 	this->_fds->fd = server_socket;
 	this->_fds->events = POLLIN | POLLOUT;
-	return ;
 }

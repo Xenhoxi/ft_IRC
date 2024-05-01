@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 22:45:21 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:54:57 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ void	running_server(Server &server)
 				user->ping(server);
 			}
 			else if (user->get_status() == DISCONNECTED)
+			{
+				delete *it;
 				it = user_list.erase(it);
+			}
 		}
 		catch (Error &e)
 		{
-			std::cout << "souris inverser pendant 3j" << std::endl;
 			std::cout << e.what() << std::endl;
 		}
 	}
@@ -66,7 +68,10 @@ void	running_server(Server &server)
 void	stop_server(int sig)
 {
 	if (sig == SIGINT)
+	{
+		std::cout << std::endl;
 		throw Stop("Server Stoped !");
+	}
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 22:11:51 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:02:03 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void    Channel::disconnect(User *leaving_user, std::string type, std::string re
 			else if (type == "QUIT")
 				send_to_all_user(":" + leaving_user->get_nick() + " " + type + " " + reason + "\r\n");
 			_userInChannel.erase(it);
+			delete_ops(leaving_user);
 			std::cout << "User leave the channel: " << _name << std::endl;
 			break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/04/30 23:24:59 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:54:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	Server::join_channel(User *user, std::string &line)
 	}
 	else
 	{
-		Channel *newChannel = new Channel(user, ch_name); // leak
+		Channel *newChannel = new Channel(user, ch_name);
 		_channel_list.insert(std::pair<std::string, Channel *>(ch_name, newChannel));
 	}
 }
@@ -113,6 +113,7 @@ void	Server::disconnect(User *user, std::string line)
         if ((*it) == user)
 		{
 			close((*it)->get_fds()->fd);
+			(*it)->change_status(DISCONNECTED);
 			for (it2 = _channel_list.begin(); it2 != _channel_list.end(); it2++)
 			{
 				if (it2->second->is_connected(user))
@@ -128,7 +129,6 @@ void	Server::disconnect(User *user, std::string line)
 					}
 				}
 			}
-			(*it)->change_status(DISCONNECTED);
 			break ;
 		}
     }

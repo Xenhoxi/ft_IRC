@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 23:29:17 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:54:25 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ User::User() : _status(NEGOTIATION), _cap_passed(false)
 	this->_fds = new struct pollfd[1];
 	_last_pong = time(0);
 	_pinged = false;
-	return ;
 }
 
 User::~User() 
@@ -25,7 +24,6 @@ User::~User()
 	if (_fds->fd > 0)
 		close(_fds->fd);
 	delete [] _fds;
-	return ;
 }
 
 void	User::parse_command(std::string line, Server &server)
@@ -137,12 +135,6 @@ void    User::parse_negotiation(std::string line, Server &server)
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
 	else if ("NICK" == line.substr(0, 4))
 	{
-		if (!server.is_pass(_password))
-		{
-			send_message("ERROR :Password incorrect\r\n");
-			server.disconnect(this, "NULL");
-			throw Error("Password incorrect: you will be disconnected");
-		}
 		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
 		check_nick_validity(server);
 	}
@@ -157,7 +149,15 @@ void    User::parse_negotiation(std::string line, Server &server)
 		std::cout << _realname << std::endl;
 	}
 	else if (line == "CAP END")
-		this->registration(server);
+	{
+		if (!server.is_pass(_password))
+		{
+			send_message("ERROR :Password incorrect\r\n");
+			server.disconnect(this, "NULL");
+		}
+		else
+			this->registration(server);
+	}
 	else if ("PONG" == line.substr(0, 4))
 	{
 		_last_pong = time(0);
