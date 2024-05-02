@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 18:55:00 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:56:31 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		return ;
 	}
 	else if (is_operator(caller.get_nick()) == false)
+	{
 		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
+		throw Error("not channel op");
+	}
 	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
 
 	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
@@ -33,18 +36,18 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		throw Error("wrong MODE opt");
 	}	
 	if (opt[1] == 'o')
-		this->mode_o(line, opt);
+		this->mode_o(line, opt, caller);
 	else if (opt[1] == 'l')
-		this->mode_l(line, opt);
+		this->mode_l(line, opt, caller);
 	else if (opt[1] == 't')
-		this->mode_t(opt);
+		this->mode_t(opt, caller);
 	else if (opt[1] == 'i')
-		this->mode_i(opt);
+		this->mode_i(opt, caller);
 	else if (opt[1] == 'k')
-		this->mode_k(line);
+		this->mode_k(line, caller);
 }
 
-void Channel::mode_o(std::string &line, std::string &opt)
+void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 {
 	std::string	tar = line.substr(line.find("MODE") + 9 + this->_name.size(), line.size());
 	std::list<User *>::iterator it;
@@ -55,7 +58,7 @@ void Channel::mode_o(std::string &line, std::string &opt)
 			if ((*it)->get_nick() == tar)
 			{
 					this->_operators.erase(it);
-					this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+					this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + tar + "\r\n");
 					break ;
 			}
 		}
@@ -65,57 +68,57 @@ void Channel::mode_o(std::string &line, std::string &opt)
 			if ((*it)->get_nick() == tar)
 			{
 					this->_operators.push_back(*it);
-					this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+					this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + tar + "\r\n");
 					break ;
 			}
 		}
 }
 
-void    Channel::mode_l(std::string &line, std::string &opt)
+void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
 		std::string count = line.substr(line.find(opt) + 3, line.size());
 		this->_max_users += atoi(count.c_str());
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + count + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + count + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
 		this->_max_users = 0;
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 }
 
-void    Channel::mode_t(std::string &opt)
+void    Channel::mode_t(std::string &opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
 		this->_topic_mode = TOPIC_ALL;
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
 		this->_topic_mode = TOPIC_OP;
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 
 }
 
-void    Channel::mode_i(std::string &opt)
+void    Channel::mode_i(std::string &opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
 		this->_invite_mode = ON_INVITE;
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
 		this->_invite_mode = NO_INVITE;
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + "\r\n");
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 }
 
-void    Channel::mode_k(std::string &line)
+void    Channel::mode_k(std::string &line, User &caller)
 {
 	// si 
 	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
@@ -125,7 +128,7 @@ void    Channel::mode_k(std::string &line)
 		this->_password = pass;
 		std::cout << this->_password << std::endl;
 		this->_need_pass = true;
-		send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
+		send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
@@ -134,6 +137,6 @@ void    Channel::mode_k(std::string &line)
 			throw Error("can't remove password: Wrong password");
 		this->_password.clear();
 		this->_need_pass = false;
-		send_to_all_user(": MODE " + this->_name + " " + opt + " " + pass + "\r\n");
+		send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
 }
