@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/02 14:58:49 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:19:50 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,11 @@ void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
+		if (line.find(opt) + 3 >= line.size())
+		{
+			caller.send_message(": 461 " + caller.get_nick() + " MODE +l :Not enough parameters\r\n");
+			throw Error("not enough parameters mode +l");
+		}
 		std::string count = line.substr(line.find(opt) + 3, line.size());
 		this->_max_users += atoi(count.c_str());
 		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + count + "\r\n");
