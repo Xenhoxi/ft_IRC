@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/02 14:54:22 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:34:17 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ public:
 
 	/*channelMode.class.cpp*/
 	void			mode(std::string &line, User &caller, Server &server);
-	void			mode_o(std::string &line, std::string &opt, User &caller);
-	void			mode_l(std::string &line, std::string &opt, User &caller);
-	void			mode_t(std::string &opt, User &caller);
-	void			mode_i(std::string &opt, User &caller);
+	void			mode_o(std::string &line, char *opt, User &caller);
+	void			mode_l(std::string &line, char *opt, User &caller);
+	void			mode_t(char *opt, User &caller);
+	void			mode_i(char *opt, User &caller);
 	void			mode_k(std::string &line, User &caller);
 
 	/*channelGeters.class.cpp*/

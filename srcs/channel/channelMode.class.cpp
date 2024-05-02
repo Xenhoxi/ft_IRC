@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/02 15:19:50 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:35:33 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,14 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 		throw Error("not channel op");
 	}
-	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
+	char *opt = (char *)line.c_str();
+		opt = strtok(NULL, " ");
+		opt = strtok(NULL, " ");
+	std::cout << opt << std::endl;
+	// std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
 
-	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
-		&& opt[0] != '+' && opt[0] != '-')
+	if ((opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
+		&& opt[0] != '+' && opt[0] != '-') || strlen(opt) > 2)
 	{
 		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
 		throw Error("wrong MODE opt");
@@ -47,7 +51,7 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		this->mode_k(line, caller);
 }
 
-void Channel::mode_o(std::string &line, std::string &opt, User &caller)
+void Channel::mode_o(std::string &line, char *opt, User &caller)
 {
 	std::string	tar = line.substr(line.find("MODE") + 9 + this->_name.size(), line.size());
 	std::list<User *>::iterator it;
@@ -78,7 +82,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 	}
 }
 
-void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
+void    Channel::mode_l(std::string &line, char *opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
@@ -98,7 +102,7 @@ void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
 	}
 }
 
-void    Channel::mode_t(std::string &opt, User &caller)
+void    Channel::mode_t(char *opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
@@ -113,7 +117,7 @@ void    Channel::mode_t(std::string &opt, User &caller)
 
 }
 
-void    Channel::mode_i(std::string &opt, User &caller)
+void    Channel::mode_i(char *opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
@@ -130,7 +134,14 @@ void    Channel::mode_i(std::string &opt, User &caller)
 void    Channel::mode_k(std::string &line, User &caller)
 {
 	// si 
-	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
+	char *opt = (char *)line.c_str();
+		opt = strtok(NULL, " ");
+		opt = strtok(NULL, " ");	
+	if (strlen(opt) > 2)
+	{
+		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
+		throw Error("wrong mode opt");
+	}
 	if (opt[0] == '+')
 	{
 		std::string pass = line.substr(line.find(opt) + 3, line.size());
