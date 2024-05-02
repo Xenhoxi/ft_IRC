@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/01 21:54:57 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:24:19 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	stop_server(int sig)
 int main(int argc, char **argv)
 {
 	Server	*server = new Server();
+
 	try
 	{
 		signal(SIGINT, stop_server);

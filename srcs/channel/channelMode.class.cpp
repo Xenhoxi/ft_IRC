@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/02 14:56:31 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:58:49 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 	std::list<User *>::iterator it;
 
 	if (opt[0] == '-')
+	{
 		for (it = this->_operators.begin(); it != this->_operators.end(); it++)
 		{
 			if ((*it)->get_nick() == tar)
@@ -62,7 +63,9 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 					break ;
 			}
 		}
+	}
 	else
+	{
 		for (it = this->_userInChannel.begin(); it != this->_userInChannel.end(); it++)
 		{
 			if ((*it)->get_nick() == tar)
@@ -72,6 +75,7 @@ void Channel::mode_o(std::string &line, std::string &opt, User &caller)
 					break ;
 			}
 		}
+	}
 }
 
 void    Channel::mode_l(std::string &line, std::string &opt, User &caller)
