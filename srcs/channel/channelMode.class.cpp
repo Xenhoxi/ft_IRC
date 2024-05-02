@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/29 18:55:00 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:12:20 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,27 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 	}
 	else if (is_operator(caller.get_nick()) == false)
 		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
-	std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
-
-	if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
-		&& opt[0] != '+' && opt[0] != '-')
+	else if (is_operator(caller.get_nick()))
 	{
-		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
-		throw Error("wrong MODE opt");
-	}	
-	if (opt[1] == 'o')
-		this->mode_o(line, opt);
-	else if (opt[1] == 'l')
-		this->mode_l(line, opt);
-	else if (opt[1] == 't')
-		this->mode_t(opt);
-	else if (opt[1] == 'i')
-		this->mode_i(opt);
-	else if (opt[1] == 'k')
-		this->mode_k(line);
+		std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
+
+		if (opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
+			&& opt[0] != '+' && opt[0] != '-')
+		{
+			caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
+			throw Error("wrong MODE opt");
+		}	
+		if (opt[1] == 'o')
+			this->mode_o(line, opt);
+		else if (opt[1] == 'l')
+			this->mode_l(line, opt);
+		else if (opt[1] == 't')
+			this->mode_t(opt);
+		else if (opt[1] == 'i')
+			this->mode_i(opt);
+		else if (opt[1] == 'k')
+			this->mode_k(line);
+	}
 }
 
 void Channel::mode_o(std::string &line, std::string &opt)
@@ -50,6 +53,7 @@ void Channel::mode_o(std::string &line, std::string &opt)
 	std::list<User *>::iterator it;
 
 	if (opt[0] == '-')
+	{
 		for (it = this->_operators.begin(); it != this->_operators.end(); it++)
 		{
 			if ((*it)->get_nick() == tar)
@@ -59,7 +63,9 @@ void Channel::mode_o(std::string &line, std::string &opt)
 					break ;
 			}
 		}
+	}
 	else
+	{
 		for (it = this->_userInChannel.begin(); it != this->_userInChannel.end(); it++)
 		{
 			if ((*it)->get_nick() == tar)
@@ -69,15 +75,20 @@ void Channel::mode_o(std::string &line, std::string &opt)
 					break ;
 			}
 		}
+	}
 }
 
 void    Channel::mode_l(std::string &line, std::string &opt)
 {
 	if (opt[0] == '+')
 	{
-		std::string count = line.substr(line.find(opt) + 3, line.size());
-		this->_max_users += atoi(count.c_str());
-		this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + count + "\r\n");
+		if (line.rfind("+l") + 3 != line.npos)
+		{
+			std::string count = line.substr(line.rfind("+l") + 3, line.size() - line.rfind("+l") + 3);
+			std::cout << count << std::endl << count.size() << std::endl;
+			this->_max_users += atoi(count.c_str());
+			this->send_to_all_user(": MODE " + this->_name + " " + opt + " " + count + "\r\n");
+		}
 	}
 	if (opt[0] == '-')
 	{
