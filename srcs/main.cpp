@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/02 11:24:19 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/03 14:00:37 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,23 @@ int main(int argc, char **argv)
 	}
 	delete server;
 	return (0);
+}
+
+void	ascii_sam(User *user)
+{
+	std::string		buff;
+	std::ifstream	ifs("ascii-art.txt");
+
+	std::getline(ifs, buff);
+	if (!ifs.is_open())
+	{
+		std::cout << "file couldn't be open !" << std::endl;
+		return ;
+	}
+	while (ifs)
+	{
+		user->send_message(":ft_irc 372 " + user->get_nick() + " :" + buff + "\r\n");
+		std::getline(ifs, buff);
+	}
+	ifs.close();
 }

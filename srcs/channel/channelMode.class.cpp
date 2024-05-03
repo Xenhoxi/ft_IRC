@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/02 15:35:33 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/03 13:34:46 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void Channel::mode_o(std::string &line, char *opt, User &caller)
 					break ;
 			}
 		}
+		if (it == this->_userInChannel.end())
+			caller.send_message(":ft_irc 401 " + caller.get_nick()  + " " + tar + ":No such nick/channel");
 	}
 }
 

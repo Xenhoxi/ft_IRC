@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libs.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 15:01:35 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/03 13:57:22 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@
 #include <map>
 #include <sstream>
 #include <signal.h>
+#include <fstream>
 #include "user.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"
 #include "channel.hpp"
+
+void    ascii_sam(User *user);
 
 #endif
