@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/03 13:34:46 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:10:30 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 	char *opt = (char *)line.c_str();
 		opt = strtok(NULL, " ");
 		opt = strtok(NULL, " ");
-	std::cout << opt << std::endl;
-	// std::string opt = line.substr(line.find("MODE") + 6 + this->_name.size(), 2);
-
 	if ((opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
 		&& opt[0] != '+' && opt[0] != '-') || strlen(opt) > 2)
 	{
@@ -135,7 +132,6 @@ void    Channel::mode_i(char *opt, User &caller)
 
 void    Channel::mode_k(std::string &line, User &caller)
 {
-	// si 
 	char *opt = (char *)line.c_str();
 		opt = strtok(NULL, " ");
 		opt = strtok(NULL, " ");	

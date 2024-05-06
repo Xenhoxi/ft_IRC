@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/01 21:54:25 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:29:36 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ User::~User()
 void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
+	{
+		std::cout << "caca" << std::endl;
 		server.join_channel(this, line);
+	}
 	else if ("PRIVMSG" == line.substr(0, 7))
 		server.broadcast(this, line);
 	else if ("PING" == line.substr(0, 4))
