@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/03 13:34:46 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 11:10:52 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 
 	if (line.find('#') + this->_name.size() == line.size())
 	{
+		std::stringstream	nb;
+		nb << _created_at;
 		caller.send_message(": 324 " + caller.get_nick() + " " + this->_name + " +" + "\r\n");
-		caller.send_message(": 329 " + caller.get_nick() + " " + this->_name + " 1714381232" + "\r\n");
+		caller.send_message(": 329 " + caller.get_nick() + " " + this->_name + " " + nb.str() + "\r\n");
 		return ;
 	}
 	else if (is_operator(caller.get_nick()) == false)
@@ -94,8 +96,12 @@ void    Channel::mode_l(std::string &line, char *opt, User &caller)
 			throw Error("not enough parameters mode +l");
 		}
 		std::string count = line.substr(line.find(opt) + 3, line.size());
+		if (!isdigit(count[0]))
+			throw Error("wrong MODE +l opt");
 		this->_max_users += atoi(count.c_str());
-		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + count + "\r\n");
+		std::stringstream	nb;
+		nb << _max_users;
+		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + nb.str() + "\r\n");
 	}
 	if (opt[0] == '-')
 	{

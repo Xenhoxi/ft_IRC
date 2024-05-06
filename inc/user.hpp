@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/04/30 20:57:01 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:29:01 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ public:
 	void			change_status(int status);
 
 private:
+	void			change_nick(std::string new_nick, Server &server);
 	int				nick_isalnum(void);
 	bool			is_nick_used(Server &server);
 	void			check_nick_validity(Server &server);
