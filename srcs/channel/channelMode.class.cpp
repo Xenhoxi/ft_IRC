@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:43:53 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:46:22 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,15 +138,15 @@ void    Channel::mode_i(char *opt, User &caller)
 
 void    Channel::mode_k(std::string &line, User &caller)
 {
-	char *opt = (char *)line.c_str();
-		opt = strtok(NULL, " ");
-		opt = strtok(NULL, " ");	
-	if (strlen(opt) > 2)
+	char *opt = strtok((char *)line.c_str(), " ");
+	opt = strtok(NULL, " ");
+	std::cout << "caca :" << opt << "|" << std::endl;
+	if (opt != NULL && strlen(opt) > 2)
 	{
 		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
 		throw Error("wrong mode opt");
 	}
-	if (opt[0] == '+')
+	if (opt != NULL && opt[0] == '+')
 	{
 		std::string pass = line.substr(line.find(opt) + 3, line.size());
 		this->_password = pass;
@@ -154,7 +154,7 @@ void    Channel::mode_k(std::string &line, User &caller)
 		this->_need_pass = true;
 		send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
-	if (opt[0] == '-')
+	if (opt != NULL && opt[0] == '-' && _need_pass == true)
 	{
 		std::string pass = line.substr(line.find(opt) + 3, line.size());
 		if (pass != this->_password)
