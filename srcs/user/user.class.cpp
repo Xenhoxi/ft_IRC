@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:54:42 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:04:15 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	User::parse_command(std::string line, Server &server)
 	{
 		if (line.substr(5, strlen(line.c_str()) - 5).size() == 0)
 		{
-			send_message(": 431 " + this->_nickname + " :No nickname given\r\n");
+			send_message(":ft_irc 431 " + this->_nickname + " :No nickname given\r\n");
 			throw Error("no nickname given");
 		}
 		change_nick(line.substr(5, strlen(line.c_str()) - 5), server);
@@ -136,8 +136,13 @@ void    User::parse_negotiation(std::string line, Server &server)
 		this->_password = line.substr(5, strlen(line.c_str()) - 5);
 	else if ("NICK" == line.substr(0, 4))
 	{
-		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
-		check_nick_validity(server);
+		if (line.substr(4, strlen(line.c_str()) - 4).size() == 0)
+			send_message(":ft_irc 431 " + this->_nickname + " :No nickname given\r\n");
+		else
+		{
+			this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
+			check_nick_validity(server);
+		}
 	}
 	else if ("USER" == line.substr(0, 4))
 	{
