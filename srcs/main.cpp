@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 11:12:17 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:01:10 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	running_server(Server &server)
 			{
 				delete *it;
 				it = user_list.erase(it);
+				std::cout << "Disconnected" << std::endl;
 			}
 		}
 		catch (Error &e)

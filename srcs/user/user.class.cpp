@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:43:59 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:54:42 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,9 @@ void    User::parse_negotiation(std::string line, Server &server)
 	{
 		char *tmp = strtok((char *)line.c_str(), " ");
 		tmp = strtok(NULL, " ");
+		if (tmp == NULL)
+			return ;
 		this->_username = tmp;
-		if (line.find(":") != line.npos)
-			this->_realname = line.substr(line.find(":") + 1, line.size() - line.find(":") + 1);	
-		std::cout << _username << std::endl;
-		std::cout << _realname << std::endl;
 	}
 	else if (line == "CAP END")
 	{
