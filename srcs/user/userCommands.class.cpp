@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 11:04:54 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:44:05 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,30 @@ void    User::registration(Server &server)
 		server.disconnect(this, "NULL");
 		throw Error("Cannot register if negotiation is not done.");
 	}
+}
+
+void	User::change_nick(std::string new_nick, Server &server)
+{
+	std::string old_nick = this->_nickname;
+	this->_nickname = new_nick;
+	// check_nick_validity(server);
+	for (int i = 0; new_nick[i]; i++)
+	{
+		if (!isalpha(new_nick[i]))
+		{
+			send_message(": 432 " + old_nick + " " + this->_nickname + " :Errorneous nickname\r\n");
+			this->_nickname = old_nick;
+			throw Error("errorneous nickname");
+		}
+	}
+	if (is_nick_used(server))
+	{
+		send_message(": NOTICE " + this->_nickname + " :This nick is owned by someone else.\r\n");
+		send_message(": NOTICE " + this->_nickname + " :Your nick will be changed if you like it or not.\r\n");
+		this->_nickname = old_nick;
+		throw Error("errorneous nickname");
+	}
+	send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");
 }
 
 void    User::change_status(int status)

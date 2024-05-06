@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/02 15:34:17 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/06 11:10:18 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ private:
 	std::list<User *>				_operators;
 	std::list<std::string>			_user_invited;
 	size_t							_max_users;
+	time_t							_created_at;
 	bool							_need_pass;
 
 	unsigned int					_topic_mode;

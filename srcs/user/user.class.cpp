@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:29:36 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:43:59 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ void	User::parse_command(std::string line, Server &server)
 		server.disconnect(this, line);
 	else if ("NICK" == line.substr(0, 4))
 	{
-		std::string old_nick = this->_nickname;
-		this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
-		check_nick_validity(server);
-		send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");
+		if (line.substr(5, strlen(line.c_str()) - 5).size() == 0)
+		{
+			send_message(": 431 " + this->_nickname + " :No nickname given\r\n");
+			throw Error("no nickname given");
+		}
+		change_nick(line.substr(5, strlen(line.c_str()) - 5), server);
 	}
 }
 
@@ -103,10 +105,6 @@ void	User::check_nick_validity(Server &server)
 		nb << ++i;
 		_nickname = nick + nb.str();
 	}
-		// send_message(": 431 " + this->_nickname + " :No nickname given: Will be known as a guest\r\n");
-		// send_message(": 432 " + old_nick + " " + this->_nickname + " :Errorneous nickname: Will be known as a guest\r\n");
-		// send_message(": NOTICE " + this->_nickname + " :This nick is owned by someone else.\r\n");
-		// send_message(": NOTICE " + this->_nickname + " :Your nick will be changed if you like it or not.\r\n");
 }
 
 void	User::be_my_guest(Server &server)
