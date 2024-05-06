@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:32:05 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 14:34:08 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:35:13 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ public:
 	void			mode_l(std::string &line, char *opt, User &caller);
 	void			mode_t(char *opt, User &caller);
 	void			mode_i(char *opt, User &caller);
-	void			mode_k(std::string &line, User &caller);
+	void			mode_k(char *opt, std::string &line, User &caller);
 
 	/*channelGeters.class.cpp*/
 	User			&get_user(std::string nick);

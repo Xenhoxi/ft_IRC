@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 14:46:22 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:00:17 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
 		throw Error("wrong MODE opt");
 	}	
-	if (opt[1] == 'o')
+	if (opt != NULL && opt[1] == 'o')
 		this->mode_o(line, opt, caller);
-	else if (opt[1] == 'l')
+	else if (opt != NULL && opt[1] == 'l')
 		this->mode_l(line, opt, caller);
-	else if (opt[1] == 't')
+	else if (opt != NULL && opt[1] == 't')
 		this->mode_t(opt, caller);
-	else if (opt[1] == 'i')
+	else if (opt != NULL && opt[1] == 'i')
 		this->mode_i(opt, caller);
-	else if (opt[1] == 'k')
-		this->mode_k(line, caller);
+	else if (opt != NULL && opt[1] == 'k')
+		this->mode_k(opt, line, caller);
 }
 
 void Channel::mode_o(std::string &line, char *opt, User &caller)
 {
+	if (line.find("MODE") + 9 + this->_name.size() >= line.size())
+		throw Error("no target for MODE o");
 	std::string	tar = line.substr(line.find("MODE") + 9 + this->_name.size(), line.size());
 	std::list<User *>::iterator it;
 
@@ -136,27 +138,25 @@ void    Channel::mode_i(char *opt, User &caller)
 	}
 }
 
-void    Channel::mode_k(std::string &line, User &caller)
+void    Channel::mode_k(char *opt, std::string &line, User &caller)
 {
-	char *opt = strtok((char *)line.c_str(), " ");
-	opt = strtok(NULL, " ");
-	std::cout << "caca :" << opt << "|" << std::endl;
-	if (opt != NULL && strlen(opt) > 2)
+	if (strlen(opt) > 2)
 	{
 		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
 		throw Error("wrong mode opt");
 	}
-	if (opt != NULL && opt[0] == '+')
+	if (opt[0] == '+')
 	{
-		std::string pass = line.substr(line.find(opt) + 3, line.size());
+		if (line.find('+') + 3 >= line.size())
+			throw Error("missing password");
+		std::string pass = line.substr(line.find('+') + 3, line.size());
 		this->_password = pass;
-		std::cout << this->_password << std::endl;
 		this->_need_pass = true;
 		send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + pass + "\r\n");
 	}
-	if (opt != NULL && opt[0] == '-' && _need_pass == true)
+	if (opt[0] == '-' && _need_pass == true)
 	{
-		std::string pass = line.substr(line.find(opt) + 3, line.size());
+		std::string pass = line.substr(line.find('-') + 3, line.size());
 		if (pass != this->_password)
 			throw Error("can't remove password: Wrong password");
 		this->_password.clear();
