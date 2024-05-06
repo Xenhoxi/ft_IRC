@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/01 21:54:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:42:48 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 
 void	Server::join_channel(User *user, std::string &line)
 {
-	char *ch_name 	= strtok((char *)line.c_str(), " ");
-	ch_name			= strtok(NULL, " ");
+	std::string ch_name;
+
+	if (line.size() > 5)
+		ch_name = line.substr(5, line.size() - 5);
+	else
+		return ;
+	if (ch_name[0] != '#')
+		throw Error("Need # to join channel");
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user() && _channel_list[ch_name]->get_max_user() != 0)
@@ -26,11 +32,11 @@ void	Server::join_channel(User *user, std::string &line)
 		{
 			if (_channel_list[ch_name]->is_invited(user->get_nick()))
 				_channel_list[ch_name]->add_user(user);
-			else if (line.size() < line.find(ch_name) + strlen(ch_name) + 1)
+			else if (line.size() < line.find(ch_name) + ch_name.size() + 1)
 				user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 			else
 			{
-				std::string pass = line.substr(line.find(ch_name) + strlen(ch_name) + 1, line.size());
+				std::string pass = line.substr(line.find(ch_name) + ch_name.size() + 1, line.size());
 				if (pass == _channel_list[ch_name]->get_password())
 					_channel_list[ch_name]->add_user(user);
 				else
@@ -166,8 +172,11 @@ void	Server::call_op_cmd(std::string line, User &caller)
 	const char *cmd_tab[] = {"KICK", "INVITE", "TOPIC", "MODE"};
 	void (Channel::*functptr[])(std::string&, User&, Server&) = {&Channel::kick, &Channel::invite, &Channel::topic, &Channel::mode};
 
-	Channel *my_channel = this->_channel_list[ch_name];
-	for (int i = 0; i < 4; i++)	
-		if (!strcmp(cmd, cmd_tab[i]))
-			(my_channel->*functptr[i])(line, caller, *this);
+	if (_channel_list.find(ch_name) != _channel_list.end())
+	{
+		Channel *my_channel = this->_channel_list[ch_name];
+		for (int i = 0; i < 4; i++)	
+			if (!strcmp(cmd, cmd_tab[i]))
+				(my_channel->*functptr[i])(line, caller, *this);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:49:47 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/01 22:00:13 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:58:44 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	Server::socket_init(int port, std::string pass)
 	}
 	else
 		std::cout << "Server ON !" << std::endl;
-	listen(fd_socket, 5);
+	listen(fd_socket, 50);
 	server_socket->set_fds(fd_socket);
     this->_usr_list.push_back(server_socket);
 }

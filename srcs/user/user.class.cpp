@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:38:40 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/06 14:04:15 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ User::~User()
 void	User::parse_command(std::string line, Server &server)
 {
 	if ("JOIN" == line.substr(0, 4))
+	{
+		std::cout << "caca" << std::endl;
 		server.join_channel(this, line);
+	}
 	else if ("PRIVMSG" == line.substr(0, 7))
 		server.broadcast(this, line);
 	else if ("PING" == line.substr(0, 4))
@@ -145,11 +148,9 @@ void    User::parse_negotiation(std::string line, Server &server)
 	{
 		char *tmp = strtok((char *)line.c_str(), " ");
 		tmp = strtok(NULL, " ");
+		if (tmp == NULL)
+			return ;
 		this->_username = tmp;
-		if (line.find(":") != line.npos)
-			this->_realname = line.substr(line.find(":") + 1, line.size() - line.find(":") + 1);	
-		std::cout << _username << std::endl;
-		std::cout << _realname << std::endl;
 	}
 	else if (line == "CAP END")
 	{
