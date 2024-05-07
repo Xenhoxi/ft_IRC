@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 13:42:48 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:31:13 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ void	Server::join_channel(User *user, std::string &line)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		else if (_channel_list[ch_name]->get_pass_bool() != false)
+		else if (_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick()))
 		{
-			if (_channel_list[ch_name]->is_invited(user->get_nick()))
-				_channel_list[ch_name]->add_user(user);
-			else if (line.size() < line.find(ch_name) + ch_name.size() + 1)
+			if (line.size() < line.find(ch_name) + ch_name.size() + 1)
 				user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 			else
 			{
