@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelCommands.class.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/07 10:24:52 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/07 11:27:28 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 	else
 	{
 		if (_topic_mode == TOPIC_OP && is_operator(caller.get_nick()))
-		   send_to_all_user(":" + caller.get_nick() + " TOPIC "+ _topic + "\r\n");
+		   send_to_all_user(":" + caller.get_nick() + " TOPIC " + _name + " :" + _topic + "\r\n");
 		else
 			caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
 	}

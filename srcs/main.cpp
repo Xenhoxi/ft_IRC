@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 14:01:10 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:22:01 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 void	ascii_sam(User *user)
 {
 	std::string		buff;
-	std::ifstream	ifs("ascii-art.txt");
+	std::ifstream	ifs("ascii/ascii-art.txt");
 
 	std::getline(ifs, buff);
 	if (!ifs.is_open())
