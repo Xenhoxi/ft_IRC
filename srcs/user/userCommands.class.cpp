@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userCommands.class.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/06 13:44:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:07:23 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	User::change_nick(std::string new_nick, Server &server)
 	// check_nick_validity(server);
 	for (int i = 0; new_nick[i]; i++)
 	{
-		if (!isalpha(new_nick[i]))
+		if (i == 0 && !isalpha(new_nick[i]))
 		{
 			send_message(": 432 " + old_nick + " " + this->_nickname + " :Errorneous nickname\r\n");
 			this->_nickname = old_nick;
