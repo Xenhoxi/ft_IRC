@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelCommands.class.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 12:57:05 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:24:52 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,16 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 	(void)server;
 	if (is_operator(caller.get_nick()) != false)
 	{
-		std::string reason = line.substr(line.find(':') + 1, line.size());
-
+		std::string reason;
+		if (line.find(':') != line.npos)
+			reason = line.substr(line.find(':') + 1, line.size() - (line.find(':') + 1));
 		char *tar = (char *)line.c_str();
 		tar = strtok(NULL, " ");
 		tar = strtok(NULL, " ");
 
 		User    &target = this->get_user(tar);
 
-		std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + "\r\n";
+		std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + " :" + reason + "\r\n";
 		this->send_to_all_user(msg);
 		
 		std::list<User *>::iterator it;

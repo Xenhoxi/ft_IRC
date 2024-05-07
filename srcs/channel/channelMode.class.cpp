@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 16:00:17 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/07 10:14:39 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ void    Channel::mode_t(char *opt, User &caller)
 {
 	if (opt[0] == '+')
 	{
-		this->_topic_mode = TOPIC_ALL;
+		this->_topic_mode = TOPIC_OP;
 		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 	if (opt[0] == '-')
 	{
-		this->_topic_mode = TOPIC_OP;
+		this->_topic_mode = TOPIC_ALL;
 		this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + "\r\n");
 	}
 
