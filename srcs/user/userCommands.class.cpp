@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/07 10:07:23 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/08 11:08:29 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,3 +106,4 @@ void	User::ping(Server &server)
 		std::cout << "Client TIMEOUT" << std::endl;
 	}
 }
+

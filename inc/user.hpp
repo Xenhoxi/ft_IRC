@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/06 13:51:30 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 11:11:00 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ public:
 	struct pollfd   *get_fds() const;
 	void			add_data(std::string new_data);
 	void            set_fds(int server_socket);
+	std::string		get_host_info() const;
 	
 	void			parsing(Server &server);
 	void			parse_negotiation(std::string line, Server &server);
 	void			parse_command(std::string line, Server &server);
 	void			be_my_guest(Server &server);
-	// void			parse_op_cmd(const char *cmd, Server &server, std::string ch_name) const;
 
 	void			ping(Server &server);
 	void			negotiation(Server &server);
