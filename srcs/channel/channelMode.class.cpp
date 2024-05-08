@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.class.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/07 10:34:44 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 11:10:36 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void Channel::mode_o(std::string &line, char *opt, User &caller)
 			if ((*it)->get_nick() == tar)
 			{
 					this->_operators.erase(it);
-					this->send_to_all_user(":" + caller.get_nick() + " MODE " + this->_name + " " + opt + " " + tar + "\r\n");
+					this->send_to_all_user(":" + caller.get_nick() + caller.get_host_info() + " MODE " + this->_name + " " + opt + " " + tar + "\r\n");
 					break ;
 			}
 		}
