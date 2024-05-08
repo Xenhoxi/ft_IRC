@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userGeters.class.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:54 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/08 11:10:49 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/08 11:19:38 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	User::nick_isalnum(void)
 
 std::string	User::get_host_info() const
 {
-	return ("!" + this->_username + "@localhost");
+	return (this->_nickname + "!" + this->_username + "@localhost");
 }
 
 std::string 	User::get_nick()

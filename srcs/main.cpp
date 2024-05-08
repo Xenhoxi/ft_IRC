@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:29:14 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/07 12:22:01 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 11:51:47 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,13 @@ void	stop_server(int sig)
 	return ;
 }
 
+void	sig_pipe(int sig)
+{
+	if (sig == SIGPIPE)
+		throw Error("Skip sigpipe !");
+	return ;
+}
+
 int main(int argc, char **argv)
 {
 	Server	*server = new Server();
@@ -83,6 +90,7 @@ int main(int argc, char **argv)
 	try
 	{
 		signal(SIGINT, stop_server);
+		signal(SIGPIPE, sig_pipe);
 		if (argc != 3)
 			throw Error("wrong args amount");
 		server->socket_init(atoi(argv[1]), argv[2]);
@@ -104,7 +112,7 @@ int main(int argc, char **argv)
 void	ascii_sam(User *user)
 {
 	std::string		buff;
-	std::ifstream	ifs("ascii/ascii-art.txt");
+	std::ifstream	ifs("srcs/ascii/ascii-art.txt");
 
 	std::getline(ifs, buff);
 	if (!ifs.is_open())
