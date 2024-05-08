@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:07 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/08 11:27:40 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:21:45 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void Channel::mode(std::string &line, User &caller, Server &server)
 		opt = strtok(NULL, " ");
 	if ((opt[1] != 'o' && opt[1] != 'i' && opt[1] != 'l' && opt[1] != 't' && opt[1] != 'k'
 		&& opt[0] != '+' && opt[0] != '-') || strlen(opt) > 2)
-	{
-		caller.send_message(": NOTICE " + caller.get_nick() + " :We do not handle those MODE options.\r\n");
-		throw Error("wrong MODE opt");
-	}	
+		return ;
 	if (opt != NULL && opt[1] == 'o')
 		this->mode_o(line, opt, caller);
 	else if (opt != NULL && opt[1] == 'l')

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/08 11:20:00 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:25:23 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 
 		User    &target = this->get_user(tar);
 
-		std::string msg = ":" + caller.get_nick() + " KICK " + this->_name + " " + tar + " :" + reason + "\r\n";
+		std::string msg = ":" + caller.get_host_info() + " KICK " + this->_name + " " + tar + " :" + reason + "\r\n";
 		this->send_to_all_user(msg);
 		
 		std::list<User *>::iterator it;
@@ -61,7 +61,7 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 	}
 	catch (Error &e)
 	{
-		caller.send_message(":ft_irc 401" + caller.get_nick() + " " + target->get_nick() + " :No such nick/channel\r\n");
+		caller.send_message(":ft_irc 401 " + caller.get_nick() + " " + tar + " :No such nick/channel\r\n");
 		return ;
 	}
 	if (this->is_connected(target))
@@ -69,7 +69,7 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 		caller.send_message(":ft_irc 443" + caller.get_nick() + " " + _name + " " + target->get_nick() + " :is already on channel\r\n");
 		return ;
 	}
-	target->send_message(":" + caller.get_nick() + " INVITE " + tar + " " + this->_name + "\r\n");
+	target->send_message(":" + caller.get_host_info() + " INVITE " + tar + " " + this->_name + "\r\n");
 	if (!is_invited(target->get_nick()))
 		_user_invited.push_front(target->get_nick());
 }
@@ -157,7 +157,7 @@ void    Channel::add_user(User *user)
 	std::string msg = ":ft_irc 353 " + user->get_nick() + " = " + _name + " :";
 
 	_userInChannel.push_back(user);
-	send_to_all_user(":" + user->get_nick() + " JOIN " + _name + "\r\n");
+	send_to_all_user(":" + user->get_host_info() + " JOIN " + _name + "\r\n");
 	if (_topic.size() > 0)
 		user->send_message("TOPIC " + _name + " :" + _topic + "\r\n");
 	for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)

@@ -6,13 +6,13 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:06:25 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/07 10:14:00 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:07:29 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _created_at(time(0)), _need_pass(false), _topic_mode(TOPIC_ALL)
+Channel::Channel(User *user, std::string name) : _name(name), _max_users(0), _created_at(time(0)), _need_pass(false), _topic_mode(TOPIC_ALL), _invite_mode(NO_INVITE)
 {
 	_operators.push_back(user);
 	add_user(user);

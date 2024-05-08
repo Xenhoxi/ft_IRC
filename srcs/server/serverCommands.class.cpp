@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/08 11:40:53 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:07:51 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ void	Server::join_channel(User *user, std::string &line)
 	if (line.size() > 5)
 	{
 		ch_name = line.substr(line.find(" ") + 1, line.size() - (line.find(" ") + 1) - (line.size() - line.rfind(" ")));
-		if (line.find(" ", line.find(" ") + 1))
-			pass = line.substr(line.find(" ") + 1, line.size() - line.rfind(" ") + 1);
+		if (line.find(" ", line.find(" ") + 1) != line.npos)
+			pass = line.substr(line.find(" ", line.find(" ") + 1) + 1, line.size() - line.rfind(" ") + 1);
+		std::cout << "Pass :" << pass << "|" << std::endl;
 	}
 	else
 		return ;
@@ -33,8 +34,9 @@ void	Server::join_channel(User *user, std::string &line)
 			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
 			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
-		else if (_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick())
-				&& pass.empty() != true && pass == _channel_list[ch_name]->get_password())
+		else if ((_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick()) && pass.empty() == true)
+				|| (_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick()) && pass.empty() == false
+				&& pass != _channel_list[ch_name]->get_password()))
 			user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 		else
 			_channel_list[ch_name]->add_user(user);
