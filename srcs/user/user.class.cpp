@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/07 15:18:02 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/08 10:59:15 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ void    User::parse_negotiation(std::string line, Server &server)
 		{
 			this->_nickname = line.substr(5, strlen(line.c_str()) - 5);
 			check_nick_validity(server);
-			this->_nickname += "!~@localhost";
 		}
 	}
 	else if ("USER" == line.substr(0, 4))
