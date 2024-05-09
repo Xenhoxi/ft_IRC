@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/08 14:19:28 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:21:14 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	User::change_nick(std::string new_nick, Server &server)
 {
 	std::string old_nick = this->_nickname;
 	this->_nickname = new_nick;
-	// check_nick_validity(server);
 	for (int i = 0; new_nick[i]; i++)
 	{
 		if (i == 0 && !isalpha(new_nick[i]))
@@ -73,7 +72,9 @@ void	User::change_nick(std::string new_nick, Server &server)
 		this->_nickname = old_nick;
 		throw Error("errorneous nickname");
 	}
-	send_message(":" + old_nick + " NICK :" + _nickname + "\r\n");
+	send_message(":" + old_nick + "!" + _username + "@localhost NICK :" + _nickname + "\r\n");
+	for (std::list<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		(*it)->send_to_others(":" + old_nick + "!" + _username + "@localhost NICK :" + _nickname + "\r\n", this);
 }
 
 void    User::change_status(int status)

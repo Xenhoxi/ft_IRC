@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:54 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/08 11:19:38 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:06:19 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,9 @@ void    User::set_fds(int server_socket)
 {
 	this->_fds->fd = server_socket;
 	this->_fds->events = POLLIN | POLLOUT;
+}
+
+void	User::add_channel(Channel *channel)
+{
+	_channels.push_back(channel);
 }

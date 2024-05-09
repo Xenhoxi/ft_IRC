@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/08 11:15:04 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:14:28 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ User::~User()
 	if (_fds->fd > 0)
 		close(_fds->fd);
 	delete [] _fds;
+	_channels.clear();
 }
 
 void	User::parse_command(std::string line, Server &server)

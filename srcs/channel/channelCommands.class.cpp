@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/08 14:25:23 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:07:35 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void    Channel::add_user(User *user)
 
 	_userInChannel.push_back(user);
 	send_to_all_user(":" + user->get_host_info() + " JOIN " + _name + "\r\n");
+	user->add_channel(this);
 	if (_topic.size() > 0)
 		user->send_message("TOPIC " + _name + " :" + _topic + "\r\n");
 	for (std::list<User *>::iterator it = _userInChannel.begin(); it != _userInChannel.end(); ++it)

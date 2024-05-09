@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/08 11:11:00 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/09 14:12:30 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "libs.hpp"
 
 class Server;
+
+class Channel;
 
 class User
 {
@@ -28,6 +30,7 @@ public:
 	void			add_data(std::string new_data);
 	void            set_fds(int server_socket);
 	std::string		get_host_info() const;
+	void			add_channel(Channel *channel);
 	
 	void			parsing(Server &server);
 	void			parse_negotiation(std::string line, Server &server);
@@ -46,10 +49,11 @@ private:
 	bool			is_nick_used(Server &server);
 	void			check_nick_validity(Server &server);
 
-	std::string		_data;
-	std::string     _nickname;
-	std::string		_username;
-	std::string		_password;
+	std::string			_data;
+	std::string     	_nickname;
+	std::string			_username;
+	std::string			_password;
+	std::list<Channel *>	_channels;
 	time_t			_last_pong;
 	int				_status;
 	bool			_pinged;
