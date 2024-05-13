@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/13 11:12:31 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/13 11:23:45 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	Server::broadcast(User *user, std::string line)
 	{
 		if (_channel_list[ch_name]->is_connected(user))
 		{
+			std::cout << "here" << std::endl;
 			msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 			_channel_list[ch_name]->send_to_others(msg, user);
 			return ;
