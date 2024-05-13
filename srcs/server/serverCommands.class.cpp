@@ -6,7 +6,7 @@
 /*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/13 11:23:45 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/13 13:20:38 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	Server::broadcast(User *user, std::string line)
 	std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
 	std::string ch_name;
 
+	std::cout << "line " << line.size() << " :" << line << "|" << std::endl;
 	if (line.find('#') != line.npos)
 		ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 	else

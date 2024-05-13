@@ -3,32 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   userCommands.class.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/13 11:02:53 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/13 12:04:11 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
 
-void    User::negotiation(Server &server)
+// void    User::negotiation(Server &server)
+// {
+// 	std::vector<std::string> parsed;
+// 	std::string tmp;
+// 	size_t closest;
+	
+// 	while (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
+// 	{
+// 		if (_data.find('\r') < _data.find('\n'))
+// 			closest = _data.find('\r');
+// 		else
+// 			closest = _data.find('\n');
+// 		tmp = _data.substr(0, closest);
+// 		this->parse_negotiation(tmp, server);
+// 		_data.erase(0, closest + 1);
+// 	}
+// 	_data.clear();
+// }
+
+void	User::negotiation(Server &server)
 {
 	std::vector<std::string> parsed;
 	std::string tmp;
 	size_t closest;
 	
-	while (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
+	if (_data.size() > 0 && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
 	{
 		if (_data.find('\r') < _data.find('\n'))
 			closest = _data.find('\r');
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
+		std::cout << "tmp :" << tmp << std::endl;
 		this->parse_negotiation(tmp, server);
 		_data.erase(0, closest + 1);
 	}
-	_data.clear();
 }
 
 void    User::registration(Server &server)
