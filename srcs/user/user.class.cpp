@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/09 14:14:28 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:07:24 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ void	User::check_nick_validity(Server &server)
 		nb << ++i;
 		_nickname = nick + nb.str();
 	}
+	if (_nickname.size() > 30)
+		_nickname = _nickname.substr(0, 30);
 }
 
 void	User::be_my_guest(Server &server)

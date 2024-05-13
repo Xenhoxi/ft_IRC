@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/08 14:07:51 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:12:31 by smunio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	Server::join_channel(User *user, std::string &line)
 	}
 	else
 	{
+		if (ch_name.size() > 32)
+			ch_name = ch_name.substr(0, 32);
 		Channel *newChannel = new Channel(user, ch_name);
 		_channel_list.insert(std::pair<std::string, Channel *>(ch_name, newChannel));
 	}
