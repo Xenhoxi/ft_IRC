@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.class.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/13 11:07:24 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/13 12:03:03 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,14 @@ void	User::parsing(Server &server)
 	std::string tmp;
 	size_t closest;
 	
-	if (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
+	if (_data.size() > 0 && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
 	{
 		if (_data.find('\r') < _data.find('\n'))
 			closest = _data.find('\r');
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
+		std::cout << "tmp :" << tmp << std::endl;
 		try
 		{
 			parse_command(tmp, server);
@@ -81,7 +82,6 @@ void	User::parsing(Server &server)
 		}
 		_data.erase(0, closest + 1);
 	}
-	_data.clear();
 }
 
 void	User::check_nick_validity(Server &server)
