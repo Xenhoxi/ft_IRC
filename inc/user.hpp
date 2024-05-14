@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/14 10:54:37 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:49:27 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ public:
 	void			registration(Server &server);
 	void			send_message(std::string msg);
 	void			change_status(int status);
+	void			remove_channel(Channel *channel);
 
 private:
 	void			change_nick(std::string new_nick, Server &server);

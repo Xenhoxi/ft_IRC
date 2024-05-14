@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/14 11:14:51 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:15:02 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void    User::registration(Server &server)
 		send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
 		send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC NICKLEN=30 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
 		send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
-		// ascii_sam(this);
 		change_status(CONNECTED);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/14 10:49:00 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:50:09 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,5 +165,19 @@ void    User::parse_negotiation(std::string line, Server &server)
 	{
 		_last_pong = time(0);
 		_pinged = false;
+	}
+}
+
+void	User::remove_channel(Channel *channel)
+{
+	std::list<Channel *>::iterator it;
+
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (channel == *it)
+		{
+			_channels.erase(it);
+			break;
+		}
 	}
 }

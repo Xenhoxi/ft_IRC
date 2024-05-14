@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/14 10:58:24 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:17:20 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	Server::join_channel(User *user, std::string &line)
 	if (_channel_list.find(ch_name) != _channel_list.end())
 	{
 		if (_channel_list[ch_name]->get_size() >= _channel_list[ch_name]->get_max_user() && _channel_list[ch_name]->get_max_user() != 0)
-			user->send_message(":ft_irc 471 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+l)\r\n");
+			user->send_message(":ft_irc 471 " + user->get_host_info() + " " + ch_name + " :Cannot join channel (+l)\r\n");
 		else if (_channel_list[ch_name]->get_invite_mode() == ON_INVITE && !_channel_list[ch_name]->is_invited(user->get_nick()))
-			user->send_message(":ft_irc 473 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+i)\r\n");
+			user->send_message(":ft_irc 473 " + user->get_host_info() + " " + ch_name + " :Cannot join channel (+i)\r\n");
 		else if ((_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick()) && pass.empty() == true)
 				|| (_channel_list[ch_name]->get_pass_bool() == true && !_channel_list[ch_name]->is_invited(user->get_nick()) && pass.empty() == false
 				&& pass != _channel_list[ch_name]->get_password()))
-			user->send_message(":ft_irc 475 " + user->get_nick() + " " + ch_name + " :Cannot join channel (+k)\r\n");
+			user->send_message(":ft_irc 475 " + user->get_host_info() + " " + ch_name + " :Cannot join channel (+k)\r\n");
 		else
 			_channel_list[ch_name]->add_user(user);
 	}
@@ -78,7 +78,6 @@ void	Server::broadcast(User *user, std::string line)
 	std::string msg = line.substr(line.find(':') + 1, line.size() - line.find(':') + 1);
 	std::string ch_name;
 
-	std::cout << "line " << line.size() << " :" << line << "|" << std::endl;
 	if (line.find('#') != line.npos)
 		ch_name = line.substr(line.find('#'), line.find(':') - line.find('#') - 1);
 	else

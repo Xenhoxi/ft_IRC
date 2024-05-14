@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/14 11:08:07 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:12:10 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 		}
 	}
 	else
-		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
+		caller.send_message(":ft_irc 482 " + caller.get_host_info() + " " + _name + " :You're not channel operator\r\n");
 }
 
 void Channel::invite(std::string &line, User &caller, Server &server)
@@ -54,7 +54,7 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 		return ;
 	if (!is_operator(caller.get_nick()))
 	{
-		caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator 1\r\n");
+		caller.send_message(":ft_irc 482 " + caller.get_host_info() + " " + _name + " :You're not channel operator 1\r\n");
 		return ;
 	}
 	try
@@ -63,12 +63,12 @@ void Channel::invite(std::string &line, User &caller, Server &server)
 	}
 	catch (Error &e)
 	{
-		caller.send_message(":ft_irc 401 " + caller.get_nick() + " " + tar + " :No such nick/channel\r\n");
+		caller.send_message(":ft_irc 401 " + caller.get_host_info() + " " + tar + " :No such nick/channel\r\n");
 		return ;
 	}
 	if (this->is_connected(target))
 	{
-		caller.send_message(":ft_irc 443" + caller.get_nick() + " " + _name + " " + target->get_nick() + " :is already on channel\r\n");
+		caller.send_message(":ft_irc 443" + caller.get_host_info() + " " + _name + " " + target->get_nick() + " :is already on channel\r\n");
 		return ;
 	}
 	target->send_message(":" + caller.get_host_info() + " INVITE " + tar + " " + this->_name + "\r\n");
@@ -85,13 +85,13 @@ void Channel::topic(std::string &line, User &caller, Server &server)
 		topic = line.substr(line.find(":") + 1, line.size()- line.find(":") + 2);
 	_topic = topic;
 	if (_topic_mode == TOPIC_ALL)
-		send_to_all_user(":" + caller.get_nick() + " TOPIC " + _name + " :" + _topic + "\r\n");
+		send_to_all_user(":" + caller.get_host_info() + " TOPIC " + _name + " :" + _topic + "\r\n");
 	else
 	{
 		if (_topic_mode == TOPIC_OP && is_operator(caller.get_nick()))
-		   send_to_all_user(":" + caller.get_nick() + " TOPIC " + _name + " :" + _topic + "\r\n");
+		   send_to_all_user(":" + caller.get_host_info() + " TOPIC " + _name + " :" + _topic + "\r\n");
 		else
-			caller.send_message(":ft_irc 482 " + caller.get_nick() + " " + _name + " :You're not channel operator\r\n");
+			caller.send_message(":ft_irc 482 " + caller.get_host_info() + " " + _name + " :You're not channel operator\r\n");
 	}
 }
 
@@ -110,6 +110,7 @@ void    Channel::disconnect(User *leaving_user, std::string type, std::string re
 				send_to_all_user(":" + leaving_user->get_host_info() + " " + type + " " + reason + "\r\n");
 			_userInChannel.erase(it);
 			delete_ops(leaving_user);
+			leaving_user->remove_channel(this);
 			std::cout << "User leave the channel: " << _name << std::endl;
 			break ;
 		}

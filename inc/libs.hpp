@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/14 10:19:19 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:14:51 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,5 @@
 #include "exceptions.hpp"
 #include "server.hpp"
 #include "channel.hpp"
-
-void    ascii_sam(User *user);
 
 #endif
