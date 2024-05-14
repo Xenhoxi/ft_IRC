@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:18:50 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/09 14:07:35 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:08:07 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void Channel::kick(std::string &line, User &caller, Server &server)
 		{
 			if (*it == &target)
 			{
+				if (is_operator(target.get_nick()))
+					delete_ops(&target);
 				_userInChannel.erase(it);
 				break ;
 			}

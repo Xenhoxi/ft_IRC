@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverCommands.class.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smunio <smunio@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:16:10 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/13 13:20:38 by smunio           ###   ########.fr       */
+/*   Updated: 2024/05/14 10:58:24 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	Server::join_channel(User *user, std::string &line)
 		ch_name = line.substr(line.find(" ") + 1, line.size() - (line.find(" ") + 1) - (line.size() - line.rfind(" ")));
 		if (line.find(" ", line.find(" ") + 1) != line.npos)
 			pass = line.substr(line.find(" ", line.find(" ") + 1) + 1, line.size() - line.rfind(" ") + 1);
-		std::cout << "Pass :" << pass << "|" << std::endl;
 	}
 	else
 		return ;
@@ -52,9 +51,13 @@ void	Server::join_channel(User *user, std::string &line)
 
 void	Server::add_user(void)
 {
-	User	*new_user = new User();
-	int		newfd;
-	newfd = accept(_usr_list.front()->get_fds()->fd, NULL, NULL);
+	User				*new_user = new User();
+	struct sockaddr_in	client_addr;
+	int					newfd;
+	socklen_t			len;
+
+	len = sizeof(client_addr);
+	newfd = accept(_usr_list.front()->get_fds()->fd, (struct sockaddr *) &client_addr, &len);
 	if (newfd < 0)
 	{
 		new_user->set_fds(-1);
@@ -63,6 +66,7 @@ void	Server::add_user(void)
 	}
 	else
 	{
+		new_user->set_addr(inet_ntoa(client_addr.sin_addr));
 		new_user->set_fds(newfd);
 		_usr_list.push_back(new_user);
 		std::cout << "Connection accepted on socket " << new_user->get_fds()->fd << std::endl;
@@ -83,7 +87,6 @@ void	Server::broadcast(User *user, std::string line)
 	{
 		if (_channel_list[ch_name]->is_connected(user))
 		{
-			std::cout << "here" << std::endl;
 			msg = ":" + user->get_nick() + " PRIVMSG " + ch_name + " :" + msg + "\r\n";
 			_channel_list[ch_name]->send_to_others(msg, user);
 			return ;

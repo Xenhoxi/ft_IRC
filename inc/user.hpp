@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:10:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/09 14:12:30 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:54:37 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ class User
 public:
 	User();
 	~User();
-	int				get_status() const;
-	std::string 	get_nick();
-	struct pollfd   *get_fds() const;
-	void			add_data(std::string new_data);
-	void            set_fds(int server_socket);
-	std::string		get_host_info() const;
-	void			add_channel(Channel *channel);
+	int					get_status() const;
+	std::string 		get_nick();
+	struct pollfd   	*get_fds() const;
+	void				add_data(std::string new_data);
+	void            	set_fds(int server_socket);
+	std::string			get_host_info() const;
+	void				add_channel(Channel *channel);
+	void				set_addr(char *addr);
 	
 	void			parsing(Server &server);
 	void			parse_negotiation(std::string line, Server &server);
@@ -49,16 +50,17 @@ private:
 	bool			is_nick_used(Server &server);
 	void			check_nick_validity(Server &server);
 
-	std::string			_data;
-	std::string     	_nickname;
-	std::string			_username;
-	std::string			_password;
+	std::string				_data;
+	std::string     		_nickname;
+	std::string				_username;
+	std::string				_password;
 	std::list<Channel *>	_channels;
-	time_t			_last_pong;
-	int				_status;
-	bool			_pinged;
-	bool			_cap_passed;
-	struct pollfd	*_fds;
+	time_t					_last_pong;
+	int						_status;
+	bool					_pinged;
+	bool					_cap_passed;
+	std::string				_client_addr;
+	struct pollfd			*_fds;
 };
 
 

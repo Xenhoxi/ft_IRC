@@ -6,30 +6,11 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:51 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/13 12:04:11 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:14:51 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libs.hpp"
-
-// void    User::negotiation(Server &server)
-// {
-// 	std::vector<std::string> parsed;
-// 	std::string tmp;
-// 	size_t closest;
-	
-// 	while (_data.size() && (_data.find('\r') != _data.npos || _data.find('\n') != _data.npos))
-// 	{
-// 		if (_data.find('\r') < _data.find('\n'))
-// 			closest = _data.find('\r');
-// 		else
-// 			closest = _data.find('\n');
-// 		tmp = _data.substr(0, closest);
-// 		this->parse_negotiation(tmp, server);
-// 		_data.erase(0, closest + 1);
-// 	}
-// 	_data.clear();
-// }
 
 void	User::negotiation(Server &server)
 {
@@ -44,7 +25,6 @@ void	User::negotiation(Server &server)
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
-		std::cout << "tmp :" << tmp << std::endl;
 		this->parse_negotiation(tmp, server);
 		_data.erase(0, closest + 1);
 	}
@@ -60,7 +40,7 @@ void    User::registration(Server &server)
 		send_message(":ft_irc 004 " + _nickname + " :" + server.get_servername() + " version 1.0\r\n");
 		send_message(":ft_irc 005 " + _nickname + " NETWORK=FT_IRC NICKLEN=30 CHANNELLEN=32 CHANTYPES=# PREFIX=(o)@ :are available on this server\r\n");
 		send_message(":ft_irc 005 " + _nickname + " CASEMAPPING=ascii CHANMODES=,ko,l,it :are available on this server\n");
-		ascii_sam(this);
+		// ascii_sam(this);
 		change_status(CONNECTED);
 	}
 	else
@@ -93,9 +73,9 @@ void	User::change_nick(std::string new_nick, Server &server)
 		this->_nickname = old_nick;
 		throw Error("errorneous nickname");
 	}
-	send_message(":" + old_nick + "!" + _username + "@localhost NICK :" + _nickname + "\r\n");
+	send_message(":" + old_nick + "!" + _username + "@" + _client_addr + " NICK :" + _nickname + "\r\n");
 	for (std::list<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
-		(*it)->send_to_others(":" + old_nick + "!" + _username + "@localhost NICK :" + _nickname + "\r\n", this);
+		(*it)->send_to_others(":" + old_nick + "!" + _username + "@" + _client_addr + " NICK :" + _nickname + "\r\n", this);
 }
 
 void    User::change_status(int status)

@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 10:22:54 by ljerinec          #+#    #+#             */
-/*   Updated: 2024/05/09 14:06:19 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:44:43 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	User::nick_isalnum(void)
 
 std::string	User::get_host_info() const
 {
-	return (this->_nickname + "!" + this->_username + "@localhost");
+	return (this->_nickname + "!" + this->_username + "@" + _client_addr);
 }
 
 std::string 	User::get_nick()
@@ -66,4 +66,9 @@ void    User::set_fds(int server_socket)
 void	User::add_channel(Channel *channel)
 {
 	_channels.push_back(channel);
+}
+
+void	User::set_addr(char *addr)
+{
+	_client_addr = addr;
 }

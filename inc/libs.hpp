@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 18:32:01 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/03 13:57:22 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:19:19 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 #include <sstream>
 #include <signal.h>
 #include <fstream>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "user.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"

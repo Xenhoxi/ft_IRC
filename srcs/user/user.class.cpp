@@ -6,7 +6,7 @@
 /*   By: ljerinec <ljerinec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:44 by smunio            #+#    #+#             */
-/*   Updated: 2024/05/13 12:03:03 by ljerinec         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:49:00 by ljerinec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	User::parsing(Server &server)
 		else
 			closest = _data.find('\n');
 		tmp = _data.substr(0, closest);
-		std::cout << "tmp :" << tmp << std::endl;
 		try
 		{
 			parse_command(tmp, server);
